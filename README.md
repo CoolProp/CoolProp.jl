@@ -1,7 +1,9 @@
 [![Build Status](https://travis-ci.org/vimalaad/CoolProp.jl.svg?branch=master)](https://travis-ci.org/vimalaad/CoolProp.jl)<sub>master</sub>
 [![Build Status](https://travis-ci.org/vimalaad/CoolProp.jl.svg?branch=nightly)](https://travis-ci.org/vimalaad/CoolProp.jl)<sub>nightly</sub>
+
 [![Coverage Status](https://coveralls.io/repos/github/vimalaad/CoolProp.jl/badge.svg?branch=master)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=master)<sub>master</sub>
 [![Coverage Status](https://coveralls.io/repos/github/vimalaad/CoolProp.jl/badge.svg?branch=nightly)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=nightly)<sub>nightly</sub>
+
 [![codecov](https://codecov.io/gh/vimalaad/CoolProp.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/vimalaad/CoolProp.jl)<sub>master</sub>
 [![codecov](https://codecov.io/gh/vimalaad/CoolProp.jl/branch/nightly/graph/badge.svg)](https://codecov.io/gh/vimalaad/CoolProp.jl)<sub>nightly</sub>
 # CoolProp.jl

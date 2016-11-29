@@ -4,8 +4,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/vimalaad/CoolProp.jl/badge.svg?branch=master)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=master)<sub>master</sub>
 [![Coverage Status](https://coveralls.io/repos/github/vimalaad/CoolProp.jl/badge.svg?branch=nightly)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=nightly)<sub>nightly</sub>
 
-[![codecov](https://codecov.io/gh/vimalaad/CoolProp.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/vimalaad/CoolProp.jl)<sub>master</sub>
-[![codecov](https://codecov.io/gh/vimalaad/CoolProp.jl/branch/nightly/graph/badge.svg)](https://codecov.io/gh/vimalaad/CoolProp.jl)<sub>nightly</sub>
 # CoolProp.jl
 A Julia wrapper for CoolProp (http://www.coolprop.org)
 

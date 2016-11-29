@@ -15,6 +15,6 @@ script:
   - julia -e 'Pkg.clone(pwd()); Pkg.build("CoolProp"); Pkg.test("CoolProp"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
-  - julia -e 'cd(Pkg.dir("CoolProp")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_file("deps/CoolProp.jl"))'
+  - julia -e 'cd(Pkg.dir("CoolProp")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_file("deps/lib/CoolProp.jl"))'
   # push coverage results to Codecov
   # - julia -e 'cd(Pkg.dir("CoolProp")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_file("deps/CoolProp.jl"))'

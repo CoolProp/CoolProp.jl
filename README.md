@@ -1,8 +1,11 @@
-[![Build Status](https://travis-ci.org/vimalaad/CoolProp.jl.svg?branch=master)](https://travis-ci.org/vimalaad/CoolProp.jl)<sub>master</sub>
-[![Build Status](https://travis-ci.org/vimalaad/CoolProp.jl.svg?branch=nightly)](https://travis-ci.org/vimalaad/CoolProp.jl)<sub>nightly</sub>
+[![Build Status](https://img.shields.io/travis/vimalaad/CoolProp.jl/master.svg?label=master%20build)](https://travis-ci.org/vimalaad/CoolProp.jl)
+[![Build Status](https://img.shields.io/travis/vimalaad/CoolProp.jl/nightly.svg?label=nightly%20build)](https://travis-ci.org/vimalaad/CoolProp.jl)
 
-[![Coverage Status](https://coveralls.io/repos/github/vimalaad/CoolProp.jl/badge.svg?branch=master)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=master)<sub>master</sub>
-[![Coverage Status](https://coveralls.io/repos/github/vimalaad/CoolProp.jl/badge.svg?branch=nightly)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=nightly)<sub>nightly</sub>
+[![Build status](https://ci.appveyor.com/api/projects/status/gljbe5rx71u86qum/branch/master?svg=true&passingText=master%20-%20OK&failingText=master%20-%20FAILED&pendingText=master%20-%20PENDING)](https://ci.appveyor.com/project/vimalaad/coolprop-jl/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/gljbe5rx71u86qum/branch/nightly?svg=true&passingText=nightly%20-%20OK&failingText=nightly%20-%20FAILED&pendingText=nightly%20-%20PENDING)](https://ci.appveyor.com/project/vimalaad/coolprop-jl/branch/nightly)
+
+[![Coverage Status](https://img.shields.io/coveralls/vimalaad/CoolProp.jl/master.svg?label=master%20coverage)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/vimalaad/CoolProp.jl/nightly.svg?label=nightly%20coverage)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=nightly)
 
 # CoolProp.jl
 A Julia wrapper for CoolProp (http://www.coolprop.org)

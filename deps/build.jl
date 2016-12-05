@@ -15,6 +15,11 @@ else
 end
 try
   latestVersion_CoolProp = JSON.parse(readstring(download("https://sourceforge.net/projects/coolprop/best_release.json")))["release"]["filename"][11:15];
+catch err
+  latestVersion_CoolProp = "6.1.0";
+  warn("unable to download my be a windows machine firewall.. , set latestVersion_CoolProp=$latestVersion_CoolProp");
+end
+try
   println("CoolProp latestVersion = $latestVersion_CoolProp ...")
   coolpropurlbase = "http://www.coolprop.dreamhosters.com/binaries/"
   _download(coolpropurlbase * "Julia/CoolProp.jl", joinpath(destpathbase,"CoolProp.jl"));

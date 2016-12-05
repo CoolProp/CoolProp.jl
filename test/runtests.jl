@@ -1,3 +1,6 @@
+"Path to testCoolProp, to include it, user must `ENV[\"testCoolProp\"]=\"on\""
+ENV["TestingPath"] = "../test/CoolProp.jl";
+!haskey(ENV, "testCoolProp") && (ENV["testCoolProp"]="");
 using CoolProp
 using Compat
 using Base.Test
@@ -108,7 +111,7 @@ for p in coolproptrivialparameters
        warn("Non of the defined fluids return a number for $p (expected to have numerical value.)");
     else
        println("$p is trivial without any numericalvalue");
-    end   
+    end
   else
     length(missed) > 0 && println("Only $(collect(setdiff(coolpropfluids, missed))) return number for $p");
   end

@@ -1,5 +1,5 @@
 "Path to testCoolProp, to include it, user must `ENV[\"testCoolProp\"]=\"on\""
-ENV["TestingPath"] = "../test/CoolProp.jl";
+ENV["TestingPath"] = @__DIR__() * "/CoolProp.jl";
 !haskey(ENV, "testCoolProp") && (ENV["testCoolProp"]="");
 using CoolProp
 using Compat

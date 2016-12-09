@@ -7,21 +7,29 @@ errcode = Ref{Clong}(0)
 const buffer_length = 20000
 message_buffer = Array(UInt8, buffer_length)
 
+const inputs_to_get_global_param_string = ["version", "gitrevision", "errstring", "warnstring", "FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "parameter_list", "predefined_mixtures", "HOME", "cubic_fluids_schema"];
+
 # ---------------------------------
 #        High-level functions
 # ---------------------------------
 
 """
-    PropsSI(FluidName::AbstractString, Output::AbstractString)
+    PropsSI(fluid::AbstractString, output::AbstractString)
 
-Return a value that does not depend on the thermodynamic state - this is a convenience function that does the call PropsSI(Output, "", 0, "", 0, FluidName).
+Return a value that does not depend on the thermodynamic state - this is a convenience function that does the call `PropsSI(output, "", 0, "", 0, fluid)`.
 
-\ref CoolProp::Props1SI(std::string, std::string)
-# Note
-Note If there is an error, a huge value will be returned, you can get the error message by doing something like get_global_param_string("errstring",output)
+# Example
+```julia
+
+```
+# Arguments
+* `fluid`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` on of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids)
+* `output`: 
+# Ref
+CoolProp::Props1SI(std::string, std::string)
 """
-function PropsSI(FluidName::AbstractString, Output::AbstractString)
-  val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Ptr{UInt8},Ptr{UInt8}), FluidName,Output)
+function PropsSI(fluid::AbstractString, output::AbstractString)
+  val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Ptr{UInt8}, Ptr{UInt8}), fluid, output)
   if val == Inf
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -29,15 +37,17 @@ function PropsSI(FluidName::AbstractString, Output::AbstractString)
 end
 
 """
-    PropsSI(Output::AbstractString, Name1::AbstractString, Value1::Real, Name2::AbstractString, Value2::Real, Fluid::AbstractString)
+    PropsSI(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
 
 Return a value that depends on the thermodynamic state.
 
-\ref CoolProp::PropsSI(const std::string &, const std::string &, double, const std::string &, double, const std::string&)
-\note If there is an error, a huge value will be returned, you can get the error message by doing something like get_global_param_string("errstring",output)
+# Ref
+CoolProp::PropsSI(const std::string &, const std::string &, double, const std::string &, double, const std::string&)
+# Arguments
+* `fluid`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` on of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids)
 """
-function PropsSI(Output::AbstractString, Name1::AbstractString, Value1::Real, Name2::AbstractString, Value2::Real, Fluid::AbstractString)
-  val = ccall( (:PropsSI, "CoolProp"), Cdouble, (Ptr{UInt8},Ptr{UInt8},Float64,Ptr{UInt8},Float64,Ptr{UInt8}), Output,Name1,Value1,Name2,Value2,Fluid)
+function PropsSI(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
+  val = ccall( (:PropsSI, "CoolProp"), Cdouble, (Ptr{UInt8}, Ptr{UInt8}, Float64, Ptr{UInt8}, Float64, Ptr{UInt8}), output, name1, value1, name2, value2, fluid)
   if val == Inf
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -60,18 +70,18 @@ function PhaseSI(Name1::AbstractString, Value1::Real, Name2::AbstractString, Val
   end
   return val
 end
-
 """
-    get_global_param_string(Key::AbstractString)
+    get_global_param_string(key::AbstractString)
 
 Get a globally-defined string.
 
-\ref CoolProp::get_global_param_string
-\note This function returns the output string in pre-allocated char buffer.  If buffer is not large enough, no copy is made
-@returns error_code 1 = Ok 0 = error
+# Ref
+ref CoolProp::get_global_param_string
+# Arguments
+* `key`: A string represents parameter name, could be one of $inputs_to_get_global_param_string
 """
-function get_global_param_string(Key::AbstractString)
-  val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Ptr{UInt8},Ptr{UInt8},Int), Key,message_buffer::Array{UInt8,1},buffer_length)
+function get_global_param_string(key::AbstractString)
+  val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Ptr{UInt8},Ptr{UInt8},Int), key, message_buffer::Array{UInt8,1}, buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -82,7 +92,7 @@ end
     get_parameter_information_string(key::AbstractString,outtype::AbstractString)
     get_parameter_information_string(key::AbstractString)
 
-Get information for a parameter
+Get information for a parameter.
 
 # Arguments
 

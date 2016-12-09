@@ -25,3 +25,10 @@ Pkg.build("CoolProp") # to download the nightly binaries
 ```
 ## Note
 The installer downloads related libraries respect to machine OS & wordsize. Please let me know if it does not work for you. As an alternative, you can download the binaries for your OS from [here](https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/)
+## Development
+For development, it is possible to include a custom wrapper from `ENV["TestingPath"]`, then:  
+```julia
+ENV["testCoolProp"]="on";
+using CoolProp;
+```
+if `!haskey(ENV, "TestingPath")` the default `\test\CoolProp.jl` will be used.

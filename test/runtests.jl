@@ -1,6 +1,3 @@
-"Path to testCoolProp, to include it, user must `ENV[\"testCoolProp\"]=\"on\""
-ENV["TestingPath"] = @__DIR__() * "/CoolProp.jl";
-!haskey(ENV, "testCoolProp") && (ENV["testCoolProp"]="");
 using CoolProp
 using Compat
 using Base.Test
@@ -89,7 +86,7 @@ const pseudopuremixtures = ["R134a","R116","n-Pentane","R11","n-Nonane","MDM","O
 #get_global_param_string
 coolpropmix = split(get_global_param_string("predefined_mixtures"), ',');
 coolpropfluids = split(get_global_param_string("FluidsList"),',');
-coolpropparameters = split(get_global_param_string("parameter_list"),',');
+coolpropparameters = map(String, split(get_global_param_string("parameter_list"),','));
 #Finding PROPERTIES WITH NUMERICAL VALUES in Trivial inputs
 tpropwithnumval = Set();
 info("Finding trivials with numerical value")
@@ -116,6 +113,18 @@ for p in coolproptrivialparameters
     length(missed) > 0 && println("Only $(collect(setdiff(coolpropfluids, missed))) return number for $p");
   end
 end
+missed = Set();
+for p in setdiff(map(lowercase, coolpropparameters), map(lowercase, coolproptrivialparameters))
+  for fluid in coolpropfluids
+    try
+      res = ("$(PropsSI(p, Compat.String(fluid)))");
+      push!(missed, p);
+      break;
+    catch err
+    end
+  end
+end
+println(missed);
 close(logf);
 if ((tpropwithnumval == Set(trivalwithnumval)) && (Set(setdiff(coolproptrivialparameters, tpropwithnumval)) == Set(trivalwithoutnumval)))
   info("Trivial inputs with numerical values are as expected.");

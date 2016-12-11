@@ -90,10 +90,10 @@ coolpropparameters = map(String, split(get_global_param_string("parameter_list")
 #Finding PROPERTIES WITH NUMERICAL VALUES in Trivial inputs
 tpropwithnumval = Set();
 info("Finding trivials with numerical value")
-logf = open("trivials.log", "w");
+logf = open("parameters.log", "w");
 for p in coolproptrivialparameters
   #get_parameter_information_string
-  println(logf, get_parameter_information_string(p, "long") * " in (" * get_parameter_information_string(p, "units") * ")");
+  println(logf, p * " --- " * get_parameter_information_string(p, "long") * " in (" * get_parameter_information_string(p, "units") * ")");
   missed = Set();
   for fluid in coolpropfluids
     try
@@ -113,24 +113,45 @@ for p in coolproptrivialparameters
     length(missed) > 0 && println("Only $(collect(setdiff(coolpropfluids, missed))) return number for $p");
   end
 end
-missed = Set();
-for p in setdiff(map(lowercase, coolpropparameters), map(lowercase, coolproptrivialparameters))
-  for fluid in coolpropfluids
-    try
-      res = ("$(PropsSI(p, Compat.String(fluid)))");
-      push!(missed, p);
-      break;
-    catch err
-    end
-  end
-end
-println(missed);
-close(logf);
 if ((tpropwithnumval == Set(trivalwithnumval)) && (Set(setdiff(coolproptrivialparameters, tpropwithnumval)) == Set(trivalwithoutnumval)))
   info("Trivial inputs with numerical values are as expected.");
 else
   warn("Trivial inputs with numerical values are not as expected.");
 end
+missed = Set();
+println(logf, " |-------------------| ");
+const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_triple","MOLEMASS","rhomolar_critical",
+"MOLARMASS","Pcrit","gas_constant","Tcrit","p_reducing","Tmin","rhocrit","molarmass","T_CRITICAL",
+"P_min","pmax","T_min","T_reducing","T_MAX","P_MIN","T_triple","P_MAX","ptriple","Ttriple",
+"acentric","p_critical","Tmax","T_TRIPLE","rhomolar_reducing","MOLAR_MASS",
+"P_CRITICAL","T_max","molemass","T_MIN","rhomass_critical","T_critical",
+"P_max","RHOMASS_CRITICAL","molar_mass","pmin"]));
+counter = 0;
+longunits = Set();
+for p in coolpropparameters
+  longunit = get_parameter_information_string(p, "long") * " in (" * get_parameter_information_string(p, "units") * ")";
+  note = "";
+  if (!in(longunit, longunits))
+    push!(longunits, longunit);
+  else
+    note = " *repeated* "
+  end
+  for fluid in coolpropfluids
+    try
+      res = ("$(PropsSI(p, Compat.String(fluid)))");
+      !in(p, parameterswithnumval) && push!(missed, p);
+      note *= " *fluid constant* "
+      counter+=1;
+      break;
+    catch err
+    end
+  end
+  println(logf, p * " --- " * longunit * note);
+end
+length(missed) > 0 && warn("missed parameters eith numerical value:\n $missed)");
+@test length(parameterswithnumval) == counter
+info("parameters with numerical values are as expected");
+close(logf);
 info("Testing get_fluid_param_string");
 #get_fluid_param_string
 id = 0;

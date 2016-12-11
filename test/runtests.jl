@@ -86,7 +86,7 @@ const pseudopuremixtures = ["R134a","R116","n-Pentane","R11","n-Nonane","MDM","O
 #get_global_param_string
 coolpropmix = split(get_global_param_string("predefined_mixtures"), ',');
 coolpropfluids = split(get_global_param_string("FluidsList"),',');
-coolpropparameters = map(String, split(get_global_param_string("parameter_list"),','));
+coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
 #Finding PROPERTIES WITH NUMERICAL VALUES in Trivial inputs
 tpropwithnumval = Set();
 info("Finding trivials with numerical value")

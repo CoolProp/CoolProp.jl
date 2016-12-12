@@ -146,7 +146,7 @@ for p in coolpropparameters
     catch err
     end
   end
-  println(logf, "\"$p\"" * " | " * longunit * " | " * note);
+  println(logf, "$p" * " | " * longunit * " | " * note);
 end
 length(missed) > 0 && warn("missed parameters eith numerical value:\n $missed)");
 @test length(parameterswithnumval) == counter
@@ -159,14 +159,16 @@ counter = 0;
 maxdiffreduvscriti = 0.0;
 maxfluid = "";
 ppm = Set();
-logf = open("fluids.log", "w");
+logf = open("fluids.table", "w");
+println(logf, "ID |Name |Alias |CAS |Pure |Formula |BibTeX ");
+println(logf, ":--|:----|:-----|:---|:----|:-------|:------");
 for fluid in coolpropfluids
   id+=1;
-  print(logf, "$id)$fluid aliases:$(get_fluid_param_string(Compat.String(fluid), "aliases"))");
-  print(logf, " cas:$(get_fluid_param_string(Compat.String(fluid), "CAS"))");
+  print(logf, "$id | $fluid | $(get_fluid_param_string(Compat.String(fluid), "aliases"))");
+  print(logf, " | $(get_fluid_param_string(Compat.String(fluid), "CAS"))");
   pure=get_fluid_param_string(Compat.String(fluid), "pure");
-  print(logf, " pure:$pure");
-  print(logf, " formula:$(get_fluid_param_string(Compat.String(fluid), "formula"))");
+  print(logf, " | $pure");
+  print(logf, " | $(get_fluid_param_string(Compat.String(fluid), "formula")) | ");
   for bi in ["BibTeX-CONDUCTIVITY", "BibTeX-EOS", "BibTeX-CP0", "BibTeX-SURFACE_TENSION","BibTeX-MELTING_LINE","BibTeX-VISCOSITY"]
     print(logf, " $bi:$(get_fluid_param_string(Compat.String(fluid), bi))");
   end

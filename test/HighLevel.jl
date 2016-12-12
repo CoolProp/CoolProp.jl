@@ -1,6 +1,23 @@
+export PARAMETERS, FLUIDS;
+
+"""
+# CoolProp parameters table
+
+$(readstring(abspath(@__FILE__, "..", "parameters.table")))
+"""
+const PARAMETERS = "CoolProp parameters table" #readdlm(abspath(@__FILE__, "..", "parameters.table"), '|', skipstart=2);
+
+"""
+# CoolProp fluids table
+
+$(readstring(abspath(@__FILE__, "..", "fluids.table")))
+"""
+const FLUIDS = "CoolProp fluids table" #readdlm(abspath(@__FILE__, "..", "fluids.table"), '|', skipstart=2);
+
 # ---------------------------------
 #        High-level functions
 # ---------------------------------
+
 
 """
     propssi(fluid::AbstractString, param::AbstractString)
@@ -12,10 +29,8 @@ Return a value that does not depend on the thermodynamic state - this is a conve
 
 ```
 # Arguments
-* `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids)
-* `param::AbstractString`: The name of property to evaluate. could be one of **constant properties** in the table below.
-
-$(readstring(abspath(@__FILE__, "..", "parameters.table")))
+* `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids), or simply type `?FLUIDS`
+* `param::AbstractString`: The name of property to evaluate. to see a list type `?PARAMETERS`
 
 # Ref
 CoolProp::Props1SI(std::string, std::string)

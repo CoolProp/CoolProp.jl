@@ -90,10 +90,7 @@ coolpropparameters = map(Compat.String, split(get_global_param_string("parameter
 #Finding PROPERTIES WITH NUMERICAL VALUES in Trivial inputs
 tpropwithnumval = Set();
 info("Finding trivials with numerical value")
-logf = open("parameters.log", "w");
 for p in coolproptrivialparameters
-  #get_parameter_information_string
-  println(logf, p * " --- " * get_parameter_information_string(p, "long") * " in (" * get_parameter_information_string(p, "units") * ")");
   missed = Set();
   for fluid in coolpropfluids
     try
@@ -119,7 +116,9 @@ else
   warn("Trivial inputs with numerical values are not as expected.");
 end
 missed = Set();
-println(logf, " paramerer | description | unit | comment ");
+logf = open("parameters.table", "w");
+println(logf, "Paramerer |Description |Unit |Comment ");
+println(logf, ":---------|:-----------|:----|:-------" );
 const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_triple","MOLEMASS","rhomolar_critical",
 "MOLARMASS","Pcrit","gas_constant","Tcrit","p_reducing","Tmin","rhocrit","molarmass","T_CRITICAL",
 "P_min","pmax","T_min","T_reducing","T_MAX","P_MIN","T_triple","P_MAX","ptriple","Ttriple",
@@ -129,24 +128,25 @@ const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_
 counter = 0;
 longunits = Set();
 for p in coolpropparameters
+  #get_parameter_information_string
   longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");
   note = "";
   if (!in(longunit, longunits))
     push!(longunits, longunit);
   else
-    note = " *repeated* "
+    note = " *Duplicated* "
   end
   for fluid in coolpropfluids
     try
       res = ("$(PropsSI(p, Compat.String(fluid)))");
       !in(p, parameterswithnumval) && push!(missed, p);
-      note *= " *fluid constant* "
+      note *= " **Constant Property** "
       counter+=1;
       break;
     catch err
     end
   end
-  println(logf, p * " | " * longunit * " | " * note);
+  println(logf, "\"$p\"" * " | " * longunit * " | " * note);
 end
 length(missed) > 0 && warn("missed parameters eith numerical value:\n $missed)");
 @test length(parameterswithnumval) == counter

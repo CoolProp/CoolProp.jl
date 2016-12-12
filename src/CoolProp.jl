@@ -1,7 +1,7 @@
 push!(Libdl.DL_LOAD_PATH, abspath(@__FILE__, "..", "..", "deps", "lib"));
 
 if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
-  haskey(ENV, "TestingPath") || (ENV["TestingPath"] = include("../test/CoolProp.jl"));
+  haskey(ENV, "TestingPath") || (ENV["TestingPath"] = abspath(@__FILE__, "..", "..", "test/CoolProp.jl"));
   if (isfile(ENV["TestingPath"]))
     include(ENV["TestingPath"]);
     warn("** TestingMode is enabeled for: " * ENV["TestingPath"] * " **");

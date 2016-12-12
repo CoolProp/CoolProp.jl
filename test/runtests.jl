@@ -119,7 +119,7 @@ else
   warn("Trivial inputs with numerical values are not as expected.");
 end
 missed = Set();
-println(logf, " |-------------------| ");
+println(logf, " paramerer | description | unit | comment ");
 const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_triple","MOLEMASS","rhomolar_critical",
 "MOLARMASS","Pcrit","gas_constant","Tcrit","p_reducing","Tmin","rhocrit","molarmass","T_CRITICAL",
 "P_min","pmax","T_min","T_reducing","T_MAX","P_MIN","T_triple","P_MAX","ptriple","Ttriple",
@@ -129,7 +129,7 @@ const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_
 counter = 0;
 longunits = Set();
 for p in coolpropparameters
-  longunit = get_parameter_information_string(p, "long") * " in (" * get_parameter_information_string(p, "units") * ")";
+  longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");
   note = "";
   if (!in(longunit, longunits))
     push!(longunits, longunit);
@@ -146,7 +146,7 @@ for p in coolpropparameters
     catch err
     end
   end
-  println(logf, p * " --- " * longunit * note);
+  println(logf, p * " | " * longunit * " | " * note);
 end
 length(missed) > 0 && warn("missed parameters eith numerical value:\n $missed)");
 @test length(parameterswithnumval) == counter

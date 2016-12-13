@@ -5,14 +5,14 @@ export PARAMETERS, FLUIDS;
 
 $(readstring(abspath(@__FILE__, "..", "parameters.table")))
 """
-const PARAMETERS = "CoolProp parameters table" #readdlm(abspath(@__FILE__, "..", "parameters.table"), '|', skipstart=2);
+PARAMETERS() = readdlm(abspath(@__FILE__, "..", "parameters.table"), '|', skipstart=2);
 
 """
 # CoolProp fluids table
 
 $(readstring(abspath(@__FILE__, "..", "fluids.table")))
 """
-const FLUIDS = "CoolProp fluids table" #readdlm(abspath(@__FILE__, "..", "fluids.table"), '|', skipstart=2);
+FLUIDS() = readdlm(abspath(@__FILE__, "..", "fluids.table"), '|', skipstart=2);
 
 # ---------------------------------
 #        High-level functions
@@ -20,23 +20,25 @@ const FLUIDS = "CoolProp fluids table" #readdlm(abspath(@__FILE__, "..", "fluids
 
 
 """
-    propssi(fluid::AbstractString, param::AbstractString)
+    propssi(fluid::AbstractString, output::AbstractString)
 
 Return a value that does not depend on the thermodynamic state - this is a convenience function that does the call `PropsSI(output, "", 0, "", 0, fluid)`.
 
-# Example
-```julia
-
-```
 # Arguments
 * `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids), or simply type `?FLUIDS`
-* `param::AbstractString`: The name of property to evaluate. to see a list type `?PARAMETERS`
+* `output::AbstractString`: The name of parameter to evaluate. to see a list type `?PARAMETERS`
+
+# Example
+```julia
+julia> propssi("n-Butane","rhomolar_critical")
+3922.769612987809
+```
 
 # Ref
 CoolProp::Props1SI(std::string, std::string)
 """
-function propssi(fluid::AbstractString, param::AbstractString)
-  val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Ptr{UInt8}, Ptr{UInt8}), fluid, param)
+function propssi(fluid::AbstractString, output::AbstractString)
+  val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Ptr{UInt8}, Ptr{UInt8}), fluid, output)
   if val == Inf
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -47,11 +49,36 @@ end
     propssi(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
 
 Return a value that depends on the thermodynamic state.
+> For pure and pseudo-pure fluids, two state points are required to fix the state. The equations of state are based on T and ρ as state variables, so T,ρ will always be the fastest inputs. P,T will be a bit slower (3-10 times), and then comes inputs where neither T nor ρ are given, like p,h. They will be much slower. If speed is an issue, you can look into table-based interpolation methods using TTSE or bicubic interpolation.
+
+# Arguments
+* `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids), or simply type `?FLUIDS`
+* `output::AbstractString`: The name of parameter to evaluate. to see a list type `?PARAMETERS`
+* `name1::AbstractString`: The name of parameter for first state point
+* `value1::AbstractString`: Value of the first state point
+* `name2::AbstractString`: The name of parameter for second state point
+* `value2::AbstractString`: Value of the second state point
+
+# Example
+```julia
+julia> propssi("D","T",300,"P",101325,"n-Butane")
+2.4325863624814326
+julia> propssi("D","T",300,"P",101325,"INCOMP::DEB") # incompressible pure
+857.1454
+julia> propssi("D","T",300,"P",101325,"INCOMP::LiBr[0.23]") # incompressible mass-based binary mixture
+1187.5438243617214
+julia> propssi("D","T",300,"P",101325,"INCOMP::ZM[0.23]") # incompressible volume-based binary mixtures
+1028.7273860290911
+julia> propssi("Dmass","T",300,"P",101325,"R125[0.5]&R32[0.5]")
+3.5413381483914512
+julia> split(get_global_param_string("mixture_binary_pairs_list"),',')[1] # a random binary pair
+"100-41-4&106-42-3"
+julia> propssi("Dmass","T",300,"P",101325,"100-41-4[0.5]&106-42-3[0.5]") # ethylbenzene[0.5]&p-Xylene[0.5]
+857.7381127561846
+```
 
 # Ref
 CoolProp::PropsSI(const std::string &, const std::string &, double, const std::string &, double, const std::string&)
-# Arguments
-* `fluid`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` on of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids)
 """
 function propssi(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
   val = ccall( (:PropsSI, "CoolProp"), Cdouble, (Ptr{UInt8}, Ptr{UInt8}, Float64, Ptr{UInt8}, Float64, Ptr{UInt8}), output, name1, value1, name2, value2, fluid)
@@ -62,15 +89,34 @@ function propssi(output::AbstractString, name1::AbstractString, value1::Real, na
 end
 
 """
-    PhaseSI(Name1::AbstractString, Value1::Real, Name2::AbstractString, Value2::Real, Fluid::AbstractString)
+    phasesi(name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
 
 Return a string representation of the phase.
 
-\ref CoolProp::PhaseSI(const std::string &, double, const std::string &, double, const std::string&)
-\note This function returns the phase string in pre-allocated phase variable.  If buffer is not large enough, no copy is made
+# Arguments
+* `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids), or simply type `?FLUIDS`
+* `name1::AbstractString`: The name of parameter for first state point
+* `value1::AbstractString`: Value of the first state point
+* `name2::AbstractString`: The name of parameter for second state point
+* `value2::AbstractString`: Value of the second state point
+
+# Example
+```julia
+julia> phasesi("T",300,"Q",1,"Water")
+"twophase"
+julia> propssi("P","T",300,"Q",1,"Water")
+3536.806750422325
+julia> phasesi("T",300,"P",3531,"Water")
+"gas"
+julia> phasesi("T",300,"P",3541,"Water")
+"liquid"
+```
+
+# Ref
+CoolProp::PhaseSI(const std::string &, double, const std::string &, double, const std::string&)
 """
-function PhaseSI(Name1::AbstractString, Value1::Real, Name2::AbstractString, Value2::Real, Fluid::AbstractString)
-  val = ccall( (:PhaseSI, "CoolProp"), Int32, (Ptr{UInt8},Float64,Ptr{UInt8},Float64,Ptr{UInt8}, Ptr{UInt8}, Int), Name1,Value1,Name2,Value2,Fluid,message_buffer::Array{UInt8,1},buffer_length)
+function phasesi(name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
+  val = ccall( (:PhaseSI, "CoolProp"), Int32, (Ptr{UInt8},Float64,Ptr{UInt8},Float64,Ptr{UInt8}, Ptr{UInt8}, Int), name1,value1,name2,value2,fluid,message_buffer::Array{UInt8,1},buffer_length)
   val = unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8,1})))
   if val == ""
     error("CoolProp: ", get_global_param_string("errstring"))

@@ -1,7 +1,7 @@
 module CoolProp
 using Compat
 export PropsSI, PhaseSI, get_global_param_string, get_parameter_information_string,get_fluid_param_string,set_reference_stateS, get_param_index, get_input_pair_index, set_config, F2K, K2F, HAPropsSI, AbstractState_factory, AbstractState_free, AbstractState_set_fractions, AbstractState_update, AbstractState_specify_phase, AbstractState_unspecify_phase, AbstractState_keyed_output, AbstractState_output, AbstractState_update_and_common_out, AbstractState_update_and_1_out, AbstractState_update_and_5_out, AbstractState_set_binary_interaction_double, AbstractState_set_cubic_alpha_C, AbstractState_set_fluid_parameter_double
-export propssi
+export propssi, phasesi
 errcode = Ref{Clong}(0)
 
 const buffer_length = 20000
@@ -537,5 +537,6 @@ end
 #    EXPORT_CODE void CONVENTION AbstractState_all_critical_points(const long handle, const long length, double *T, double *p, double *rhomolar, long *stable, long *errcode, char *message_buffer, const long buffer_length);
 
 const PropsSI = propssi;
+const PhaseSI = phasesi;
 
 end #module

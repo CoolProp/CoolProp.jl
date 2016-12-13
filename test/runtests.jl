@@ -173,7 +173,19 @@ for fluid in coolpropfluids
     print(logf, " $bi:$(get_fluid_param_string(Compat.String(fluid), bi))");
   end
   print(logf, "\n");
-  (pure == "true") && PropsSI("TCRIT", Compat.String(fluid))!=PropsSI("T_REDUCING", Compat.String(fluid)) && push!(ppm, fluid);
+  println(fluid);
+  tcrit = PropsSI("TCRIT", Compat.String(fluid));
+  pcrit = PropsSI("PCRIT", Compat.String(fluid));
+  !(Compat.String(fluid) in ["Air", "CycloPropane", "D5", "DimethylCarbonate", "Fluorine", "Helium", "IsoButane", "Isohexane", "MD4M"]) && begin
+    @test PhaseSI("P", pcrit, "T", tcrit, Compat.String(fluid))=="critical_point";
+    @test PhaseSI("P", pcrit+100, "T", tcrit+10, Compat.String(fluid))=="supercritical";
+    @test PhaseSI("P", pcrit+100, "T", tcrit-10, Compat.String(fluid))=="supercritical_liquid";
+    @test PhaseSI("P", pcrit-100, "T", tcrit+10, Compat.String(fluid))=="supercritical_gas";
+    psat = PropsSI("P","T",tcrit-10,"Q",1,Compat.String(fluid));
+    @test PhaseSI("P", psat+100, "T", tcrit-10, Compat.String(fluid))=="liquid";
+    @test PhaseSI("P", psat-100, "T", tcrit-10, Compat.String(fluid))=="gas";
+  end
+  (pure == "true") && tcrit != PropsSI("T_REDUCING", Compat.String(fluid)) && push!(ppm, fluid);
   diffreduvscriti = abs(PropsSI("TCRIT", Compat.String(fluid)) - PropsSI("T_REDUCING", Compat.String(fluid)));
   if (diffreduvscriti > maxdiffreduvscriti)
     maxfluid = fluid;

@@ -21,6 +21,7 @@ for fluid in coolpropfluids
   pcrit = PropsSI("PCRIT", fluid);
   !(fluid in fails_critical_point) && begin
     #DiethylEther
+    println(fluid);
     @test PhaseSI("P", pcrit, "T", tcrit, fluid)=="critical_point";
     @test PhaseSI("P", pcrit+100, "T", tcrit+10, fluid)=="supercritical";
     @test PhaseSI("P", pcrit+100, "T", tcrit-10, fluid)=="supercritical_liquid";

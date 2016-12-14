@@ -9,7 +9,7 @@ message_buffer = Array(UInt8, buffer_length)
 
 const inputs_to_get_global_param_string = ["version", "gitrevision", "errstring", "warnstring", "FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "parameter_list", "predefined_mixtures", "HOME", "cubic_fluids_schema"];
 
-include("HighLevel.jl");
+include("CoolPropHighLevel.jl");
 
 # ---------------------------------
 #        Getter and setter for debug level

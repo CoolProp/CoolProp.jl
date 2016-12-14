@@ -11,7 +11,7 @@ const coolproptrivialparameters = ["ACENTRIC", "DIPOLE_MOMENT", "FH", "FRACTION_
   "TMIN", "TTRIPLE", "T_FREEZE", "T_REDUCING"];
 const trivalwithnumval = ["FH","GWP100","PMIN","TMIN","P_REDUCING","PCRIT","GWP20","GAS_CONSTANT","PMAX","RHOCRIT","TCRIT","T_REDUCING","ACENTRIC","GWP500","RHOMOLAR_REDUCING","TMAX","TTRIPLE","PH","M","PTRIPLE","RHOMOLAR_CRITICAL","ODP","HH"];
 const fails_any_props_trivals = ["DIPOLE_MOMENT","FRACTION_MAX","FRACTION_MIN","RHOMASS_REDUCING","T_FREEZE"];
-const fails_critical_point = [["DiethylEther"]; ["trans-2-Butene", "SulfurDioxide", "SES36", "R507A", "R410A", "R41", "R407C", "R404A", "R245fa", "R236FA", "R227EA", "R134a", "R116", "R11", "Oxygen", "Neon", "n-Undecane", "n-Propane", "n-Pentane", "n-Nonane", "MM", "MDM", "Air", "CycloPropane", "D5", "DimethylCarbonate", "Fluorine", "Helium", "IsoButane", "Isohexane", "MD4M"]];
+const fails_critical_point = ["DiethylEther","R134a","R116","SulfurDioxide","n-Pentane","R11","CycloPropane","MDM","n-Nonane","Oxygen","DimethylCarbonate","R41","R227EA","R245fa","trans-2-Butene","n-Propane","MM","Air","R236FA","Neon","SES36","Fluorine","n-Undecane","Isohexane","MD4M","IsoButane","D5"];
 const fails_tcrit_eq_treducing = ["R134a","R116","n-Pentane","R11","n-Nonane","MDM","Oxygen","R41","MM","Neon","Fluorine","n-Undecane","Isohexane","Helium","IsoButane","D5"];
 #high
 info("********* High Level Api *********");
@@ -26,11 +26,11 @@ end
 #PropsSI
 @test (CoolProp.PropsSI("T","P",101325.0,"Q",0.0,"Water")-373.1242958476879)<1e-5
 #get_fluid_param_string PhaseSI PropsSI
-include("AllFluids.jl");
+include("testFluids.jl");
 #get_parameter_information_string PropsSI
-include("AllParameters.jl");
-include("AllConstants.jl");
-include("Low.jl");
+include("testParameters.jl");
+include("testConstants.jl");
+include("testLow.jl");
 
 
 #set_reference_stateS

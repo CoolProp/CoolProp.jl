@@ -3,6 +3,7 @@ counter = 0;
 maxdiffreduvscriti = 0.0;
 maxfluid = "";
 uneq = Set();
+critphasefail = Set();
 logf = open("fluids.table", "w");
 println(logf, "ID |Name |Alias |CAS |Pure |Formula |BibTeX ");
 println(logf, ":--|:----|:-----|:---|:----|:-------|:------");
@@ -19,17 +20,19 @@ for fluid in coolpropfluids
   print(logf, "\n");
   tcrit = PropsSI("TCRIT", fluid);
   pcrit = PropsSI("PCRIT", fluid);
-  !(fluid in fails_critical_point) && begin
-    #DiethylEther
-    println(fluid);
-    @test PhaseSI("P", pcrit, "T", tcrit, fluid)=="critical_point";
-    @test PhaseSI("P", pcrit+100, "T", tcrit+10, fluid)=="supercritical";
-    @test PhaseSI("P", pcrit+100, "T", tcrit-10, fluid)=="supercritical_liquid";
-    @test PhaseSI("P", pcrit-100, "T", tcrit+10, fluid)=="supercritical_gas";
-    psat = PropsSI("P","T",tcrit-10,"Q",1, fluid);
-    @test PhaseSI("P", psat+100, "T", tcrit-10, fluid)=="liquid";
-    @test PhaseSI("P", psat-100, "T", tcrit-10, fluid)=="gas";
+  try
+    (PhaseSI("P", pcrit, "T", tcrit, fluid) != "critical_point") && push!(critphasefail, fluid);
+  catch err
+    push!(critphasefail, fluid);
   end
+  @test PhaseSI("P", pcrit+50000, "T", tcrit+3, fluid)=="supercritical";
+  @test PhaseSI("P", pcrit+50000, "T", tcrit-3, fluid)=="supercritical_liquid";
+  @test PhaseSI("P", pcrit-50000, "T", tcrit+3, fluid)=="supercritical_gas";
+  psat = PropsSI("P","T",tcrit-3,"Q",1, fluid);
+  t3 = PropsSI("Ttriple", fluid);
+  p3 = PropsSI("ptriple", fluid);
+  @test PhaseSI("P", p3, "T", (t3+tcrit)/2, fluid)=="gas";
+  @test PhaseSI("P", (pcrit+p3)/2, "T", (t3+tcrit)/2, fluid)=="liquid";
   (pure == "true") && (tcrit != PropsSI("T_REDUCING", fluid)) && push!(uneq, fluid);
   diffreduvscriti = abs(PropsSI("TCRIT", fluid) - PropsSI("T_REDUCING", fluid));
   if (diffreduvscriti > maxdiffreduvscriti)
@@ -40,4 +43,6 @@ end
 close(logf);
 println("max diff between reducing vs critical point temp: $maxdiffreduvscriti for $maxfluid");
 @test uneq == Set(fails_tcrit_eq_treducing);
-println("fails_tcrit_eq_treducing $uneq");
+println("different reducing vs critical point: $uneq");
+@test issubset(critphasefail, Set(fails_critical_point));
+println("fails to get phase for critical point: $critphasefail");

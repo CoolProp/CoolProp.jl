@@ -4,7 +4,7 @@ using Base.Test
 const coolpropfluids = map(Compat.String, split(get_global_param_string("FluidsList"),','));
 const coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
 const coolpropmix = map(Compat.String, split(get_global_param_string("predefined_mixtures"), ','));
-# See https://github.com/CoolProp/CoolProp/issues/1293
+#all trivials taken from http://www.coolprop.org/coolprop/HighLevelAPI.html#table-of-string-inputs-to-propssi-function
 const coolproptrivialparameters = ["ACENTRIC", "DIPOLE_MOMENT", "FH", "FRACTION_MAX", "FRACTION_MIN",
   "GAS_CONSTANT", "GWP100", "GWP20", "GWP500", "HH", "M", "ODP", "PCRIT", "PH", "PMAX", "PMIN", "PTRIPLE",
   "P_REDUCING", "RHOCRIT", "RHOMASS_REDUCING", "RHOMOLAR_CRITICAL", "RHOMOLAR_REDUCING", "TCRIT", "TMAX",
@@ -29,7 +29,6 @@ end
 include("AllFluids.jl");
 #get_parameter_information_string PropsSI
 include("AllParameters.jl");
-#all trivials taken from http://www.coolprop.org/coolprop/HighLevelAPI.html#table-of-string-inputs-to-propssi-function
 include("AllConstants.jl");
 include("Low.jl");
 

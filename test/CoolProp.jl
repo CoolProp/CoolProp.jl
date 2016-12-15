@@ -1,7 +1,7 @@
 module CoolProp
 using Compat
 export PropsSI, PhaseSI, get_global_param_string, get_parameter_information_string,get_fluid_param_string,set_reference_stateS, get_param_index, get_input_pair_index, set_config, F2K, K2F, HAPropsSI, AbstractState_factory, AbstractState_free, AbstractState_set_fractions, AbstractState_update, AbstractState_specify_phase, AbstractState_unspecify_phase, AbstractState_keyed_output, AbstractState_output, AbstractState_update_and_common_out, AbstractState_update_and_1_out, AbstractState_update_and_5_out, AbstractState_set_binary_interaction_double, AbstractState_set_cubic_alpha_C, AbstractState_set_fluid_parameter_double
-export propssi, phasesi
+export propssi, phasesi, k2f, f2k
 errcode = Ref{Clong}(0)
 
 const buffer_length = 20000
@@ -10,9 +10,11 @@ message_buffer = Array(UInt8, buffer_length)
 const inputs_to_get_global_param_string = ["version", "gitrevision", "errstring", "warnstring", "FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "parameter_list", "predefined_mixtures", "HOME", "cubic_fluids_schema"];
 
 include("CoolPropHighLevel.jl");
+include("CoolPropConfig.jl");
+include("CoolPropInformation.jl");
 
 # ---------------------------------
-#        Getter and setter for debug level
+# Getter and setter for debug level
 # ---------------------------------
 
 """
@@ -20,7 +22,8 @@ include("CoolPropHighLevel.jl");
 
 Get the debug level.
 
-@returns level The level of the verbosity for the debugging output (0-10) 0: no debgging output
+# Return value
+Level The level of the verbosity for the debugging output (0-10) 0: no debgging output
 """
 function get_debug_level()
   ccall( (:get_debug_level, "CoolProp"), Cint, () )
@@ -31,7 +34,8 @@ end
 
 Set the debug level.
 
-@param level The level of the verbosity for the debugging output (0-10) 0: no debgging output
+# Arguments
+* `level::Int` The level of the verbosity for the debugging output (0-10) 0: no debgging output
 """
 function set_debug_level(level::Int)
   ccall( (:set_debug_level, "CoolProp"), Void, (Cint,), level)
@@ -538,5 +542,6 @@ end
 
 const PropsSI = propssi;
 const PhaseSI = phasesi;
-
+const K2F = k2f;
+const F2K = f2k;
 end #module

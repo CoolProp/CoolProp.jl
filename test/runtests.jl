@@ -1,6 +1,10 @@
 using CoolProp
 using Compat
 using Base.Test
+dl = CoolProp.get_debug_level();
+CoolProp.set_debug_level(10);
+@test CoolProp.get_debug_level()==10;
+CoolProp.set_debug_level(dl);
 const coolpropfluids = map(Compat.String, split(get_global_param_string("FluidsList"),','));
 const coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
 const coolpropmix = map(Compat.String, split(get_global_param_string("predefined_mixtures"), ','));
@@ -24,23 +28,17 @@ for param in ["version", "gitrevision", "errstring", "warnstring", "FluidsList",
   end
 end
 #PropsSI
-@test (CoolProp.PropsSI("T","P",101325.0,"Q",0.0,"Water")-373.1242958476879)<1e-5
+@test (PropsSI("T","P",101325.0,"Q",0.0,"Water")-373.1242958476879)<1e-5
 #get_fluid_param_string PhaseSI PropsSI
 include("testFluids.jl");
 #get_parameter_information_string PropsSI
 include("testParameters.jl");
+#PropsSI
 include("testConstants.jl");
+#AbstractState_factory get_input_pair_index AbstractState_update get_param_index AbstractState_keyed_output AbstractState_free
 include("testLow.jl");
-
-
 #set_reference_stateS
-#get_param_index
-#get_input_pair_index
-#F2K
-#K2F
+#F2K K2F
+@test_approx_eq K2F(F2K(100)) 100
 #HAPropsSI
-#AbstractState_factory
-#AbstractState_free
 #AbstractState_set_fractions
-#AbstractState_update
-#AbstractState_keyed_output

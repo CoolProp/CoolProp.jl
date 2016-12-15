@@ -4,7 +4,7 @@ using Base.Test
 dl = CoolProp.get_debug_level();
 CoolProp.set_debug_level(10);
 @test CoolProp.get_debug_level()==10;
-CoolProp.set_debug_level(dl);
+CoolProp.set_debug_level(Int(dl));
 const coolpropfluids = map(Compat.String, split(get_global_param_string("FluidsList"),','));
 const coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
 const coolpropmix = map(Compat.String, split(get_global_param_string("predefined_mixtures"), ','));

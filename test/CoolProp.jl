@@ -37,7 +37,7 @@ Set the debug level.
 # Arguments
 * `level::Int` The level of the verbosity for the debugging output (0-10) 0: no debgging output
 """
-function set_debug_level(level::Int)
+function set_debug_level(level::Integer) # change ::Int to ::Integer to make set_debug_level(get_debug_level()) works on different machine
   ccall( (:set_debug_level, "CoolProp"), Void, (Cint,), level)
 end
 

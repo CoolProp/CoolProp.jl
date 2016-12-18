@@ -1,7 +1,7 @@
 module CoolProp
 using Compat
 export PropsSI, PhaseSI, get_global_param_string, get_parameter_information_string,get_fluid_param_string,set_reference_stateS, get_param_index, get_input_pair_index, set_config, F2K, K2F, HAPropsSI, AbstractState_factory, AbstractState_free, AbstractState_set_fractions, AbstractState_update, AbstractState_specify_phase, AbstractState_unspecify_phase, AbstractState_keyed_output, AbstractState_output, AbstractState_update_and_common_out, AbstractState_update_and_1_out, AbstractState_update_and_5_out, AbstractState_set_binary_interaction_double, AbstractState_set_cubic_alpha_C, AbstractState_set_fluid_parameter_double
-export propssi, phasesi, k2f, f2k
+export propssi, phasesi, k2f, f2k, hapropssi, cair_sat
 errcode = Ref{Clong}(0)
 
 const buffer_length = 20000
@@ -53,32 +53,7 @@ end
 #    EXPORT_CODE double CONVENTION saturation_ancillary(const char *fluid_name, const char *output, int Q, const char *input, double value);
 ###
 
-# ---------------------------------
-#        Humid Air Properties
-# ---------------------------------
-
-"""
-    HAPropsSI(Output::AbstractString, Name1::AbstractString, Value1::Real, Name2::AbstractString, Value2::Real, Name3::AbstractString, Value3::Real)
-
-DLL wrapper of the HAPropsSI function.
-
-\ref HumidAir::HAPropsSI(const char *OutputName, const char *Input1Name, double Input1, const char *Input2Name, double Input2, const char *Input3Name, double Input3);
-\note If there is an error, a huge value will be returned, you can get the error message by doing something like get_global_param_string("errstring",output)
-"""
-function HAPropsSI(Output::AbstractString, Name1::AbstractString, Value1::Real, Name2::AbstractString, Value2::Real, Name3::AbstractString, Value3::Real)
-  val = ccall( (:HAPropsSI, "CoolProp"), Cdouble, (Ptr{UInt8},Ptr{UInt8},Float64,Ptr{UInt8},Float64,Ptr{UInt8},Float64), Output,Name1,Value1,Name2,Value2,Name3,Value3)
-  if val == Inf
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
-end
-
-###
-#    /** \brief DLL wrapper of the cair_sat function
-#     * \sa \ref HumidAir::cair_sat(double);
-#     */
-#    EXPORT_CODE double CONVENTION cair_sat(double T);
-###
+include("CoolPropHA.jl");
 
 # ---------------------------------
 #        Low-level access
@@ -544,4 +519,5 @@ const PropsSI = propssi;
 const PhaseSI = phasesi;
 const K2F = k2f;
 const F2K = f2k;
+const HAPropsSI = hapropssi;
 end #module

@@ -8,36 +8,39 @@
 DLL wrapper of the HAPropsSI function.
 
 # Arguments
-* `output`: Output name for desired property, accepetd values are listed in the following table  
+* `output`: Output name for desired property, accepetd values are listed in the following table
 * `name1`, `name2`, `name3`: Input name of  given state values, one must be "P"
 
-Description               |Parameter(s) name
-:-------------------------|:--------------
-Humidity ratio            |Omega HumRat W
-Saturated vapor pressure  |psi_w Y
-Dew point                 |Tdp T_dp DewPoint D
-Wet bulb temperature      |Twb T_wb WetBulb B
-Enthalpy                  |Enthalpy H Hda
-GIVEN_ENTHALPY_HA         |Hha
-Internal energy           |InternalEnergy U Uda
-GIVEN_INTERNAL_ENERGY_HA  |Uha
-Entropy                   |Entropy S Sda
-GIVEN_ENTROPY_HA          |Sha
-Relative humidity         |RH RelHum R
-Temperature               |Tdb T_db T
-Pressure                  |P
-GIVEN_VDA                 |V Vda
-GIVEN_VHA                 |Vha
-Viscosity                 |mu Visc M
-Conductivity              |k Conductivity K
-GIVEN_CP                  |C cp
-GIVEN_CPHA                |Cha cp_ha
-GIVEN_CV                  |CV
-GIVEN_CVHA                |CVha cv_ha
-Partial pressure of water |P_w
-GIVEN_ISENTROPIC_EXPONENT |isentropic_exponent
-Speed of sound            |speed_of_sound
-Compressibility factor    |Z
+# Note
+Here, all outputs calculated as functions of these three: "Y"(Water mole fraction), "T" and "P", as "P" is mandatory so more perfomance achived when "Y" and "T" is given (or at least one of them).
+
+Parameter(s) name     |Description                                 |Unit      |Formula
+:---------------------|:-------------------------------------------|:---------|:-------------------------------
+Omega HumRat W        |Humidity ratio                              |          |
+psi_w Y               |Water mole fraction                         |mol_w/mol |
+Tdp T_dp DewPoint D   |Dew point temperature                       |K         |
+Twb T_wb WetBulb B    |Wet bulb temperature                        |K         |
+Enthalpy H Hda        |Enthalpy                                    |J/kg_da   |
+Hha                   |Enthalpy per kg of humid air                |J/kg_ha   |
+InternalEnergy U Uda  |Internal energy                             |J/kg_da   |
+Uha                   |Internal energy per kg of humid air         |J/kg_ha   |
+Entropy S Sda         |Entropy                                     |J/kg_da/K |
+Sha                   |Entropy per kg of humid air                 |J/kg_ha/K |
+RH RelHum R           |Relative humidity                           |          |
+Tdb T_db T            |Temperature                                 |K         |
+P                     |Pressure                                    |Pa        |
+V Vda                 |Specific volume                             |m^3/kg_da |MolarVolume*(1+HumidityRatio)/M_ha
+Vha                   |Specific volume per kg of humid air         |m^3/kg_ha |MolarVolume/M_ha
+mu Visc M             |Viscosity                                   |          |
+k Conductivity K      |Conductivity                                |          |
+C cp                  |Heat cap. const. press.                     |J/kg_da/K |
+Cha cp_ha             |Heat cap. const. press. per kg of humid air |J/kg_ha/K |
+CV                    |Heat cap. const. vol.                       |J/kg_da/K |
+CVha cv_ha            |Heat cap. const. vol. per kg of humid air   |J/kg_ha/K |
+P_w                   |Partial pressure of water                   |          |
+isentropic_exponent   |Isentropic exponent                         |          |
+speed_of_sound        |Speed of sound                              |          |sqrt(1/M_ha*cp/cv*dpdrho__constT)
+Z                     |Compressibility factor                      |          |p*MolarVolume/(R*T)
 
 # Example
 ```julia

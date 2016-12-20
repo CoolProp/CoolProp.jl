@@ -8,48 +8,48 @@
 DLL wrapper of the HAPropsSI function.
 
 # Arguments
-* `output`:
-* `name1`, `name2`, `name3`:
+* `output`: Output name for desired property, accepetd values are listed in the following table  
+* `name1`, `name2`, `name3`: Input name of  given state values, one must be "P"
 
-Description           |Parameter(s) name
-:---------------------|:--------------
-GIVEN_HUMRAT          |Omega HumRat W
-GIVEN_PSIW            |psi_w Y
-Dew point             |Tdp T_dp DewPoint D
-Wet bulb temperature  |Twb T_wb WetBulb B
-Enthalpy              |Enthalpy H Hda
-GIVEN_ENTHALPY_HA     |Hha
-Internal energy       |InternalEnergy U Uda
-GIVEN_INTERNAL_ENERGY_HA |Uha
-Entropy               |Entropy S Sda
-GIVEN_ENTROPY_HA      |Sha
-GIVEN_RH              |RH RelHum R
-Temperature           |Tdb T_db T
-Pressure              |P
-GIVEN_VDA             |V Vda
-GIVEN_VHA             |Vha
-Viscosity             |mu Visc M
-Conductivity          |k Conductivity K
-GIVEN_CP              |C cp
-GIVEN_CPHA            |Cha cp_ha
-GIVEN_CV              |CV
-GIVEN_CVHA            |CVha cv_ha
+Description               |Parameter(s) name
+:-------------------------|:--------------
+Humidity ratio            |Omega HumRat W
+Saturated vapor pressure  |psi_w Y
+Dew point                 |Tdp T_dp DewPoint D
+Wet bulb temperature      |Twb T_wb WetBulb B
+Enthalpy                  |Enthalpy H Hda
+GIVEN_ENTHALPY_HA         |Hha
+Internal energy           |InternalEnergy U Uda
+GIVEN_INTERNAL_ENERGY_HA  |Uha
+Entropy                   |Entropy S Sda
+GIVEN_ENTROPY_HA          |Sha
+Relative humidity         |RH RelHum R
+Temperature               |Tdb T_db T
+Pressure                  |P
+GIVEN_VDA                 |V Vda
+GIVEN_VHA                 |Vha
+Viscosity                 |mu Visc M
+Conductivity              |k Conductivity K
+GIVEN_CP                  |C cp
+GIVEN_CPHA                |Cha cp_ha
+GIVEN_CV                  |CV
+GIVEN_CVHA                |CVha cv_ha
 Partial pressure of water |P_w
 GIVEN_ISENTROPIC_EXPONENT |isentropic_exponent
-Speed of sound        |speed_of_sound
-Compressibility factor|Z
+Speed of sound            |speed_of_sound
+Compressibility factor    |Z
 
 # Example
 ```julia
 # Enthalpy (J per kg dry air) as a function of temperature, pressure,
 # and relative humidity at STP
-julia> h = HAPropsSI("H","T",298.15,"P",101325,"R",0.5)
+julia> h = hapropssi("H","T",298.15,"P",101325,"R",0.5)
 50423.45039247604
 # Temperature of saturated air at the previous enthalpy
-julia> T = HAPropsSI("T","P",101325,"H",h,"R",1.0)
+julia> T = hapropssi("T","P",101325,"H",h,"R",1.0)
 290.9620891952412
 # Temperature of saturated air - order of inputs doesn't matter
-julia> T = HAPropsSI("T","H",h,"R",1.0,"P",101325)
+julia> T = hapropssi("T","H",h,"R",1.0,"P",101325)
 290.9620891952412
 ```
 

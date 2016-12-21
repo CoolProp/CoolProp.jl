@@ -29,8 +29,8 @@ Sha                   |Entropy per kg of humid air                 |J/kg_ha/K |
 RH RelHum R           |Relative humidity                           |          |
 Tdb T_db T            |Temperature                                 |K         |
 P                     |Pressure                                    |Pa        |
-V Vda                 |Specific volume                             |m^3/kg_da |MolarVolume*(1+HumidityRatio)/M_ha
-Vha                   |Specific volume per kg of humid air         |m^3/kg_ha |MolarVolume/M_ha
+V Vda                 |Specific volume                             |m^3/kg_da |``MolarVolume*(1+HumidityRatio)/M_ha``
+Vha                   |Specific volume per kg of humid air         |m^3/kg_ha |``MolarVolume/M_ha``
 mu Visc M             |Viscosity                                   |          |
 k Conductivity K      |Conductivity                                |          |
 C cp                  |Heat cap. const. press.                     |J/kg_da/K |
@@ -39,8 +39,8 @@ CV                    |Heat cap. const. vol.                       |J/kg_da/K |
 CVha cv_ha            |Heat cap. const. vol. per kg of humid air   |J/kg_ha/K |
 P_w                   |Partial pressure of water                   |          |
 isentropic_exponent   |Isentropic exponent                         |          |
-speed_of_sound        |Speed of sound                              |          |sqrt(1/M_ha*cp/cv*dpdrho__constT)
-Z                     |Compressibility factor                      |          |p*MolarVolume/(R*T)
+speed_of_sound        |Speed of sound                              |          |``sqrt(1/M_ha*cp/cv*dpdrho__constT)``
+Z                     |Compressibility factor                      |          |``P*MolarVolume/(R*T)``
 
 # Example
 ```julia

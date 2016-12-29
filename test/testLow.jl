@@ -59,3 +59,50 @@ catch
   warn("QT_INPUTS not ready");
 end
 AbstractState_free(IF97);
+#AbstractState_output AbstractState_set_fractions AbstractState_specify_phase
+handle = AbstractState_factory("HEOS", "Water&Ethanol");
+pq_inputs = get_input_pair_index("PQ_INPUTS");
+t = get_param_index("T");
+AbstractState_set_fractions(handle, [0.4, 0.6]);
+AbstractState_update(handle,pq_inputs,101325, 0);
+temp = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0]; temp_=[0.0]; out=[0.0]; out_=[0.0];
+AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar);
+AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1, temp_, p, rhomolar, hmolar, smolar);
+AbstractState_update_and_1_out(handle, pq_inputs, [101325.0], [0.0],1, t, out);
+AbstractState_update_and_1_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, "T", out_);
+out1=[0.0]; out2=[0.0]; out3=[0.0]; out4=[0.0]; out5=[0.0]; out1_=[0.0];
+AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t], out1, out2, out3, out4, out5);
+AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"], out1_, out2, out3, out4, out5);
+if is_apple()
+  @test_approx_eq AbstractState_keyed_output(handle,t) 352.3522212978604
+  @test_approx_eq AbstractState_output(handle,"T") 352.3522212978604
+  @test_approx_eq temp[1] 352.3522212978604
+  @test_approx_eq temp_[1] 352.3522212978604
+  @test_approx_eq out[1] 352.3522212978604
+  @test_approx_eq out_[1] 352.3522212978604
+  @test_approx_eq out1[1] 352.3522212978604
+  @test_approx_eq out1_[1] 352.3522212978604
+else
+  @test_approx_eq AbstractState_keyed_output(handle,t) 352.3522212991724
+  @test_approx_eq AbstractState_output(handle,"T") 352.3522212991724
+  @test_approx_eq temp[1] 352.3522212991724
+  @test_approx_eq temp_[1] 352.3522212991724
+  @test_approx_eq out[1] 352.3522212991724
+  @test_approx_eq out_[1] 352.3522212991724
+  @test_approx_eq out1[1] 352.3522212991724
+  @test_approx_eq out1_[1] 352.3522212991724
+end
+for phase in ["phase_liquid", "phase_gas", "phase_twophase", "phase_supercritical", "phase_supercritical_gas", "phase_supercritical_liquid", "phase_critical_point", "phase_unknown", "phase_not_imposed"]
+  AbstractState_specify_phase(handle, phase);
+end
+AbstractState_free(handle);
+handle = AbstractState_factory("HEOS", "Water&Ethanol");
+AbstractState_set_binary_interaction_double(handle, 0, 1, "betaT", 0.987);
+pq_inputs = get_input_pair_index("PQ_INPUTS");
+t = get_param_index("T");
+AbstractState_set_fractions(handle, [0.4, 0.6]);
+AbstractState_update(handle, pq_inputs, 101325, 0);
+res = AbstractState_keyed_output(handle,t);
+#AbstractState_set_cubic_alpha_C http://www.cjche.com.cn/EN/article/downloadArticleFile.do?attachType=PDF&id=1635
+AbstractState_set_cubic_alpha_C(handle, 0, "TWU", 1.0, 1.0, 1.0);
+AbstractState_free(handle);

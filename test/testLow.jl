@@ -95,6 +95,7 @@ end
 for phase in ["phase_liquid", "phase_gas", "phase_twophase", "phase_supercritical", "phase_supercritical_gas", "phase_supercritical_liquid", "phase_critical_point", "phase_unknown", "phase_not_imposed"]
   AbstractState_specify_phase(handle, phase);
 end
+#AbstractState_set_binary_interaction_double AbstractState_set_fractions
 AbstractState_free(handle);
 handle = AbstractState_factory("HEOS", "Water&Ethanol");
 AbstractState_set_binary_interaction_double(handle, 0, 1, "betaT", 0.987);
@@ -103,6 +104,14 @@ t = get_param_index("T");
 AbstractState_set_fractions(handle, [0.4, 0.6]);
 AbstractState_update(handle, pq_inputs, 101325, 0);
 res = AbstractState_keyed_output(handle,t);
+AbstractState_free(handle);
+#AbstractState_set_cubic_alpha_C AbstractState_set_fluid_parameter_double
+handle = AbstractState_factory("SRK", "Ethanol");
 #AbstractState_set_cubic_alpha_C http://www.cjche.com.cn/EN/article/downloadArticleFile.do?attachType=PDF&id=1635
-AbstractState_set_cubic_alpha_C(handle, 0, "TWU", 1.0, 1.0, 1.0);
+try
+  AbstractState_set_cubic_alpha_C(handle, 0, "TWU", 1.0, 1.0, 1.0);
+catch err
+  warn("AbstractState_set_cubic_alpha_C fails with: $err")
+end
+AbstractState_set_fluid_parameter_double(handle, 0, "c", 1.0);
 AbstractState_free(handle);

@@ -30,7 +30,7 @@ ref CoolProp::get_global_param_string
 * `key`: A string represents parameter name, could be one of $inputs_to_get_global_param_string
 """
 function get_global_param_string(key::AbstractString)
-  val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Ptr{UInt8},Ptr{UInt8},Int), key, message_buffer::Array{UInt8,1}, buffer_length)
+  val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8},Int), key, message_buffer::Array{UInt8,1}, buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -60,7 +60,7 @@ A tabular output for this function is available with `?parameters` or `parameter
 """
 function get_parameter_information_string(key::AbstractString, outtype::AbstractString)
   message_buffer[1:length(outtype)+1] = [outtype.data; 0x00]
-  val = ccall( (:get_parameter_information_string, "CoolProp"), Clong, (Ptr{UInt8},Ptr{UInt8},Int), key,message_buffer::Array{UInt8,1},buffer_length)
+  val = ccall( (:get_parameter_information_string, "CoolProp"), Clong, (Cstring,Ptr{UInt8},Int), key,message_buffer::Array{UInt8,1},buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -94,7 +94,7 @@ ParamName                    | Description
 A tabular output for this function is available with `?fluids` or `fluids=fluids()`
 """
 function get_fluid_param_string(fluid::AbstractString,param::AbstractString)
-  val = ccall( (:get_fluid_param_string, "CoolProp"), Clong, (Ptr{UInt8},Ptr{UInt8},Ptr{UInt8},Int), fluid,param,message_buffer::Array{UInt8,1},buffer_length)
+  val = ccall( (:get_fluid_param_string, "CoolProp"), Clong, (Cstring,Cstring,Ptr{UInt8},Int), fluid,param,message_buffer::Array{UInt8,1},buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -128,7 +128,7 @@ Get the index as a long for a parameter "T", "P", etc, for `abstractstate_keyed_
 * `param`: A string represents parameter name, to see full list check "Table of string inputs to PropsSI function": http://www.coolprop.org/coolprop/HighLevelAPI.html#parameter-table, or simply type `get_global_param_string("parameter_list")`
 """
 function get_param_index(param::AbstractString)
-  val = ccall( (:get_param_index, "CoolProp"), Clong, (Ptr{UInt8},), param)
+  val = ccall( (:get_param_index, "CoolProp"), Clong, (Cstring,), param)
   if val == -1
     error("CoolProp: Unknown parameter: ", param)
   end
@@ -188,7 +188,7 @@ julia> get_input_pair_index("PT_INPUTS")
 ```
 """
 function get_input_pair_index(pair::AbstractString)
-  val = ccall( (:get_input_pair_index, "CoolProp"), Clong, (Ptr{UInt8},), pair)
+  val = ccall( (:get_input_pair_index, "CoolProp"), Clong, (Cstring,), pair)
   if val == -1
     error("CoolProp: Unknown input pair: ", param)
   end

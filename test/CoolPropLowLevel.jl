@@ -57,7 +57,7 @@ function abstractstate_free(handle::Clong)
 end
 
 """
-    abstractstate_set_fractions(handle::Clong,fractions::Array)
+    abstractstate_set_fractions(handle::Clong,fractions::Array{Float64})
 
 Set the fractions (mole, mass, volume) for the AbstractState.
 
@@ -77,7 +77,7 @@ julia> abstractstate_keyed_output(handle,t)
 julia> abstractstate_free(handle);
 ```
 """
-function abstractstate_set_fractions(handle::Clong, fractions::Array)
+function abstractstate_set_fractions(handle::Clong, fractions::Array{Float64})
   ccall( (:AbstractState_set_fractions, "CoolProp"), Void, (Clong,Ptr{Cdouble},Clong,Ref{Clong},Ptr{UInt8},Clong), handle,fractions,length(fractions),errcode,message_buffer::Array{UInt8,1},buffer_length)
   if errcode[] != 0
     if errcode[] == 1
@@ -278,7 +278,7 @@ julia> abstractstate_update_and_common_out!(handle, pq_inputs, [101325.0], [0.0]
 julia> abstractstate_free(handle);
 ```
 """
-function abstractstate_update_and_common_out!{F<:AbstractFloat}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, T::Array{F}, p::Array{F}, rhomolar::Array{F}, hmolar::Array{F}, smolar::Array{F})
+function abstractstate_update_and_common_out!{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, T::Array{F}, p::Array{F}, rhomolar::Array{F}, hmolar::Array{F}, smolar::Array{F})
   ccall( (:AbstractState_update_and_common_out, "CoolProp"), Void, (Clong,Clong,Ref{Cdouble},Ref{Cdouble},Clong,Ref{Cdouble},Ref{Cdouble},Ref{Cdouble},Ref{Cdouble},Ref{Cdouble},Ref{Clong},Ptr{UInt8},Clong), handle,input_pair,value1,value2,length,T,p,rhomolar,hmolar,smolar,errcode,message_buffer::Array{UInt8,1},buffer_length)
   if errcode[] != 0
     if errcode[] == 1
@@ -291,14 +291,14 @@ function abstractstate_update_and_common_out!{F<:AbstractFloat}(handle::Clong, i
   return nothing
 end
 
-function abstractstate_update_and_common_out!{F<:AbstractFloat}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, T::Array{F}, p::Array{F}, rhomolar::Array{F}, hmolar::Array{F}, smolar::Array{F})
+function abstractstate_update_and_common_out!{F<:Float64}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, T::Array{F}, p::Array{F}, rhomolar::Array{F}, hmolar::Array{F}, smolar::Array{F})
   abstractstate_update_and_common_out!(handle, get_input_pair_index(input_pair), value1, value2, length, T, p, rhomolar, hmolar, smolar)
   return nothing
 end
 
 """
-    abstractstate_update_and_1_out!{F<:AbstractFloat}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, output::Clong, out::Array{F})
-    abstractstate_update_and_1_out!{F<:AbstractFloat}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, output::AbstractString, out::Array{F})
+    abstractstate_update_and_1_out!{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, output::Clong, out::Array{F})
+    abstractstate_update_and_1_out!{F<:Float64}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, output::AbstractString, out::Array{F})
 
 Update the state of the AbstractState and get one output value (temperature, pressure, molar density, molar enthalpy and molar entropy) from the AbstractState using pointers as inputs and output to allow array computation.
 
@@ -312,7 +312,7 @@ Update the state of the AbstractState and get one output value (temperature, pre
 * `output`: The indice for the output desired
 * `out`: The array for output
 """
-function abstractstate_update_and_1_out!{F<:AbstractFloat}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, output::Clong, out::Array{F})
+function abstractstate_update_and_1_out!{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, output::Clong, out::Array{F})
   ccall( (:AbstractState_update_and_1_out, "CoolProp"), Void, (Clong,Clong,Ref{Cdouble},Ref{Cdouble},Clong,Clong,Ref{Cdouble},Ref{Clong},Ptr{UInt8},Clong), handle,input_pair,value1,value2,length,output,out,errcode,message_buffer::Array{UInt8,1},buffer_length)
   if errcode[] != 0
     if errcode[] == 1
@@ -326,14 +326,14 @@ function abstractstate_update_and_1_out!{F<:AbstractFloat}(handle::Clong, input_
   return nothing
 end
 
-function abstractstate_update_and_1_out!{F<:AbstractFloat}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, output::AbstractString, out::Array{F})
+function abstractstate_update_and_1_out!{F<:Float64}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, output::AbstractString, out::Array{F})
   abstractstate_update_and_1_out!(handle, get_input_pair_index(input_pair), value1, value2, length, get_param_index(output), out)
   return nothing
 end
 
 """
-    abstractstate_update_and_5_out!{F<:AbstractFloat}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{Clong}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
-    abstractstate_update_and_5_out!{F<:AbstractFloat, S<:AbstractString}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{S}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
+    abstractstate_update_and_5_out!{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{Clong}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
+    abstractstate_update_and_5_out!{F<:Float64, S<:AbstractString}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{S}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
 
 Update the state of the AbstractState and get an output value five common outputs (temperature, pressure, molar density, molar enthalpy and molar entropy) from the AbstractState using pointers as inputs and output to allow array computation.
 
@@ -351,7 +351,7 @@ Update the state of the AbstractState and get an output value five common output
 * `out4`: The array for the fourth output
 * `out5`: The array for the fifth output
 """
-function abstractstate_update_and_5_out!{F<:AbstractFloat}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{Clong}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
+function abstractstate_update_and_5_out!{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{Clong}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
   ccall( (:AbstractState_update_and_5_out, "CoolProp"), Void, (Clong,Clong,Ref{Cdouble},Ref{Cdouble},Clong,Ref{Clong},Ref{Cdouble},Ref{Cdouble},Ref{Cdouble},Ref{Cdouble},Ref{Cdouble},Ref{Clong},Ptr{UInt8},Clong), handle,input_pair,value1,value2,length,outputs,out1,out2,out3,out4,out5,errcode,message_buffer::Array{UInt8,1},buffer_length)
   if errcode[] != 0
     if errcode[] == 1
@@ -365,7 +365,7 @@ function abstractstate_update_and_5_out!{F<:AbstractFloat}(handle::Clong, input_
   return nothing
 end
 
-function abstractstate_update_and_5_out!{F<:AbstractFloat, S<:AbstractString}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{S}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
+function abstractstate_update_and_5_out!{F<:Float64, S<:AbstractString}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{S}, out1::Array{F}, out2::Array{F}, out3::Array{F}, out4::Array{F}, out5::Array{F})
   outputs_key = Array(Clong,5)
   for k = 1:5
     outputs_key[k] = get_param_index(outputs[k])
@@ -375,7 +375,7 @@ function abstractstate_update_and_5_out!{F<:AbstractFloat, S<:AbstractString}(ha
 end
 
 """
-    abstractstate_set_binary_interaction_double(handle::Clong,i::Int, j::Int, parameter::AbstractString, value::Cdouble)
+    abstractstate_set_binary_interaction_double(handle::Clong,i::Int, j::Int, parameter::AbstractString, value::Float64)
 
 Set binary interraction parrameter for diffrent mixtures model e.g.: "linear", "Lorentz-Berthelot"
 
@@ -399,7 +399,7 @@ julia> abstractstate_keyed_output(handle,t)
 julia> abstractstate_free(handle);
 ```
 """
-function abstractstate_set_binary_interaction_double(handle::Clong, i::Integer, j::Integer, parameter::AbstractString, value::Cdouble)
+function abstractstate_set_binary_interaction_double(handle::Clong, i::Integer, j::Integer, parameter::AbstractString, value::Float64)
   ccall( (:AbstractState_set_binary_interaction_double, "CoolProp"), Void, (Clong,Clong,Clong,Ptr{UInt8},Cdouble,Ref{Clong},Ptr{UInt8},Clong), handle,i,j,parameter,value,errcode,message_buffer::Array{UInt8,1},buffer_length)
   if errcode[] != 0
     if errcode[] == 1

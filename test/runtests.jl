@@ -42,5 +42,5 @@ include("testLow.jl");
 @test_approx_eq K2F(F2K(100)) 100
 #HAPropsSI
 dt=1e-3;
-@test_approx_eq (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0)-HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt HAPropsSI("C", "T", 300, "P", 100000, "Y", 0)
+@test_approx_eq_eps (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0)-HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt HAPropsSI("C", "T", 300, "P", 100000, "Y", 0) 2e-9
 #AbstractState_set_fractions

@@ -60,7 +60,7 @@ julia> T = hapropssi("T","H",h,"R",1.0,"P",101325)
 HumidAir::HAPropsSI(const char* OutputName, const char* Input1Name, double Input1, const char* Input2Name, double Input2, const char* Input3Name, double Input3);
 """
 function hapropssi(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, name3::AbstractString, value3::Real)
-  val = ccall( (:HAPropsSI, "CoolProp"), Cdouble, (Ptr{UInt8},Ptr{UInt8},Float64,Ptr{UInt8},Float64,Ptr{UInt8},Float64), output,name1,value1,name2,value2,name3,value3)
+  val = ccall( (:HAPropsSI, "CoolProp"), Cdouble, (Cstring, Cstring, Cdouble, Cstring, Cdouble, Cstring, Cdouble), output,name1,value1,name2,value2,name3,value3)
   if val == Inf
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -81,7 +81,7 @@ HumidAir::cair_sat(double);
 # Note
 No error bound checking is carried out
 """
-function cair_sat(t::Number)
-  val = ccall( (:cair_sat, "CoolProp"), Cdouble, (Float64, ), t)
+function cair_sat(t::Real)
+  val = ccall( (:cair_sat, "CoolProp"), Cdouble, (Cdouble, ), t)
   return val;
 end

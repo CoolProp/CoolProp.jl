@@ -21,7 +21,7 @@ julia> propssi("n-Butane","rhomolar_critical")
 CoolProp::Props1SI(std::string, std::string)
 """
 function propssi(fluid::AbstractString, output::AbstractString)
-  val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Ptr{UInt8}, Ptr{UInt8}), fluid, output)
+  val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Cstring, Cstring), fluid, output)
   if val == Inf
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -64,7 +64,7 @@ julia> propssi("Dmass","T",300,"P",101325,"100-41-4[0.5]&106-42-3[0.5]") # ethyl
 CoolProp::PropsSI(const std::string &, const std::string &, double, const std::string &, double, const std::string&)
 """
 function propssi(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
-  val = ccall( (:PropsSI, "CoolProp"), Cdouble, (Ptr{UInt8}, Ptr{UInt8}, Float64, Ptr{UInt8}, Float64, Ptr{UInt8}), output, name1, value1, name2, value2, fluid)
+  val = ccall( (:PropsSI, "CoolProp"), Cdouble, (Cstring, Cstring, Cdouble, Cstring, Cdouble, Cstring), output, name1, value1, name2, value2, fluid)
   if val == Inf
     error("CoolProp: ", get_global_param_string("errstring"))
   end
@@ -101,7 +101,7 @@ julia> phasesi("T",300,"P",3541,"Water")
 CoolProp::PhaseSI(const std::string &, double, const std::string &, double, const std::string&)
 """
 function phasesi(name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
-  val = ccall( (:PhaseSI, "CoolProp"), Int32, (Ptr{UInt8},Float64,Ptr{UInt8},Float64,Ptr{UInt8}, Ptr{UInt8}, Int), name1,value1,name2,value2,fluid,message_buffer::Array{UInt8,1},buffer_length)
+  val = ccall( (:PhaseSI, "CoolProp"), Int32, (Cstring, Cdouble, Cstring, Cdouble, Cstring, Ptr{UInt8}, Int), name1, value1, name2, value2, fluid, message_buffer::Array{UInt8,1}, buffer_length)
   val = unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8,1})))
   if val == ""
     error("CoolProp: ", get_global_param_string("errstring"))
@@ -131,7 +131,7 @@ end
 @returns error_code 1 = Ok 0 = error
 """
 function set_reference_stateS(Ref::AbstractString, reference_state::AbstractString)
-  val = ccall( (:set_reference_stateS, "CoolProp"), Cint, (Ptr{UInt8},Ptr{UInt8}), Ref,reference_state)
+  val = ccall( (:set_reference_stateS, "CoolProp"), Cint, (Cstring, Cstring), Ref, reference_state)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end

@@ -3,3 +3,4 @@
 *.jl.mem
 deps/lib/*
 test/*.log
+.tags*

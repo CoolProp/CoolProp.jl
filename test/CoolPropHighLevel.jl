@@ -148,10 +148,10 @@ julia> s0= 3887.0; #J/kg
 julia> rho0=997.1;
 julia> T0=298.15;
 julia> M = PropsSI("molemass", "Water");
-julia> set_reference_stateS("Water", T0, rho0/M, h0*M, s0*M);
+julia> set_reference_stateD("Water", T0, rho0/M, h0*M, s0*M);
 julia> PropsSI("H", "T", T0, "P", 101325, "Water")
 -1.5870107493843542e7
-julia> set_reference_stateD("Water", "DEF");
+julia> set_reference_stateS("Water", "DEF");
 julia> PropsSI("H", "T", T0, "P", 101325, "Water")
 104920.1198093371
 ```

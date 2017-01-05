@@ -190,7 +190,7 @@ julia> get_input_pair_index("PT_INPUTS")
 function get_input_pair_index(pair::AbstractString)
   val = ccall( (:get_input_pair_index, "CoolProp"), Clong, (Cstring,), pair)
   if val == -1
-    error("CoolProp: Unknown input pair: ", param)
+    error("CoolProp: Unknown input pair: ", pair)
   end
   return val
 end

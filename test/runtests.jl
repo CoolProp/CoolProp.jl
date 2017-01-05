@@ -1,6 +1,9 @@
 using CoolProp
 using Compat
 using Base.Test
+
+include("testThrows.jl");
+
 dl = CoolProp.get_debug_level();
 CoolProp.set_debug_level(10);
 @test CoolProp.get_debug_level()==10;
@@ -43,4 +46,3 @@ include("testLow.jl");
 #HAPropsSI
 dt=1e-3;
 @test_approx_eq_eps (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0)-HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt HAPropsSI("C", "T", 300, "P", 100000, "Y", 0) 2e-9
-include("testThrows.jl");

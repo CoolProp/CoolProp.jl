@@ -447,7 +447,7 @@ Set some fluid parameter (ie volume translation for cubic). Currently applied to
 
 # Arguments
 * `handle`: The integer handle for the state class stored in memory
-* `i`: indice of the fluid the parramter should be applied too (for mixtures)
+* `i`: indice of the fluid the parramter should be applied to (for mixtures)
 * `parameter`: string wit the name of the parameter, e.g. "c", "cm", "c_m" for volume translation parrameter.
 * `value`: the value of the parameter
 """

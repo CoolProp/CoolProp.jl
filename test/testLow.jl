@@ -109,6 +109,7 @@ AbstractState_free(handle);
 handle = AbstractState_factory("SRK", "Ethanol");
 #AbstractState_set_cubic_alpha_C http://www.cjche.com.cn/EN/article/downloadArticleFile.do?attachType=PDF&id=1635
 try
+  #do not export on all machines
   AbstractState_set_cubic_alpha_C(handle, 0, "TWU", 1.0, 1.0, 1.0);
 catch err
   warn("AbstractState_set_cubic_alpha_C fails with: $err")

@@ -38,9 +38,9 @@ Return a value that depends on the thermodynamic state.
 * `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids)
 * `output::AbstractString`: The name of parameter to evaluate. to see a list type `?parameters`
 * `name1::AbstractString`: The name of parameter for first state point
-* `value1::AbstractString`: Value of the first state point
+* `value1::Real`: Value of the first state point
 * `name2::AbstractString`: The name of parameter for second state point
-* `value2::AbstractString`: Value of the second state point
+* `value2::Real`: Value of the second state point
 
 # Example
 ```julia
@@ -79,9 +79,9 @@ Return a string representation of the phase. Valid states are: "liquid", "superc
 # Arguments
 * `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids)
 * `name1::AbstractString`: The name of parameter for first state point
-* `value1::AbstractString`: Value of the first state point
+* `value1::Real`: Value of the first state point
 * `name2::AbstractString`: The name of parameter for second state point
-* `value2::AbstractString`: Value of the second state point
+* `value2::Real`: Value of the second state point
 
 # Example
 ```julia
@@ -125,19 +125,73 @@ end
 ###
 
 """
-    set_reference_stateS(Ref::AbstractString, reference_state::AbstractString)
+    set_reference_state(ref::AbstractString,reference_state::AbstractString)
 
-\ref CoolProp::set_reference_stateS
-@returns error_code 1 = Ok 0 = error
+Set the reference state based on a string representation.
+
+#Arguments
+* `fluid::AbstractString`	The name of the fluid (Backend can be provided like "REFPROP::Water", or if no backend is provided, "HEOS" is the assumed backend)
+* `reference_state::AbstractString`	The reference state to use, one of:
+
+Reference State |	Description
+:---------------|:-------------------------------------
+"IIR"	          |h = 200 kJ/kg, s=1 kJ/kg/K at 0C saturated liquid
+"ASHRAE"        |h = 0, s = 0 @ -40C saturated liquid
+"NBP"	          |h = 0, s = 0 @ 1.0 bar saturated liquid
+"DEF"	          |Reset to the default reference state for the fluid
+"RESET"	        |Remove the offset
+
+#Example
+```julia
+julia> h0=-15870000.0; # J/kg
+julia> s0= 3887.0; #J/kg
+julia> rho0=997.1;
+julia> T0=298.15;
+julia> M = PropsSI("molemass","Water");
+julia> set_reference_stateS("Water", T0, rho0/M, h0*M, s0*M);
+julia> PropsSI("H", "T", T0, "P", 101325, "Water")
+-1.5870107493843542e7
+julia> set_reference_stateD("Water", "DEF");
+julia> PropsSI("H", "T", T0, "P", 101325, "Water")
+104920.1198093371
+```
+
+#Ref
+set_reference_stateS(const std::string& FluidName,const std::string& reference_state)
+
+#Note
+The changing of the reference state should be part of the initialization of your program, and it is not recommended to change the reference state during the course of making calculations
 """
-function set_reference_stateS(Ref::AbstractString, reference_state::AbstractString)
-  val = ccall( (:set_reference_stateS, "CoolProp"), Cint, (Cstring, Cstring), Ref, reference_state)
+function set_reference_state(fluid::AbstractString,reference_state::AbstractString)
+  val = ccall( (:set_reference_stateS,"CoolProp"),Cint,(Cstring,Cstring),fluid,reference_state)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
   return val
 end
 
+"""
+    set_reference_state(fluid::AbstractString,temp::Real,rhomolar::Real,hmolar0::Real,smolar0::Real)
+
+Set the reference state based on a thermodynamic state point specified by temperature and molar density.
+
+#Arguments
+* `fluid::AbstractString`	The name of the fluid
+* `temp::Real`	Temperature at reference state [K]
+* `rhomolar::Real`	Molar density at reference state [mol/m^3]
+* `hmolar0::Real`	Molar enthalpy at reference state [J/mol]
+* `smolar0::Real`	Molar entropy at reference state [J/mol/K]
+
+#Ref
+set_reference_stateD(const char* Ref,double T,double rhomolar,double hmolar0,double smolar0)
+"""
+function set_reference_state(fluid::AbstractString,temp::Real,rhomolar::Real,hmolar0::Real,smolar0::Real)
+  val = ccall( (:set_reference_stateD,"CoolProp"),Cint,(Cstring,Cdouble,Cdouble,Cdouble,Cdouble),fluid,temp,rhomolar,hmolar0,smolar0)
+  if val == 0
+    error("CoolProp: ", get_global_param_string("errstring"))
+  end
+  return val
+end
 ###
 #    /**
 #     * \overload

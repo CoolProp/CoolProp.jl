@@ -30,15 +30,15 @@ ref CoolProp::get_global_param_string
 * `key`: A string represents parameter name, could be one of $inputs_to_get_global_param_string
 """
 function get_global_param_string(key::AbstractString)
-  val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8},Int), key, message_buffer::Array{UInt8,1}, buffer_length)
+  val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8}, Int), key, message_buffer::Array{UInt8, 1}, buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
-  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8,1})))
+  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
 end
 
 """
-    get_parameter_information_string(key::AbstractString,outtype::AbstractString)
+    get_parameter_information_string(key::AbstractString, outtype::AbstractString)
     get_parameter_information_string(key::AbstractString)
 
 Get information for a parameter.
@@ -60,11 +60,11 @@ A tabular output for this function is available with `?parameters` or `parameter
 """
 function get_parameter_information_string(key::AbstractString, outtype::AbstractString)
   message_buffer[1:length(outtype)+1] = [outtype.data; 0x00]
-  val = ccall( (:get_parameter_information_string, "CoolProp"), Clong, (Cstring,Ptr{UInt8},Int), key,message_buffer::Array{UInt8,1},buffer_length)
+  val = ccall( (:get_parameter_information_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8}, Int), key, message_buffer::Array{UInt8, 1}, buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
-  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8,1})))
+  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
 end
 
 function get_parameter_information_string(key::AbstractString)
@@ -72,7 +72,7 @@ function get_parameter_information_string(key::AbstractString)
 end
 
 """
-    get_fluid_param_string(fluid::AbstractString,param::AbstractString)
+    get_fluid_param_string(fluid::AbstractString, param::AbstractString)
 
 Get a string for a value from a fluid (numerical values for the fluid can be obtained from Props1SI function).
 
@@ -81,11 +81,11 @@ Get a string for a value from a fluid (numerical values for the fluid can be obt
 * `param`: A string, can be in one of the terms described in the following table
 
 ParamName                    | Description
-:-------------------------   |:----------------------------------------
+:----------------------------|:----------------------------------------
 "aliases"                    | A comma separated list of aliases for the fluid
 "CAS", "CAS_number"          | The CAS number
 "ASHRAE34"                   | The ASHRAE standard 34 safety rating
-"REFPROPName","REFPROP_name" | The name of the fluid used in REFPROP
+"REFPROPName", "REFPROP_name"| The name of the fluid used in REFPROP
 "Bibtex-XXX"                 | A BibTeX key, where XXX is one of the bibtex keys used in get_BibTeXKey
 "pure"                       | "true" if the fluid is pure, "false" otherwise
 "formula"                    | The chemical formula of the fluid in LaTeX form if available, "" otherwise
@@ -93,12 +93,12 @@ ParamName                    | Description
 # Note
 A tabular output for this function is available with `?fluids` or `fluids=fluids()`
 """
-function get_fluid_param_string(fluid::AbstractString,param::AbstractString)
-  val = ccall( (:get_fluid_param_string, "CoolProp"), Clong, (Cstring,Cstring,Ptr{UInt8},Int), fluid,param,message_buffer::Array{UInt8,1},buffer_length)
+function get_fluid_param_string(fluid::AbstractString, param::AbstractString)
+  val = ccall( (:get_fluid_param_string, "CoolProp"), Clong, (Cstring, Cstring, Ptr{UInt8}, Int), fluid, param, message_buffer::Array{UInt8, 1}, buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end
-  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8,1})))
+  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
 end
 
 """

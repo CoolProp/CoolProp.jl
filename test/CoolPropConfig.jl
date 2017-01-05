@@ -19,7 +19,7 @@ ALTERNATIVE_REFPROP_HMX_BNC_PATH | "" | An alternative path to the HMX.BNC file.
 VTPR_UNIFAQ_PATH | "" | The path to the directory containing the UNIFAQ JSON files.  Should be slash terminated
 """
 function set_config(key::AbstractString, val::AbstractString)
-  ccall( (:set_config_string, "CoolProp"), Void, (Cstring, Cstring), key,val)
+  ccall( (:set_config_string, "CoolProp"), Void, (Cstring, Cstring), key, val)
   return get_global_param_string("errstring")
 end
 

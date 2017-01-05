@@ -35,7 +35,7 @@ include("testFluids.jl");
 include("testParameters.jl");
 #PropsSI
 include("testConstants.jl");
-#AbstractState_factory get_input_pair_index AbstractState_update get_param_index AbstractState_keyed_output AbstractState_free
+#AbstractState_factory get_input_pair_index AbstractState_update get_param_index AbstractState_keyed_output AbstractState_free AbstractState_set_binary_interaction_double AbstractState_set_fractions
 include("testLow.jl");
 #set_reference_stateS
 #F2K K2F
@@ -43,4 +43,4 @@ include("testLow.jl");
 #HAPropsSI
 dt=1e-3;
 @test_approx_eq_eps (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0)-HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt HAPropsSI("C", "T", 300, "P", 100000, "Y", 0) 2e-9
-#AbstractState_set_fractions
+include("testThrows.jl");

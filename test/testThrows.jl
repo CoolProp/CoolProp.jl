@@ -1,1 +1,1 @@
-@test_throws ErrorException  set_reference_state("Water", "DEFwe");
+@test_throws ErrorException  set_reference_stateS("Water", "DEFwe");

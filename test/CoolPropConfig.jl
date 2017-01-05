@@ -8,8 +8,8 @@
 Set configuration string.
 
 # Arguments
-* `key::AbstractString` The key to configure, following table shows possible `key` values, its default setting and its usage.
-* `val::AbstractString` The value to set to the key
+* `key::AbstractString`: The key to configure, following table shows possible `key` values, its default setting and its usage.
+* `val::AbstractString`: The value to set to the key
 
 Key                     |Default|Description
 :-----------------------|:-----:|:---------------------------------------------------------------------------------
@@ -29,8 +29,8 @@ end
 Set configuration numerical value as double.
 
 # Arguments
-* `key::AbstractString` The key to configure, following table shows possible `key` values, its default setting and its usage.
-* `val::Real` The value to set to the key
+* `key::AbstractString`: The key to configure, following table shows possible `key` values, its default setting and its usage.
+* `val::Real`: The value to set to the key
 
 Key                     |Default|Description
 :-----------------------|:-----:|:---------------------------------------------------------------------------------
@@ -50,8 +50,8 @@ end
 Set configuration value as a boolean.
 
 # Arguments
-* `key::AbstractString` The key to configure, following table shows possible `key` values, its default setting and its usage.
-* `val::Bool` The value to set to the key
+* `key::AbstractString`: The key to configure, following table shows possible `key` values, its default setting and its usage.
+* `val::Bool`: The value to set to the key
 
 Key                     |Default|Description
 :-----------------------|:-----:|:---------------------------------------------------------------------------------

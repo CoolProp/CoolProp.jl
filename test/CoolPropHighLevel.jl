@@ -192,18 +192,3 @@ function set_reference_state(fluid::AbstractString, temp::Real, rhomolar::Real, 
   end
   return val
 end
-###
-#    /**
-#     * \overload
-#     * \sa \ref CoolProp::set_reference_stateD
-#     * @returns error_code 1 = Ok 0 = error
-#     */
-#    EXPORT_CODE int CONVENTION set_reference_stateD(const char *Ref, double T, double rhomolar, double hmolar0, double smolar0);
-#    /** \brief FORTRAN 77 style wrapper of the PropsSI function
-#     * \overload
-#     * \sa \ref CoolProp::PropsSI(const std::string &, const std::string &, double, const std::string &, double, const std::string&)
-#     *
-#     * \note If there is an error, a huge value will be returned, you can get the error message by doing something like get_global_param_string("errstring", output)
-#     */
-#    EXPORT_CODE void CONVENTION propssi_(const char *Output, const char *Name1, const double *Prop1, const char *Name2, const double *Prop2, const char * Ref, double *output);
-###

@@ -1,4 +1,5 @@
 instr = "invalid value"
+inhandle = 999%Clong
 @test_throws ErrorException set_reference_stateS("Water", instr);
 @test_throws ErrorException HAPropsSI(instr, "T", 298.15, "P", 101325, "R", 0.5)
 @test_throws ErrorException HAPropsSI("H", instr, 298.15, "P", 101325, "R", 0.5)
@@ -19,33 +20,33 @@ instr = "invalid value"
 @test_throws ErrorException get_input_pair_index(instr)
 @test_throws ErrorException AbstractState_factory(instr, "R245fa")
 @test_throws ErrorException AbstractState_factory("HEOS", instr)
-@test_throws ErrorException AbstractState_free(-1)
-@test_throws ErrorException AbstractState_set_fractions(-1, [0.0])
-@test_throws ErrorException AbstractState_update(-1, "PQ_INPUTS", 101325, 0)
+@test_throws ErrorException AbstractState_free(inhandle)
+@test_throws ErrorException AbstractState_set_fractions(inhandle, [0.0])
+@test_throws ErrorException AbstractState_update(inhandle, "PQ_INPUTS", 101325, 0)
 handle = AbstractState_factory("HEOS", "Water&Ethanol")
 @test_throws ErrorException AbstractState_update(handle, instr, 101325, 0)
-@test_throws ErrorException AbstractState_update(handle, -1, 101325, 0)
+@test_throws ErrorException AbstractState_update(handle, inhandle, 101325, 0)
 @test_throws ErrorException AbstractState_output(handle, instr)
-@test_throws ErrorException AbstractState_output(-1, "T")
-@test_throws ErrorException AbstractState_keyed_output(-1, 1)
-@test_throws ErrorException AbstractState_keyed_output(handle, -1)
-@test_throws ErrorException AbstractState_specify_phase(-1, "phase_gas")
+@test_throws ErrorException AbstractState_output(inhandle, "T")
+@test_throws ErrorException AbstractState_keyed_output(inhandle, 1%Clong)
+@test_throws ErrorException AbstractState_keyed_output(handle, inhandle)
+@test_throws ErrorException AbstractState_specify_phase(inhandle, "phase_gas")
 @test_throws ErrorException AbstractState_specify_phase(handle, instr)
-@test_throws ErrorException AbstractState_unspecify_phase(-1)
+@test_throws ErrorException AbstractState_unspecify_phase(inhandle)
 pq_inputs = get_input_pair_index("PQ_INPUTS")
 temp = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0];
-@test_throws ErrorException AbstractState_update_and_common_out(-1, pq_inputs, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
+@test_throws ErrorException AbstractState_update_and_common_out(inhandle, pq_inputs, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
 @test_throws ErrorException AbstractState_update_and_common_out(handle, instr, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
 out = [0.0];
-@test_throws ErrorException AbstractState_update_and_1_out(-1, pq_inputs, [101325.0], [0.0], 1, 1, out)
+@test_throws ErrorException AbstractState_update_and_1_out(inhandle, pq_inputs, [101325.0], [0.0], 1, 1%Clong, out)
 @test_throws ErrorException AbstractState_update_and_1_out(handle, instr, [101325.0], [0.0], 1, "T", out)
-@test_throws ErrorException AbstractState_update_and_5_out(-1, pq_inputs, [101325.0], [0.0], 1, [1, 1, 1, 1, 1], out, out, out, out, out)
+@test_throws ErrorException AbstractState_update_and_5_out(inhandle, pq_inputs, [101325.0], [0.0], 1, [1%Clong, 1%Clong, 1%Clong, 1%Clong, 1%Clong], out, out, out, out, out)
 @test_throws ErrorException AbstractState_update_and_5_out(handle, instr, [101325.0], [0.0], 1, ["T", "T", "T", "T", "T"], out, out, out, out, out)
-@test_throws ErrorException AbstractState_set_binary_interaction_double(-1, 0, 1, "betaT", 0.987);
+@test_throws ErrorException AbstractState_set_binary_interaction_double(inhandle, 0, 1, "betaT", 0.987);
 @test_throws ErrorException AbstractState_set_binary_interaction_double(handle, 0, 1, instr, 0.987);
 AbstractState_free(handle)
 handle = AbstractState_factory("SRK", "Ethanol");
-@test_throws ErrorException AbstractState_set_fluid_parameter_double(-1, 1, "c", 0.0)
+@test_throws ErrorException AbstractState_set_fluid_parameter_double(inhandle, 1, "c", 0.0)
 @test_throws ErrorException AbstractState_set_fluid_parameter_double(handle, 0, instr, 0.0)
 #AbstractState_set_cubic_alpha_c
 AbstractState_free(handle)

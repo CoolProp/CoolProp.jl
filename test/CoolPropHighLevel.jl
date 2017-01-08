@@ -109,20 +109,27 @@ function phasesi(name1::AbstractString, value1::Real, name2::AbstractString, val
   return val
 end
 
-###
-#    /**
-#     * @brief Set the departure functions in the departure function library from a string format
-#     * @param string_data The departure functions to be set, either provided as a JSON-formatted string
-#     *                    or as a string of the contents of a HMX.BNC file from REFPROP
-#     * @param errcode The errorcode that is returned (0 = no error, !0 = error)
-#     * @param message_buffer A buffer for the error code
-#     * @param buffer_length The length of the buffer for the error code
-#     *
-#     * @note By default, if a departure function already exists in the library, this is an error,
-#     *       unless the configuration variable OVERWRITE_DEPARTURE_FUNCTIONS is set to true
-#     */
-#    EXPORT_CODE void CONVENTION set_departure_functions(const char * string_data, long *errcode, char *message_buffer, const long buffer_length);
-###
+"""
+    set_departure_functions(string_data::AbstractString)
+
+Set the departure functions in the departure function library from a string format
+
+# Arguments
+* `string_data`: The departure functions to be set, either provided as a JSON-formatted string or as a string of the contents of a HMX.BNC file from REFPROP
+
+# Note
+By default, if a departure function already exists in the library, this is an error, unless the configuration variable OVERWRITE_DEPARTURE_FUNCTIONS is set to true
+
+# Ref
+CoolProp::set_departure_functions(const char * string_data, long *errcode, char *message_buffer, const long buffer_length);
+"""
+function set_departure_functions(string_data::AbstractString)
+  errcode = ref{Clong}(0);
+  ccall( (:set_departure_functions, "CoolProp"), Void, (Cstring, Ptr{Clong}, Ptr{UInt8}, Int), string_data, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+  if errcode != 0
+    error("CoolProp: ", unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1}))))
+  end
+end
 
 """
     set_reference_state(ref::AbstractString, reference_state::AbstractString)

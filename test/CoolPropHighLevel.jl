@@ -108,20 +108,20 @@ function phasesi(name1::AbstractString, value1::Real, name2::AbstractString, val
   end
   return val
 end
-
+#=No sample no test
 """
     set_departure_functions(string_data::AbstractString)
 
-Set the departure functions in the departure function library from a string format
+Set the departure functions in the departure function library from a string format.
 
 # Arguments
 * `string_data`: The departure functions to be set, either provided as a JSON-formatted string or as a string of the contents of a HMX.BNC file from REFPROP
 
-# Note
-By default, if a departure function already exists in the library, this is an error, unless the configuration variable OVERWRITE_DEPARTURE_FUNCTIONS is set to true
-
 # Ref
 CoolProp::set_departure_functions(const char * string_data, long* errcode, char* message_buffer, const long buffer_length);
+
+# Note
+By default, if a departure function already exists in the library, this is an error, unless the configuration variable OVERWRITE_DEPARTURE_FUNCTIONS is set to true
 """
 function set_departure_functions(string_data::AbstractString)
   errcode = Ref{Clong}(0);
@@ -130,7 +130,7 @@ function set_departure_functions(string_data::AbstractString)
     error("CoolProp: ", unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1}))))
   end
 end
-
+=#
 """
     set_reference_state(ref::AbstractString, reference_state::AbstractString)
 
@@ -195,6 +195,33 @@ set_reference_stateD(const char* Ref, double T, double rhomolar, double hmolar0,
 function set_reference_state(fluid::AbstractString, temp::Real, rhomolar::Real, hmolar0::Real, smolar0::Real)
   val = ccall( (:set_reference_stateD, "CoolProp"), Cint, (Cstring, Cdouble, Cdouble, Cdouble, Cdouble), fluid, temp, rhomolar, hmolar0, smolar0)
   if val == 0
+    error("CoolProp: ", get_global_param_string("errstring"))
+  end
+  return val
+end
+
+"""
+    saturation_ancillary(fluid_name::AbstractString, output::AbstractString, quality::Integer, input::AbstractString, value::Real)
+
+Extract a value from the saturation ancillary.
+
+# Arguments
+* `fluid_name`: The name of the fluid to be used - HelmholtzEOS backend only
+* `output`: The desired output variable ("P" for instance for pressure)
+* `quality`: The quality, 0 or 1
+* `input`: The input variable ("T")
+* `value`: The input value
+
+#  Example
+julia> saturation_ancillary("R410A","I",1,"T", 300)
+0.004877519938463293
+
+# Ref
+double saturation_ancillary(const char* fluid_name, const char* output, int Q, const char* input, double value);
+"""
+function saturation_ancillary(fluid_name::AbstractString, output::AbstractString, quality::Integer, input::AbstractString, value::Real)
+  val = ccall( (:saturation_ancillary, "CoolProp"), Cdouble, (Cstring, Cstring, Cint, Cstring, Cdouble), fluid_name, output, quality, input, value)
+  if val == Inf
     error("CoolProp: ", get_global_param_string("errstring"))
   end
   return val

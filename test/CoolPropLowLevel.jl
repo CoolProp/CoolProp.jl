@@ -399,7 +399,7 @@ julia> abstractstate_keyed_output(handle, t)
 julia> abstractstate_free(handle);
 ```
 """
-function abstractstate_set_binary_interaction_double(handle::Clong, i::Integer, j::Integer, parameter::AbstractString, value::Float64)
+function abstractstate_set_binary_interaction_double(handle::Clong, i::Integer, j::Integer, parameter::AbstractString, value::Real)
   ccall( (:AbstractState_set_binary_interaction_double, "CoolProp"), Void, (Clong, Clong, Clong, Cstring, Cdouble, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, j, parameter, value, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
   if errcode[] != 0
     if errcode[] == 1
@@ -414,7 +414,7 @@ function abstractstate_set_binary_interaction_double(handle::Clong, i::Integer, 
 end
 
 """
-    abstractstate_set_cubic_alpha_c(handle::Clong, i::Integer, parameter::AbstractString, c1::Float64, c2::Float64, c3::Float64)
+    abstractstate_set_cubic_alpha_c(handle::Clong, i::Integer, parameter::AbstractString, c1::Real, c2::Real, c3::Real)
 
  Set cubic's alpha function parameters.
 
@@ -426,7 +426,7 @@ end
 * `c2`: the second parameter for the alpha function
 * `c3`: the third parameter for the alpha function
 """
-function abstractstate_set_cubic_alpha_c(handle::Clong, i::Integer, parameter::AbstractString, c1::Float64, c2::Float64, c3::Float64)
+function abstractstate_set_cubic_alpha_c(handle::Clong, i::Integer, parameter::AbstractString, c1::Real, c2::Real, c3::Real)
   ccall( (:AbstractState_set_cubic_alpha_C, "CoolProp"), Void, (Clong, Clong, Cstring, Cdouble, Cdouble, Cdouble, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, parameter, c1, c2, c3, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
   if errcode[] != 0
     if errcode[] == 1
@@ -441,7 +441,7 @@ function abstractstate_set_cubic_alpha_c(handle::Clong, i::Integer, parameter::A
 end
 
 """
-    abstractstate_set_fluid_parameter_double(handle::Clong, i::Integer, parameter::AbstractString, value::Float64)
+    abstractstate_set_fluid_parameter_double(handle::Clong, i::Integer, parameter::AbstractString, value::Real)
 
 Set some fluid parameter (ie volume translation for cubic). Currently applied to the whole fluid not to components.
 
@@ -451,7 +451,7 @@ Set some fluid parameter (ie volume translation for cubic). Currently applied to
 * `parameter`: string wit the name of the parameter, e.g. "c", "cm", "c_m" for volume translation parrameter.
 * `value`: the value of the parameter
 """
-function abstractstate_set_fluid_parameter_double(handle::Clong, i::Integer, parameter::AbstractString, value::Float64)
+function abstractstate_set_fluid_parameter_double(handle::Clong, i::Integer, parameter::AbstractString, value::Real)
   ccall( (:AbstractState_set_fluid_parameter_double, "CoolProp"), Void, (Clong, Clong, Cstring, Cdouble, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, parameter, value, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
   if errcode[] != 0
     if errcode[] == 1
@@ -464,3 +464,104 @@ function abstractstate_set_fluid_parameter_double(handle::Clong, i::Integer, par
   end
   return nothing
 end
+
+#    /**
+#    * @brief Calculate a saturation derivative from the AbstractState using integer values for the desired parameters
+#    * @param handle The integer handle for the state class stored in memory
+#    * @param Of The parameter of which the derivative is being taken
+#    * @param Wrt The derivative with with respect to this parameter
+#    * @param errcode The errorcode that is returned (0 = no error, !0 = error)
+#    * @param message_buffer A buffer for the error code
+#    * @param buffer_length The length of the buffer for the error code
+#    * @return
+#    */
+#    EXPORT_CODE double CONVENTION AbstractState_first_saturation_deriv(const long handle, const long Of, const long Wrt, long *errcode, char *message_buffer, const long buffer_length);
+#
+#    /**
+#    * @brief Calculate the first partial derivative in homogeneous phases from the AbstractState using integer values for the desired parameters
+#    * @param handle The integer handle for the state class stored in memory
+#    * @param Of The parameter of which the derivative is being taken
+#    * @param Wrt The derivative with with respect to this parameter
+#    * @param Constant The parameter that is not affected by the derivative
+#    * @param errcode The errorcode that is returned (0 = no error, !0 = error)
+#    * @param message_buffer A buffer for the error code
+#    * @param buffer_length The length of the buffer for the error code
+#    * @return
+#    */
+#    EXPORT_CODE double CONVENTION AbstractState_first_partial_deriv(const long handle, const long Of, const long Wrt, const long Constant, long *errcode, char *message_buffer, const long buffer_length);
+
+
+#    /**
+#     * @brief Build the phase envelope
+#     * @param handle The integer handle for the state class stored in memory
+#     * @param level How much refining of the phase envelope ("none" to skip refining (recommended))
+#     * @param errcode The errorcode that is returned (0 = no error, !0 = error)
+#     * @param message_buffer A buffer for the error code
+#     * @param buffer_length The length of the buffer for the error code
+#     * @return
+#     *
+#     * @note If there is an error in an update call for one of the inputs, no change in the output array will be made
+#     */
+#    EXPORT_CODE void CONVENTION AbstractState_build_phase_envelope(const long handle, const char *level, long *errcode, char *message_buffer, const long buffer_length);
+#
+#    /**
+#     * @brief Get data from the phase envelope for the given mixture composition
+#     * @param handle The integer handle for the state class stored in memory
+#     * @param length The number of elements stored in the arrays (both inputs and outputs MUST be the same length)
+#     * @param T The pointer to the array of temperature (K)
+#     * @param p The pointer to the array of pressure (Pa)
+#     * @param rhomolar_vap The pointer to the array of molar density for vapor phase (m^3/mol)
+#     * @param rhomolar_liq The pointer to the array of molar density for liquid phase (m^3/mol)
+#     * @param x The compositions of the "liquid" phase (WARNING: buffer should be Ncomp*Npoints in length, at a minimum, but there is no way to check buffer length at runtime)
+#     * @param y The compositions of the "vapor" phase (WARNING: buffer should be Ncomp*Npoints in length, at a minimum, but there is no way to check buffer length at runtime)
+#     * @param errcode The errorcode that is returned (0 = no error, !0 = error)
+#     * @param message_buffer A buffer for the error code
+#     * @param buffer_length The length of the buffer for the error code
+#     * @return
+#     *
+#     * @note If there is an error in an update call for one of the inputs, no change in the output array will be made
+#     */
+#    EXPORT_CODE void CONVENTION AbstractState_get_phase_envelope_data(const long handle, const long length, double* T, double* p, double* rhomolar_vap, double *rhomolar_liq, double *x, double *y, long *errcode, char *message_buffer, const long buffer_length);
+#
+#    /**
+#     * @brief Build the spinodal
+#     * @param handle The integer handle for the state class stored in memory
+#     * @param errcode The errorcode that is returned (0 = no error, !0 = error)
+#     * @param message_buffer A buffer for the error code
+#     * @param buffer_length The length of the buffer for the error code
+#     * @return
+#     */
+#    EXPORT_CODE void CONVENTION AbstractState_build_spinodal(const long handle, long *errcode, char *message_buffer, const long buffer_length);
+#
+#    /**
+#     * @brief Get data for the spinodal curve
+#     * @param handle The integer handle for the state class stored in memory
+#     * @param length The number of elements stored in the arrays (all outputs MUST be the same length)
+#     * @param tau The pointer to the array of reciprocal reduced temperature
+#     * @param delta The pointer to the array of reduced density
+#     * @param M1 The pointer to the array of M1 values (when L1=M1=0, critical point)
+#     * @param errcode The errorcode that is returned (0 = no error, !0 = error)
+#     * @param message_buffer A buffer for the error code
+#     * @param buffer_length The length of the buffer for the error code
+#     * @return
+#     *
+#     * @note If there is an error, no change in the output arrays will be made
+#     */
+#    EXPORT_CODE void CONVENTION AbstractState_get_spinodal_data(const long handle, const long length, double* tau, double* delta, double* M1, long *errcode, char *message_buffer, const long buffer_length);
+#
+#    /**
+#     * @brief Calculate all the critical points for a given composition
+#     * @param handle The integer handle for the state class stored in memory
+#     * @param length The length of the buffers passed to this function
+#     * @param T The pointer to the array of temperature (K)
+#     * @param p The pointer to the array of pressure (Pa)
+#     * @param rhomolar The pointer to the array of molar density (m^3/mol)
+#     * @param stable The pointer to the array of boolean flags for whether the critical point is stable (1) or unstable (0)
+#     * @param errcode The errorcode that is returned (0 = no error, !0 = error)
+#     * @param message_buffer A buffer for the error code
+#     * @param buffer_length The length of the buffer for the error code
+#     * @return
+#     *
+#     * @note If there is an error in an update call for one of the inputs, no change in the output array will be made
+#     */
+#    EXPORT_CODE void CONVENTION AbstractState_all_critical_points(const long handle, const long length, double *T, double *p, double *rhomolar, long *stable, long *errcode, char *message_buffer, const long buffer_length);

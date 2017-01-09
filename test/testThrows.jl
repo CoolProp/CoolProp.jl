@@ -53,7 +53,11 @@ if (branchname == "nightly")
   @test_throws ErrorException AbstractState_set_cubic_alpha_C(handle, 0, instr, 0.0, 0.0, 0.0)
 end
 if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
-  @test_throws ErrorException saturation_ancillary(instr,"I", 1, "T", 300.0)
+  @test_throws ErrorException saturation_ancillary(instr, "I", 1, "T", 300.0)
   @test_throws ErrorException saturation_ancillary("R410A", instr, 1, "T", 300.0)
 end
 AbstractState_free(handle)
+handle = AbstractState_factory("HEOS", "Water")
+AbstractState_update(handle, "PQ_INPUTS", 15e5, 0)
+@test_throws ErrorException AbstractState_first_saturation_deriv(inhandle, 1%Clong, 2%Clong)
+@test_throws ErrorException AbstractState_first_saturation_deriv(handle, inhandle, 2%Clong)

@@ -2,6 +2,15 @@ using CoolProp
 using Compat
 using Base.Test
 
+const branchname = begin
+  if (isdefined(:LibGit2))
+    LibGit2.branch(LibGit2.GitRepo(abspath(@__FILE__, "..", "..")));
+  else
+    Base.Git.branch(dir = abspath(@__FILE__, "..", ".."));
+  end
+end
+info("On $branchname");
+
 include("testThrows.jl");
 
 dl = CoolProp.get_debug_level();

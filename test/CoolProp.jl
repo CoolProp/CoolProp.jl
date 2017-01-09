@@ -4,7 +4,7 @@ export PropsSI, PhaseSI, get_global_param_string, get_parameter_information_stri
 export propssi, phasesi, k2f, f2k, hapropssi, cair_sat, set_reference_state
 export abstractstate_factory, abstractstate_free, abstractstate_set_fractions, abstractstate_update, abstractstate_keyed_output, abstractstate_specify_phase, abstractstate_unspecify_phase, abstractstate_update_and_common_out!, abstractstate_update_and_5_out!, abstractstate_update_and_1_out!, abstractstate_set_binary_interaction_double, abstractstate_set_cubic_alpha_c, abstractstate_set_fluid_parameter_double, abstractstate_output
 export saturation_ancillary, set_departure_functions
-export AbstractState_first_saturation_deriv
+export AbstractState_first_saturation_deriv, AbstractState_first_partial_deriv
 export abstractstate_first_saturation_deriv, abstractstate_first_partial_deriv, abstractstate_build_phase_envelope, abstractstate_get_phase_envelope_data!, abstractstate_build_spinodal, abstractstate_get_spinodal_data!, abstractState_all_critical_points!
 errcode = Ref{Clong}(0)
 
@@ -70,4 +70,5 @@ const AbstractState_set_fluid_parameter_double = abstractstate_set_fluid_paramet
 const set_reference_stateS = set_reference_state
 const set_reference_stateD = set_reference_state
 const AbstractState_first_saturation_deriv = abstractstate_first_saturation_deriv
+const AbstractState_first_partial_deriv = abstractstate_first_partial_deriv
 end #module

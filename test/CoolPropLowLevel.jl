@@ -386,8 +386,8 @@ Calculate a saturation derivative from the AbstractState using integer values fo
 
 # Example
 ```julia
-julia> as = AbstractState_factory("HEOS", "Water");
-julia> AbstractState_update(as, "PQ_INPUTS", 15e5, 0)
+julia> as = abstractstate_factory("HEOS", "Water");
+julia> abstractstate_update(as, "PQ_INPUTS", 15e5, 0);
 julia> abstractstate_first_saturation_deriv(as, get_param_index("Hmolar"), get_param_index("P"))
 0.0025636362140578207
 ```
@@ -414,6 +414,16 @@ Calculate the first partial derivative in homogeneous phases from the AbstractSt
 * `of`: The parameter of which the derivative is being taken
 * `Wrt`: The derivative with with respect to this parameter
 * `Constant`: The parameter that is not affected by the derivative
+
+# Example
+```julia
+julia> as = abstractstate_factory("HEOS", "Water");
+julia> abstractstate_update(as, "PQ_INPUTS", 15e5, 0);
+julia> abstractstate_first_partial_deriv(as, get_param_index("Hmolar"), get_param_index("P"), get_param_index("S"))
+2.07872526058326e-5
+julia> abstractstate_first_partial_deriv(as, get_param_index("Hmolar"), get_param_index("P"), get_param_index("D"))
+5.900781297636475e-5
+```
 
 # Ref
 double CoolProp::AbstractState_first_partial_deriv(const long handle, const long Of, const long Wrt, const long Constant, long* errcode, char* message_buffer, const long buffer_length);

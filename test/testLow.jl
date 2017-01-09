@@ -118,5 +118,6 @@ AbstractState_set_fluid_parameter_double(handle, 0, "c", 1.0)
 AbstractState_free(handle)
 handle = AbstractState_factory("HEOS", "Water")
 AbstractState_update(handle, "PQ_INPUTS", 15e5, 0)
-@test_approx_eq abstractstate_first_saturation_deriv(handle, get_param_index("Hmolar"), get_param_index("P")) 0.0025636362140578207
+@test_approx_eq AbstractState_first_saturation_deriv(handle, get_param_index("Hmolar"), get_param_index("P")) 0.0025636362140578207
+@test_approx_eq AbstractState_first_partial_deriv(handle, get_param_index("Hmolar"), get_param_index("P"), get_param_index("S")) 2.07872526058326e-5
 AbstractState_free(handle)

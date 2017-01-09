@@ -34,16 +34,16 @@ handle = AbstractState_factory("HEOS", "Water&Ethanol")
 @test_throws ErrorException AbstractState_specify_phase(handle, instr)
 @test_throws ErrorException AbstractState_unspecify_phase(inhandle)
 pq_inputs = get_input_pair_index("PQ_INPUTS")
-temp = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0];
+temp = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0]
 @test_throws ErrorException AbstractState_update_and_common_out(inhandle, pq_inputs, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
 @test_throws ErrorException AbstractState_update_and_common_out(handle, instr, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
-out = [0.0];
+out = [0.0]
 @test_throws ErrorException AbstractState_update_and_1_out(inhandle, pq_inputs, [101325.0], [0.0], 1, 1%Clong, out)
 @test_throws ErrorException AbstractState_update_and_1_out(handle, instr, [101325.0], [0.0], 1, "T", out)
 @test_throws ErrorException AbstractState_update_and_5_out(inhandle, pq_inputs, [101325.0], [0.0], 1, [1%Clong, 1%Clong, 1%Clong, 1%Clong, 1%Clong], out, out, out, out, out)
 @test_throws ErrorException AbstractState_update_and_5_out(handle, instr, [101325.0], [0.0], 1, ["T", "T", "T", "T", "T"], out, out, out, out, out)
-@test_throws ErrorException AbstractState_set_binary_interaction_double(inhandle, 0, 1, "betaT", 0.987);
-@test_throws ErrorException AbstractState_set_binary_interaction_double(handle, 0, 1, instr, 0.987);
+@test_throws ErrorException AbstractState_set_binary_interaction_double(inhandle, 0, 1, "betaT", 0.987)
+@test_throws ErrorException AbstractState_set_binary_interaction_double(handle, 0, 1, instr, 0.987)
 AbstractState_free(handle)
 handle = AbstractState_factory("SRK", "Ethanol");
 @test_throws ErrorException AbstractState_set_fluid_parameter_double(inhandle, 1, "c", 0.0)
@@ -61,3 +61,5 @@ handle = AbstractState_factory("HEOS", "Water")
 AbstractState_update(handle, "PQ_INPUTS", 15e5, 0)
 @test_throws ErrorException AbstractState_first_saturation_deriv(inhandle, 1%Clong, 2%Clong)
 @test_throws ErrorException AbstractState_first_saturation_deriv(handle, inhandle, 2%Clong)
+@test_throws ErrorException AbstractState_first_partial_deriv(inhandle, 1%Clong, 2%Clong, 3%Clong)
+@test_throws ErrorException AbstractState_first_partial_deriv(handle, inhandle, 2%Clong, 3%Clong)

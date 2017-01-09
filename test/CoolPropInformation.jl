@@ -59,7 +59,7 @@ julia> get_parameter_information_string("HMOLAR", "units")
 A tabular output for this function is available with `?parameters` or `parameters=parameters()`
 """
 function get_parameter_information_string(key::AbstractString, outtype::AbstractString)
-  message_buffer[1:length(outtype)+1] = [outtype.data; 0x00]
+  message_buffer[1:length(outtype)+1] = [Vector{UInt8}(outtype); 0x00]
   val = ccall( (:get_parameter_information_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8}, Int), key, message_buffer::Array{UInt8, 1}, buffer_length)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))

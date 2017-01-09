@@ -48,9 +48,8 @@ AbstractState_free(handle)
 handle = AbstractState_factory("SRK", "Ethanol");
 @test_throws ErrorException AbstractState_set_fluid_parameter_double(inhandle, 1, "c", 0.0)
 @test_throws ErrorException AbstractState_set_fluid_parameter_double(handle, 0, instr, 0.0)
-@test_throws ErrorException AbstractState_set_cubic_alpha_C(inhandle, 0, "TWU", 0.0, 0.0, 0.0)
-@test_throws ErrorException AbstractState_set_cubic_alpha_C(handle, 0, instr, 0.0, 0.0, 0.0)
-#AbstractState_set_cubic_alpha_C
+#@test_throws ErrorException AbstractState_set_cubic_alpha_C(inhandle, 0, "TWU", 0.0, 0.0, 0.0)
+#@test_throws ErrorException AbstractState_set_cubic_alpha_C(handle, 0, instr, 0.0, 0.0, 0.0)
 if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   @test_throws ErrorException saturation_ancillary(instr,"I", 1, "T", 300)
   @test_throws ErrorException saturation_ancillary(handle, instr, 1, "T", 300)

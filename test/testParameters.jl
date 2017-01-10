@@ -30,7 +30,7 @@ for p in coolpropparameters
   end
   println(logf, "$p" * " | " * longunit * " | " * note);
 end
-length(missed) > 0 && warn("missed parameters eith numerical value:\n $missed)");
+length(missed) > 0 && warn("missed parameters with numerical value:\n $missed)");
 @test length(parameterswithnumval) == counter
 info("parameters with numerical values are as expected");
 close(logf);

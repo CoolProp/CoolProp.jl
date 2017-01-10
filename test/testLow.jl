@@ -121,8 +121,17 @@ AbstractState_update(handle, "PQ_INPUTS", 15e5, 0)
 @test_approx_eq AbstractState_first_saturation_deriv(handle, get_param_index("Hmolar"), get_param_index("P")) 0.0025636362140578207
 @test_approx_eq AbstractState_first_partial_deriv(handle, get_param_index("Hmolar"), get_param_index("P"), get_param_index("S")) 2.07872526058326e-5
 AbstractState_free(handle)
-handle = AbstractState_factory("HEOS", "Water&Ethanol")
-AbstractState_set_fractions(handle, [0.4, 0.6])
-AbstractState_build_phase_envelope(handle, "none")
-AbstractState_build_spinodal(handle)
-AbstractState_free(handle)
+#envelope
+HEOS=AbstractState_factory("HEOS","Methane&Ethane")
+len=200
+t=zeros(len);p=zeros(len);x=zeros(2*len);y=zeros(2*len);rhomolar_vap=zeros(len);rhomolar_liq=zeros(len);
+for x0 in [0.02, 0.2, 0.4, 0.6, 0.8, 0.98]
+    AbstractState_set_fractions(HEOS, [x0, 1 - x0])
+    try
+        AbstractState_build_phase_envelope(HEOS, "none")
+        AbstractState_get_phase_envelope_data(HEOS, len, t, p, rhomolar_vap, rhomolar_liq, x, y)
+    catch err
+        println("$err")
+    end
+end
+AbstractState_free(HEOS)

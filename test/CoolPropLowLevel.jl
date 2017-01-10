@@ -473,6 +473,17 @@ Get data from the phase envelope for the given mixture composition.
 * `x`: The compositions of the "liquid" phase (WARNING: buffer should be Ncomp*Npoints in length, at a minimum, but there is no way to check buffer length at runtime)
 * `y`: The compositions of the "vapor" phase (WARNING: buffer should be Ncomp*Npoints in length, at a minimum, but there is no way to check buffer length at runtime)
 
+# Example
+```julia
+julia> HEOS=AbstractState_factory("HEOS","Methane&Ethane");
+julia> length=200;
+julia> t=zeros(length);p=zeros(length);x=zeros(2*length);y=zeros(2*length);rhomolar_vap=zeros(length);rhomolar_liq=zeros(length);
+julia> AbstractState_set_fractions(HEOS, [0.2, 1 - 0.2])
+julia> AbstractState_build_phase_envelope(HEOS, "none")
+julia> AbstractState_get_phase_envelope_data(HEOS, length, t, p, rhomolar_vap, rhomolar_liq, x, y)
+julia> AbstractState_free(HEOS)
+```
+
 # Note
 If there is an error in an update call for one of the inputs, no change in the output array will be made
 

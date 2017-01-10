@@ -64,4 +64,6 @@ AbstractState_update(handle, "PQ_INPUTS", 15e5, 0)
 @test_throws ErrorException AbstractState_first_partial_deriv(inhandle, 1%Clong, 2%Clong, 3%Clong)
 @test_throws ErrorException AbstractState_first_partial_deriv(handle, inhandle, 2%Clong, 3%Clong)
 @test_throws ErrorException AbstractState_build_phase_envelope(inhandle, "none")
+len=100;t=zeros(len);p=zeros(len);x=zeros(2*len);y=zeros(2*len);rhomolar_vap=zeros(len);rhomolar_liq=zeros(len);
+@test_throws ErrorException AbstractState_get_phase_envelope_data(inhandle, len, t, p, rhomolar_vap, rhomolar_liq, x, y)
 @test_throws ErrorException AbstractState_build_spinodal(inhandle)

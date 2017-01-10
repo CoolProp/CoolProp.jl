@@ -61,5 +61,5 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
 end
 #config
 set_config("ALTERNATIVE_TABLES_DIRECTORY", "")
-branchname == "nightly" && set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0)
+#set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0) (not exported?)
 set_config("NORMALIZE_GAS_CONSTANTS", true)

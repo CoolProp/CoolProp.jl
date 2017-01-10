@@ -61,5 +61,13 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
 end
 #config
 set_config("ALTERNATIVE_TABLES_DIRECTORY", "")
-#set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0) (not exported?)
-set_config("NORMALIZE_GAS_CONSTANTS", true)
+try
+  set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0)
+catch err
+  warn("set_config for double fails with: $err")
+end
+try
+  set_config("NORMALIZE_GAS_CONSTANTS", true)
+catch err
+  warn("set_config for bool fails with: $err")
+end

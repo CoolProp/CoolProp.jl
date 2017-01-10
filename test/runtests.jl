@@ -1,7 +1,6 @@
 using CoolProp
 using Compat
 using Base.Test
-
 const branchname = begin
   if (isdefined(:LibGit2))
     LibGit2.branch(LibGit2.GitRepo(abspath(@__FILE__, "..", "..")));
@@ -60,3 +59,7 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   #saturation_ancillary
   @test_approx_eq saturation_ancillary("R410A","I",1,"T", 300) 0.004877519938463293
 end
+#config
+set_config("ALTERNATIVE_TABLES_DIRECTORY", "")
+branchname == "nightly" && set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0)
+set_config("NORMALIZE_GAS_CONSTANTS", true)

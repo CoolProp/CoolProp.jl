@@ -54,6 +54,7 @@ include("testLow.jl");
 #HAPropsSI
 dt=1e-3;
 @test_approx_eq_eps (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0)-HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt HAPropsSI("C", "T", 300, "P", 100000, "Y", 0) 2e-9
+@test cair_sat(400) ≈ 202.53656679999574
 
 if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   #saturation_ancillary

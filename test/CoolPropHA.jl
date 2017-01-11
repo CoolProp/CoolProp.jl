@@ -70,16 +70,16 @@ end
 """
     cair_sat(t::Real)
 
-Air saturation specific heat in [kJ/kg-K] based on a correlation from EES, good from 250K to 300K.
+Humid air saturation specific in [kJ/kg-K] heat at 1 atmosphere, based on a correlation from EES.
 
 # Arguments
-* `t`: Temperature in Kelvin
+* `t`: T [K] good from 250K to 300K, no error bound checking is carried out.
 
 # Ref
 HumidAir::cair_sat(double);
 
 # Note
-No error bound checking is carried out
+Equals partial derivative of enthalpy with respect to temperature at constant relative humidity of 100 percent and pressure of 1 atmosphere.
 """
 function cair_sat(t::Real)
   val = ccall( (:cair_sat, "CoolProp"), Cdouble, (Cdouble, ), t)

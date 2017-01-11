@@ -56,5 +56,5 @@ const set_config_string = set_config
 export set_reference_stateS, set_reference_stateD, AbstractState_get_spinodal_data, AbstractState_all_critical_points, AbstractState_get_phase_envelope_data
 export set_reference_state, abstractstate_get_spinodal_data!, abstractState_all_critical_points!, abstractstate_get_phase_envelope_data!
 export get_global_param_string, get_parameter_information_string, get_fluid_param_string, get_param_index, get_input_pair_index, set_config
-export saturation_ancillary, set_departure_functions, set_config_string
+export saturation_ancillary, set_departure_functions, set_config_string, cair_sat
 end #module

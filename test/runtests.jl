@@ -60,7 +60,7 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   @test_approx_eq saturation_ancillary("R410A","I",1,"T", 300) 0.004877519938463293
 end
 #config
-set_config("ALTERNATIVE_TABLES_DIRECTORY", "")
+set_config_string("ALTERNATIVE_TABLES_DIRECTORY", "")
 try
   set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0)
 catch err

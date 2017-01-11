@@ -531,8 +531,8 @@ If there is an error, no change in the output arrays will be made
 # Ref
 CoolProp::AbstractState_get_spinodal_data(const long handle, const long length, double* tau, double* delta, double* M1, long* errcode, char* message_buffer, const long buffer_length);
 """
-function abstractstate_get_spinodal_data!{F<:Float64}(handle::Clong, length::Integer, tau::Array{F}, dalta::Array{F}, m1::Array{F})
-  ccall( (:AbstractState_get_spinodal_data, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, tau, delta, m1, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+function abstractstate_get_spinodal_data!{F<:Float64}(handle::Clong, length::Integer, tau::Array{F}, delta::Array{F}, m1::Array{F})
+  ccall( (:AbstractState_get_spinodal_data, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, tau, delta, m1, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
   raise(errcode, message_buffer)
   return nothing
 end

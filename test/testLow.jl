@@ -126,11 +126,13 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   HEOS=AbstractState_factory("HEOS","Methane&Ethane")
   len=200
   t=zeros(len);p=zeros(len);x=zeros(2*len);y=zeros(2*len);rhomolar_vap=zeros(len);rhomolar_liq=zeros(len);
+  tau=zeros(len);delta=zeros(len);m1=zeros(len);
   for x0 in [0.02, 0.2, 0.4, 0.6, 0.8, 0.98]
     AbstractState_set_fractions(HEOS, [x0, 1 - x0])
     try
       AbstractState_build_phase_envelope(HEOS, "none")
       AbstractState_get_phase_envelope_data(HEOS, len, t, p, rhomolar_vap, rhomolar_liq, x, y)
+      AbstractState_get_spinodal_data(HEOS, len, tau, delta, m1)
     catch err
       println("$err")
     end

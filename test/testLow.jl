@@ -74,23 +74,23 @@ out1=[0.0]; out2=[0.0]; out3=[0.0]; out4=[0.0]; out5=[0.0]; out1_=[0.0]
 AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t], out1, out2, out3, out4, out5)
 AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"], out1_, out2, out3, out4, out5)
 if is_apple()
-  @test_approx_eq AbstractState_keyed_output(handle,t) 352.3522212978604
-  @test_approx_eq AbstractState_output(handle,"T") 352.3522212978604
-  @test_approx_eq temp[1] 352.3522212978604
-  @test_approx_eq temp_[1] 352.3522212978604
-  @test_approx_eq out[1] 352.3522212978604
-  @test_approx_eq out_[1] 352.3522212978604
-  @test_approx_eq out1[1] 352.3522212978604
-  @test_approx_eq out1_[1] 352.3522212978604
+  @test AbstractState_keyed_output(handle,t) ≈ 352.3522212978604
+  @test AbstractState_output(handle,"T") ≈ 352.3522212978604
+  @test temp[1] ≈ 352.3522212978604
+  @test temp_[1] ≈ 352.3522212978604
+  @test out[1] ≈ 352.3522212978604
+  @test out_[1] ≈ 352.3522212978604
+  @test out1[1] ≈ 352.3522212978604
+  @test out1_[1] ≈ 352.3522212978604
 else
-  @test_approx_eq AbstractState_keyed_output(handle,t) 352.3522212991724
-  @test_approx_eq AbstractState_output(handle,"T") 352.3522212991724
-  @test_approx_eq temp[1] 352.3522212991724
-  @test_approx_eq temp_[1] 352.3522212991724
-  @test_approx_eq out[1] 352.3522212991724
-  @test_approx_eq out_[1] 352.3522212991724
-  @test_approx_eq out1[1] 352.3522212991724
-  @test_approx_eq out1_[1] 352.3522212991724
+  @test AbstractState_keyed_output(handle,t) ≈ 352.3522212991724
+  @test AbstractState_output(handle,"T") ≈ 352.3522212991724
+  @test temp[1] ≈ 352.3522212991724
+  @test temp_[1] ≈ 352.3522212991724
+  @test out[1] ≈ 352.3522212991724
+  @test out_[1] ≈ 352.3522212991724
+  @test out1[1] ≈ 352.3522212991724
+  @test out1_[1] ≈ 352.3522212991724
 end
 for phase in ["phase_liquid", "phase_gas", "phase_twophase", "phase_supercritical", "phase_supercritical_gas", "phase_supercritical_liquid", "phase_critical_point", "phase_unknown", "phase_not_imposed"]
   AbstractState_specify_phase(handle, phase)
@@ -119,8 +119,8 @@ AbstractState_free(handle)
 if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   handle = AbstractState_factory("HEOS", "Water")
   AbstractState_update(handle, "PQ_INPUTS", 15e5, 0)
-  @test_approx_eq AbstractState_first_saturation_deriv(handle, get_param_index("Hmolar"), get_param_index("P")) 0.0025636362140578207
-  @test_approx_eq AbstractState_first_partial_deriv(handle, get_param_index("Hmolar"), get_param_index("P"), get_param_index("S")) 2.07872526058326e-5
+  @test AbstractState_first_saturation_deriv(handle, get_param_index("Hmolar"), get_param_index("P")) ≈ 0.0025636362140578207
+  @test AbstractState_first_partial_deriv(handle, get_param_index("Hmolar"), get_param_index("P"), get_param_index("S")) ≈ 2.07872526058326e-5
   AbstractState_free(handle)
   #envelope
   HEOS=AbstractState_factory("HEOS","Methane&Ethane")

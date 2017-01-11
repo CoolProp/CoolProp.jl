@@ -50,14 +50,14 @@ include("testConstants.jl");
 include("testLow.jl");
 #set_reference_stateS
 #F2K K2F
-@test_approx_eq K2F(F2K(100)) 100
+@test K2F(F2K(100)) ≈ 100
 #HAPropsSI
 dt=1e-3;
 @test_approx_eq_eps (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0)-HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt HAPropsSI("C", "T", 300, "P", 100000, "Y", 0) 2e-9
 
 if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   #saturation_ancillary
-  @test_approx_eq saturation_ancillary("R410A","I",1,"T", 300) 0.004877519938463293
+  @test saturation_ancillary("R410A","I",1,"T", 300) ≈ 0.004877519938463293
 end
 #config
 set_config_string("ALTERNATIVE_TABLES_DIRECTORY", "")

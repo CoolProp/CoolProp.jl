@@ -50,6 +50,7 @@ end
 const set_reference_stateS = set_reference_state
 const set_reference_stateD = set_reference_state
 const AbstractState_get_phase_envelope_data = abstractstate_get_phase_envelope_data!
+const AbstractState_all_critical_points = abstractstate_all_critical_points!
 const set_config_string = set_config
 export set_config_string, set_reference_stateS, set_reference_stateD, AbstractState_get_spinodal_data, AbstractState_all_critical_points, AbstractState_get_phase_envelope_data
 export set_reference_state, abstractstate_get_spinodal_data!, abstractState_all_critical_points!, abstractstate_get_phase_envelope_data!

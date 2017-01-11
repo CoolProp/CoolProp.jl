@@ -135,5 +135,7 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
       println("$err")
     end
   end
+  rhomolar=zeros(len); stable=zeros(Clong, len)
+  AbstractState_all_critical_points(HEOS, len, t, p, rhomolar, stable)
   AbstractState_free(HEOS)
 end

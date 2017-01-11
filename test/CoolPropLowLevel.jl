@@ -538,7 +538,7 @@ function abstractstate_get_spinodal_data!{F<:Float64}(handle::Clong, length::Int
 end
 
 """
-    abstractState_all_critical_points!{F<:Float64}(handle::Clong, length::Integer, temp::Array{F}, p::Array{F}, rhomolar::Array{F}, stable::Array{Bool})
+    abstractState_all_critical_points!{F<:Float64}(handle::Clong, length::Integer, temp::Array{F}, p::Array{F}, rhomolar::Array{F}, stable::Array{Clong})
 
 Calculate all the critical points for a given composition.
 
@@ -556,7 +556,7 @@ If there is an error in an update call for one of the inputs, no change in the o
 # Ref
 CoolProp::AbstractState_all_critical_points(const long handle, const long length, double* T, double* p, double* rhomolar, long* stable, long* errcode, char* message_buffer, const long buffer_length);
 """
-function abstractState_all_critical_points!{F<:Float64}(handle::Clong, length::Integer, temp::Array{F}, p::Array{F}, rhomolar::Array{F}, stable::Array{Bool})
+function abstractstate_all_critical_points!{F<:Float64}(handle::Clong, length::Integer, temp::Array{F}, p::Array{F}, rhomolar::Array{F}, stable::Array{Clong})
   ccall( (:AbstractState_all_critical_points, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, temp, p, rhomolar, stable, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
   raise(errcode, message_buffer)
   return nothing

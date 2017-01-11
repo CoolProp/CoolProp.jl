@@ -66,4 +66,6 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   len=100;t=zeros(len);p=zeros(len);x=zeros(2*len);y=zeros(2*len);rhomolar_vap=zeros(len);rhomolar_liq=zeros(len);
   @test_throws ErrorException AbstractState_get_phase_envelope_data(inhandle, len, t, p, rhomolar_vap, rhomolar_liq, x, y)
   @test_throws ErrorException AbstractState_build_spinodal(inhandle)
+  rhomolar=zeros(len); stable=zeros(Clong, len);
+  @test_throws ErrorException AbstractState_all_critical_points(inhandle, 2, t, p, rhomolar, stable);
 end

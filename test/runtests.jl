@@ -54,11 +54,22 @@ include("testLow.jl");
 #HAPropsSI
 dt=1e-3;
 @test_approx_eq_eps (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0)-HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt HAPropsSI("C", "T", 300, "P", 100000, "Y", 0) 2e-9
-@test cair_sat(400) ≈ 202.53656679999574
+#PropsSI
+h0 = -15870000.0; # J/kg
+s0 = 3887.0; #J/kg
+rho0 = 997.1;
+T0 = 298.15;
+M = PropsSI("molemass", "Water");
+set_reference_stateD("Water", T0, rho0/M, h0*M, s0*M);
+@test PropsSI("H", "T", T0, "P", 101325, "Water") ≈ -1.5870107493843542e7
+set_reference_stateS("Water", "DEF");
+@test PropsSI("H", "T", T0, "P", 101325, "Water") ≈ 104920.1198093371
 
 if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   #saturation_ancillary
   @test saturation_ancillary("R410A","I",1,"T", 300) ≈ 0.004877519938463293
+  #cair_sat
+  @test cair_sat(400) ≈ 202.53656679999574
 end
 #config
 set_config_string("ALTERNATIVE_TABLES_DIRECTORY", "")

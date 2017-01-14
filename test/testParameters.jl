@@ -1,7 +1,4 @@
 missed = Set();
-logf = open("parameters.table", "w");
-println(logf, "Paramerer |Description |Unit |Comment ");
-println(logf, ":---------|:-----------|:----|:-------" );
 const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_triple","MOLEMASS","rhomolar_critical",
 "MOLARMASS","Pcrit","gas_constant","Tcrit","p_reducing","Tmin","rhocrit","molarmass","T_CRITICAL",
 "P_min","pmax","T_min","T_reducing","T_MAX","P_MIN","T_triple","P_MAX","ptriple","Ttriple",
@@ -9,6 +6,7 @@ const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_
 "P_CRITICAL","T_max","molemass","T_MIN","rhomass_critical","T_critical",
 "P_max","RHOMASS_CRITICAL","molar_mass","pmin"]));
 counter = 0;
+parameters();
 longunits = Set();
 for p in coolpropparameters
   longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");
@@ -28,9 +26,7 @@ for p in coolpropparameters
     catch err
     end
   end
-  println(logf, "$p" * " | " * longunit * " | " * note);
 end
 length(missed) > 0 && warn("missed parameters with numerical value:\n $missed)");
 @test length(parameterswithnumval) == counter
 info("parameters with numerical values are as expected");
-close(logf);

@@ -65,8 +65,8 @@ pq_inputs = get_input_pair_index("PQ_INPUTS")
 t = get_param_index("T")
 AbstractState_set_fractions(handle, [0.4, 0.6])
 AbstractState_update(handle,pq_inputs,101325, 0)
-temp = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0]; temp_=[0.0]; out=[0.0]; out_=[0.0]
-AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
+T = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0]; temp_=[0.0]; out=[0.0]; out_=[0.0]
+AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1, T, p, rhomolar, hmolar, smolar)
 AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1, temp_, p, rhomolar, hmolar, smolar)
 AbstractState_update_and_1_out(handle, pq_inputs, [101325.0], [0.0],1, t, out)
 AbstractState_update_and_1_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, "T", out_)
@@ -76,7 +76,7 @@ AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "
 if is_apple()
   @test AbstractState_keyed_output(handle,t) ≈ 352.3522212978604
   @test AbstractState_output(handle,"T") ≈ 352.3522212978604
-  @test temp[1] ≈ 352.3522212978604
+  @test T[1] ≈ 352.3522212978604
   @test temp_[1] ≈ 352.3522212978604
   @test out[1] ≈ 352.3522212978604
   @test out_[1] ≈ 352.3522212978604
@@ -85,7 +85,7 @@ if is_apple()
 else
   @test AbstractState_keyed_output(handle,t) ≈ 352.3522212991724
   @test AbstractState_output(handle,"T") ≈ 352.3522212991724
-  @test temp[1] ≈ 352.3522212991724
+  @test T[1] ≈ 352.3522212991724
   @test temp_[1] ≈ 352.3522212991724
   @test out[1] ≈ 352.3522212991724
   @test out_[1] ≈ 352.3522212991724

@@ -29,7 +29,7 @@ for fluid in coolpropfluids
     maxdiffreduvscriti = diffreduvscriti;
   end
 end
-println("max diff between reducing vs critical point temp: $maxdiffreduvscriti for $maxfluid");
+println("max diff between reducing vs critical point T: $maxdiffreduvscriti for $maxfluid");
 @test uneq == Set(fails_tcrit_eq_treducing);
 println("different reducing vs critical point: $uneq");
 @test issubset(critphasefail, Set(fails_critical_point));

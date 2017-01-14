@@ -34,9 +34,9 @@ handle = AbstractState_factory("HEOS", "Water&Ethanol")
 @test_throws ErrorException AbstractState_specify_phase(handle, instr)
 @test_throws ErrorException AbstractState_unspecify_phase(inhandle)
 pq_inputs = get_input_pair_index("PQ_INPUTS")
-temp = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0]
-@test_throws ErrorException AbstractState_update_and_common_out(inhandle, pq_inputs, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
-@test_throws ErrorException AbstractState_update_and_common_out(handle, instr, [101325.0], [0.0], 1, temp, p, rhomolar, hmolar, smolar)
+T = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0]
+@test_throws ErrorException AbstractState_update_and_common_out(inhandle, pq_inputs, [101325.0], [0.0], 1, T, p, rhomolar, hmolar, smolar)
+@test_throws ErrorException AbstractState_update_and_common_out(handle, instr, [101325.0], [0.0], 1, T, p, rhomolar, hmolar, smolar)
 out = [0.0]
 @test_throws ErrorException AbstractState_update_and_1_out(inhandle, pq_inputs, [101325.0], [0.0], 1, 1%Clong, out)
 @test_throws ErrorException AbstractState_update_and_1_out(handle, instr, [101325.0], [0.0], 1, "T", out)

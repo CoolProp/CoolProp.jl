@@ -180,13 +180,13 @@ function set_reference_state(fluid::AbstractString, reference_state::AbstractStr
 end
 
 """
-    set_reference_state(fluid::AbstractString, temp::Real, rhomolar::Real, hmolar0::Real, smolar0::Real)
+    set_reference_state(fluid::AbstractString, T::Real, rhomolar::Real, hmolar0::Real, smolar0::Real)
 
 Set the reference state based on a thermodynamic state point specified by temperature and molar density.
 
 #Arguments
 * `fluid::AbstractString`	The name of the fluid
-* `temp::Real`	Temperature at reference state [K]
+* `T::Real`	Temperature at reference state [K]
 * `rhomolar::Real`	Molar density at reference state [mol/m^3]
 * `hmolar0::Real`	Molar enthalpy at reference state [J/mol]
 * `smolar0::Real`	Molar entropy at reference state [J/mol/K]
@@ -194,8 +194,8 @@ Set the reference state based on a thermodynamic state point specified by temper
 #Ref
 set_reference_stateD(const char* Ref, double T, double rhomolar, double hmolar0, double smolar0)
 """
-function set_reference_state(fluid::AbstractString, temp::Real, rhomolar::Real, hmolar0::Real, smolar0::Real)
-  val = ccall( (:set_reference_stateD, "CoolProp"), Cint, (Cstring, Cdouble, Cdouble, Cdouble, Cdouble), fluid, temp, rhomolar, hmolar0, smolar0)
+function set_reference_state(fluid::AbstractString, T::Real, rhomolar::Real, hmolar0::Real, smolar0::Real)
+  val = ccall( (:set_reference_stateD, "CoolProp"), Cint, (Cstring, Cdouble, Cdouble, Cdouble, Cdouble), fluid, T, rhomolar, hmolar0, smolar0)
   if val == 0
     error("CoolProp: ", get_global_param_string("errstring"))
   end

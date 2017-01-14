@@ -4,7 +4,6 @@ maxdiffreduvscriti = 0.0;
 maxfluid = "";
 uneq = Set();
 critphasefail = Set();
-fluids();
 for fluid in coolpropfluids
   id+=1;
   pure = get_fluid_param_string(fluid, "pure");

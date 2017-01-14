@@ -6,7 +6,6 @@ const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_
 "P_CRITICAL","T_max","molemass","T_MIN","rhomass_critical","T_critical",
 "P_max","RHOMASS_CRITICAL","molar_mass","pmin"]));
 counter = 0;
-parameters();
 longunits = Set();
 for p in coolpropparameters
   longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");

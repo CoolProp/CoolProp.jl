@@ -144,20 +144,20 @@ function get_fluid_param_string(fluid::AbstractString, param::AbstractString)
 end
 
 """
-    f2k(tf::Real)
+    F2K(tf::Real)
 
 Convert from degrees Fahrenheit to Kelvin (useful primarily for testing).
 """
-function f2k(tf::Real)
+function F2K(tf::Real)
   return ccall( (:F2K, "CoolProp"), Cdouble, (Cdouble,), tf)
 end
 
 """
-    k2f(tk::Real)
+    K2F(tk::Real)
 
 Convert from Kelvin to degrees Fahrenheit (useful primarily for testing).
 """
-function k2f(tk::Real)
+function K2F(tk::Real)
   return ccall( (:K2F, "CoolProp"), Cdouble, (Cdouble,), tk)
 end
 

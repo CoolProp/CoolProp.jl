@@ -1,10 +1,11 @@
-export parameters, fluids;
+export CoolProp_parameters, CoolProp_fluids;
 """
-# CoolProp parameters table, to build run `parameters()`
+# CoolProp parameters table, to build run `CoolProp.buildparameters()`
 
 $(readstring(abspath(@__FILE__, "..", "parameters.table")))
 """
-parameters() = begin
+const CoolProp_parameters = "Type `?CoolProp_arameters` to get a list of all CoolProp parameters."
+buildparameters() = begin
   logf = open("parameters.table", "w");
   println(logf, "Paramerer |Description |Unit |Comment ");
   println(logf, ":---------|:-----------|:----|:-------" );
@@ -29,14 +30,14 @@ parameters() = begin
     println(logf, "$p" * " | " * longunit * " | " * note);
   end
   close(logf);
-  readdlm(abspath(@__FILE__, "..", "parameters.table"), '|', skipstart=2);
 end
 """
-# CoolProp fluids table, to build run `fluids()`
+# CoolProp fluids table, to build run `CoolProp.buildfluids()`
 
 $(readstring(abspath(@__FILE__, "..", "fluids.table")))
 """
-fluids() = begin
+const CoolProp_fluids = "Type `?CoolProp_fluids` to get a list of all CoolProp fluids."
+buildfluids() = begin
   logf = open("fluids.table", "w");
   println(logf, "ID |Name |Alias |CAS |Pure |Formula |BibTeX ");
   println(logf, ":--|:----|:-----|:---|:----|:-------|:------");
@@ -54,7 +55,6 @@ fluids() = begin
     print(logf, "\n");
   end
   close(logf);
-  readdlm(abspath(@__FILE__, "..", "fluids.table"), '|', skipstart=2);
 end
 # ---------------------------------
 #       Information functions
@@ -98,7 +98,7 @@ julia> get_parameter_information_string("HMOLAR", "units")
 ```
 
 # Note
-A tabular output for this function is available with `?parameters` or `parameters=parameters()`
+A tabular output for this function is available with `?CoolProp_parameters`
 """
 function get_parameter_information_string(key::AbstractString, outtype::AbstractString)
   message_buffer[1:length(outtype)+1] = [Vector{UInt8}(outtype); 0x00]
@@ -133,7 +133,7 @@ ParamName                    | Description
 "formula"                    | The chemical formula of the fluid in LaTeX form if available, "" otherwise
 
 # Note
-A tabular output for this function is available with `?fluids` or `fluids=fluids()`
+A tabular output for this function is available with `?CoolProp_fluids`
 """
 function get_fluid_param_string(fluid::AbstractString, param::AbstractString)
   val = ccall( (:get_fluid_param_string, "CoolProp"), Clong, (Cstring, Cstring, Ptr{UInt8}, Int), fluid, param, message_buffer::Array{UInt8, 1}, buffer_length)

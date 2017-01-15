@@ -8,8 +8,8 @@
 Return a value that does not depend on the thermodynamic state - this is a convenience function that does the call `PropsSI(output, "", 0, "", 0, fluid)`.
 
 # Arguments
-* `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of possible values types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids), or simply type `?fluids`
-* `output::AbstractString`: The name of parameter to evaluate. to see a list type `?parameters`
+* `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of possible values types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids), or simply type `?CoolProp_fluids`
+* `output::AbstractString`: The name of parameter to evaluate. to see a list type `?CoolProp_parameters`
 
 # Example
 ```julia
@@ -36,7 +36,7 @@ Return a value that depends on the thermodynamic state.
 
 # Arguments
 * `fluid::AbstractString`: The name of the fluid that is part of CoolProp, for instance "n-Propane", to get a list of different passible fulid types call `get_global_param_string(key)` with `key` one of the following: `["FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "predefined_mixtures"]`, also there is a list in CoolProp online documentation [List of Fluids](http://www.coolprop.org/fluid_properties/PurePseudoPure.html#list-of-fluids)
-* `output::AbstractString`: The name of parameter to evaluate. to see a list type `?parameters`
+* `output::AbstractString`: The name of parameter to evaluate. to see a list type `?CoolProp_parameters`
 * `name1::AbstractString`: The name of parameter for first state point
 * `value1::Real`: Value of the first state point
 * `name2::AbstractString`: The name of parameter for second state point

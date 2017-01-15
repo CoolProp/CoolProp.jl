@@ -50,8 +50,8 @@ try
   end
 import CoolProp: fluids, parameters
 info("Building help tables...")
-fluids();
-parameters();
+CoolProp.buildfluids();
+CoolProp.buildparameters();
 catch err
   println("Build error: $err")
 end

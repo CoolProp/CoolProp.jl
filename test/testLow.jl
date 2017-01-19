@@ -65,13 +65,23 @@ pq_inputs = get_input_pair_index("PQ_INPUTS")
 t = get_param_index("T")
 AbstractState_set_fractions(handle, [0.4, 0.6])
 AbstractState_update(handle,pq_inputs,101325, 0)
-out=[0.0]; out_=[0.0]
-T, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1)
-temp_, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1)
-out = AbstractState_update_and_1_out(handle, pq_inputs, [101325.0], [0.0],1, t)
-out_ = AbstractState_update_and_1_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, "T")
-out1, out2, out3, out4, out5 = AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t])
-out1_, out2, out3, out4, out5 = AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"])
+if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
+  T, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1)
+  temp_, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1)
+  out = AbstractState_update_and_1_out(handle, pq_inputs, [101325.0], [0.0],1, t)
+  out_ = AbstractState_update_and_1_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, "T")
+  out1, out2, out3, out4, out5 = AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t])
+  out1_, out2, out3, out4, out5 = AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"])
+else
+  T = [0.0]; p = [0.0]; rhomolar = [0.0]; hmolar = [0.0]; smolar = [0.0]; temp_=[0.0]; out=[0.0]; out_=[0.0]
+  AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1, T, p, rhomolar, hmolar, smolar)
+  AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1, temp_, p, rhomolar, hmolar, smolar)
+  AbstractState_update_and_1_out(handle, pq_inputs, [101325.0], [0.0],1, t, out)
+  AbstractState_update_and_1_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, "T", out_)
+  out1=[0.0]; out2=[0.0]; out3=[0.0]; out4=[0.0]; out5=[0.0]; out1_=[0.0]
+  AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t], out1, out2, out3, out4, out5)
+  AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"], out1_, out2, out3, out4, out5)
+end 
 if is_apple()
   @test AbstractState_keyed_output(handle,t) ≈ 352.3522212978604
   @test AbstractState_output(handle,"T") ≈ 352.3522212978604
@@ -126,7 +136,7 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
   len=200
   t=zeros(len);p=zeros(len);x=zeros(2*len);y=zeros(2*len);rhomolar_vap=zeros(len);rhomolar_liq=zeros(len);
   tau=zeros(len);delta=zeros(len);m1=zeros(len);
-  for x0 in [0.02, 0.2, 0.4, 0.6, 0.8, 0.98]
+  for x0 in [0.02, 0.2, 0.4, 0.8]
     AbstractState_set_fractions(HEOS, [x0, 1 - x0])
     try
       AbstractState_build_phase_envelope(HEOS, "none")
@@ -134,12 +144,12 @@ if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
       AbstractState_build_spinodal(HEOS)
       AbstractState_get_spinodal_data(HEOS, len, tau, delta, m1)
     catch err
-      println("$err")
+      println("$x0  $err")
     end
   end
   t, p, rhomolar_vap, rhomolar_liq, x, y = AbstractState_get_phase_envelope_data(HEOS, len, 2)
   tau, delta, m1 = AbstractState_get_spinodal_data(HEOS, len)
   rhomolar=zeros(len); stable=zeros(Clong, len)
-  AbstractState_all_critical_points(HEOS, len, t, p, rhomolar, stable)
+  t, p, rhomolar, stable = AbstractState_all_critical_points(HEOS, len)
   AbstractState_free(HEOS)
 end

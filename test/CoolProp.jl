@@ -42,19 +42,15 @@ end
 include("CoolPropHA.jl")
 include("CoolPropLowLevel.jl")
 
-for sym=[:PropsSI, :PhaseSI, :K2F, :F2K, :HAPropsSI, :AbstractState_factory, :AbstractState_free, :AbstractState_set_fractions, :AbstractState_update, :AbstractState_keyed_output, :AbstractState_output, :AbstractState_specify_phase, :AbstractState_unspecify_phase, :AbstractState_update_and_common_out, :AbstractState_update_and_1_out, :AbstractState_update_and_5_out, :AbstractState_set_binary_interaction_double, :AbstractState_set_cubic_alpha_C, :AbstractState_set_fluid_parameter_double, :AbstractState_first_saturation_deriv, :AbstractState_first_partial_deriv, :AbstractState_build_phase_envelope, :AbstractState_build_spinodal]
+for sym=[:PropsSI, :PhaseSI, :K2F, :F2K, :HAPropsSI, :AbstractState_factory, :AbstractState_free, :AbstractState_set_fractions, :AbstractState_update, :AbstractState_keyed_output, :AbstractState_output, :AbstractState_specify_phase, :AbstractState_unspecify_phase, :AbstractState_update_and_common_out, :AbstractState_update_and_1_out, :AbstractState_update_and_5_out, :AbstractState_set_binary_interaction_double, :AbstractState_set_cubic_alpha_C, :AbstractState_set_fluid_parameter_double, :AbstractState_first_saturation_deriv, :AbstractState_first_partial_deriv, :AbstractState_build_phase_envelope, :AbstractState_build_spinodal, :AbstractState_all_critical_points, :AbstractState_get_phase_envelope_data, :AbstractState_get_spinodal_data]
   symorigin = Symbol(lowercase(string(sym)))
   @eval const $symorigin = $sym
   @eval export $sym, $symorigin
 end
 const set_reference_stateS = set_reference_state
 const set_reference_stateD = set_reference_state
-const abstractstate_get_phase_envelope_data! = AbstractState_get_phase_envelope_data
-const abstractstate_all_critical_points! = AbstractState_all_critical_points
-const abstractstate_get_spinodal_data! = AbstractState_get_spinodal_data
 const set_config_string = set_config
-export set_reference_stateS, set_reference_stateD, AbstractState_get_spinodal_data, AbstractState_all_critical_points, AbstractState_get_phase_envelope_data
-export set_reference_state, abstractstate_get_spinodal_data!, abstractState_all_critical_points!, abstractstate_get_phase_envelope_data!
+export set_reference_stateS, set_reference_stateD, set_reference_state
 export get_global_param_string, get_parameter_information_string, get_fluid_param_string, get_param_index, get_input_pair_index, set_config
 export saturation_ancillary, set_departure_functions, set_config_string, cair_sat
 end #module

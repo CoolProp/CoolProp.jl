@@ -625,3 +625,11 @@ function AbstractState_all_critical_points{F<:Float64}(handle::Clong, length::In
   raise(errcode, message_buffer)
   return nothing
 end
+
+function AbstractState_all_critical_points(handle::Clong, length::Integer)
+  T, p, rhomolar = [fill(NaN,length) for i=1:3]
+  stable = zeros(Clong, length)
+  ccall( (:AbstractState_all_critical_points, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, T, p, rhomolar, stable, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+  raise(errcode, message_buffer)
+  return T, p, rhomolar, stable
+end

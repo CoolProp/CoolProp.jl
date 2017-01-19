@@ -245,6 +245,19 @@ function AbstractState_update_and_common_out{F<:Float64}(handle::Clong, input_pa
   return nothing
 end
 
+function AbstractState_update_and_common_out{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer)
+  T, p, rhomolar, hmolar, smolar = [fill(NaN,length) for i=1:5]
+  ccall( (:AbstractState_update_and_common_out, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, input_pair, value1, value2, length, T, p, rhomolar, hmolar, smolar, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+  raise(errcode, message_buffer)
+  return T, p, rhomolar, hmolar, smolar
+end
+
+function AbstractState_update_and_common_out{F<:Float64}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer)
+  T, p, rhomolar, hmolar, smolar = [fill(NaN,length) for i=1:5]
+  AbstractState_update_and_common_out(handle, get_input_pair_index(input_pair), value1, value2, length, T, p, rhomolar, hmolar, smolar)
+  return T, p, rhomolar, hmolar, smolar
+end
+
 """
     AbstractState_update_and_1_out{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, output::Clong, out::Array{F})
     AbstractState_update_and_1_out{F<:Float64}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, output::AbstractString, out::Array{F})
@@ -270,6 +283,19 @@ end
 function AbstractState_update_and_1_out{F<:Float64}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, output::AbstractString, out::Array{F})
   AbstractState_update_and_1_out(handle, get_input_pair_index(input_pair), value1, value2, length, get_param_index(output), out)
   return nothing
+end
+
+function AbstractState_update_and_1_out{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, output::Clong)
+  out = fill(NaN,length)
+  ccall( (:AbstractState_update_and_1_out, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Clong, Clong, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, input_pair, value1, value2, length, output, out, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+  raise(errcode, message_buffer)
+  return out
+end
+
+function AbstractState_update_and_1_out{F<:Float64}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, output::AbstractString)
+  out = fill(NaN,length)
+  AbstractState_update_and_1_out(handle, get_input_pair_index(input_pair), value1, value2, length, get_param_index(output), out)
+  return out
 end
 
 """
@@ -305,6 +331,23 @@ function AbstractState_update_and_5_out{F<:Float64, S<:AbstractString}(handle::C
   end
   AbstractState_update_and_5_out(handle, get_input_pair_index(input_pair), value1, value2, length, outputs_key, out1, out2, out3, out4, out5)
   return nothing
+end
+
+function AbstractState_update_and_5_out{F<:Float64}(handle::Clong, input_pair::Clong, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{Clong})
+  out1, out2, out3, out4, out5 = [fill(NaN,length) for i=1:5]
+  ccall( (:AbstractState_update_and_5_out, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Clong, Ref{Clong}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, input_pair, value1, value2, length, outputs, out1, out2, out3, out4, out5, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+  raise(errcode, message_buffer)
+  return out1, out2, out3, out4, out5
+end
+
+function AbstractState_update_and_5_out{F<:Float64, S<:AbstractString}(handle::Clong, input_pair::AbstractString, value1::Array{F}, value2::Array{F}, length::Integer, outputs::Array{S})
+  out1, out2, out3, out4, out5 = [fill(NaN,length) for i=1:5]
+  outputs_key = Array(Clong, 5)
+  for k = 1:5
+    outputs_key[k] = get_param_index(outputs[k])
+  end
+  AbstractState_update_and_5_out(handle, get_input_pair_index(input_pair), value1, value2, length, outputs_key, out1, out2, out3, out4, out5)
+  return out1, out2, out3, out4, out5
 end
 
 """
@@ -496,6 +539,14 @@ function AbstractState_get_phase_envelope_data{F<:Float64}(handle::Clong, length
   return nothing
 end
 
+function AbstractState_get_phase_envelope_data(handle::Clong, length::Integer, ncomp::Integer)
+  T, p, rhomolar_vap, rhomolar_liq = [fill(NaN,length) for i=1:5]
+  x, y = [fill(NaN,length*ncomp) for i=1:2]
+  ccall( (:AbstractState_get_phase_envelope_data, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, T, p, rhomolar_vap, rhomolar_liq, x, y, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+  raise(errcode, message_buffer)
+  return T, p, rhomolar_vap, rhomolar_liq, x, y
+end
+
 """
     AbstractState_build_spinodal(handle::Clong)
 
@@ -535,6 +586,13 @@ function AbstractState_get_spinodal_data{F<:Float64}(handle::Clong, length::Inte
   ccall( (:AbstractState_get_spinodal_data, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, tau, delta, m1, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
   raise(errcode, message_buffer)
   return nothing
+end
+
+function AbstractState_get_spinodal_data(handle::Clong, length::Integer)
+  tau, delta, m1 = [fill(NaN,length) for i=1:3]
+  ccall( (:AbstractState_get_spinodal_data, "CoolProp"), Void, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, tau, delta, m1, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+  raise(errcode, message_buffer)
+  return tau, delta, m1
 end
 
 """

@@ -579,6 +579,12 @@ Get data for the spinodal curve.
 # Note
 If there is an error, no change in the output arrays will be made
 
+# Example
+julia> HEOS=AbstractState_factory("HEOS","Methane&Ethane");
+julia> AbstractState_set_fractions(HEOS, [0.1, 0.9]);
+julia> AbstractState_build_spinodal(HEOS);
+julia> tau, delta, m1 = AbstractState_get_spinodal_data(HEOS, 127);
+
 # Ref
 CoolProp::AbstractState_get_spinodal_data(const long handle, const long length, double* tau, double* delta, double* M1, long* errcode, char* message_buffer, const long buffer_length);
 """

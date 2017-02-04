@@ -48,10 +48,14 @@ try
     urlbase = coolpropurlbase * "shared_library/Darwin/$OS_ARCH_CoolProp/libCoolProp.dylib";
     _download(urlbase, joinpath(destpathbase,"CoolProp.dylib"));
   end
-import CoolProp: fluids, parameters
-info("Building help tables...")
-CoolProp.buildfluids();
-CoolProp.buildparameters();
+  (branchname == "nightly") && begin
+    info("Building help tables...")
+    touch(joinpath(destpathbase, "fluids.table"))
+    touch(joinpath(destpathbase, "parameters.table"))
+    import CoolProp: buildfluids , buildparameters
+    buildfluids();
+    buildparameters();
+  end
 catch err
   println("Build error: $err")
 end

@@ -65,7 +65,7 @@ pq_inputs = get_input_pair_index("PQ_INPUTS")
 t = get_param_index("T")
 AbstractState_set_fractions(handle, [0.4, 0.6])
 AbstractState_update(handle,pq_inputs,101325, 0)
-if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
+if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
   T, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1)
   temp_, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1)
   out = AbstractState_update_and_1_out(handle, pq_inputs, [101325.0], [0.0],1, t)
@@ -125,7 +125,7 @@ catch err
 end
 AbstractState_set_fluid_parameter_double(handle, 0, "c", 1.0)
 AbstractState_free(handle)
-if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
+if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
   handle = AbstractState_factory("HEOS", "Water")
   AbstractState_update(handle, "PQ_INPUTS", 15e5, 0)
   @test AbstractState_first_saturation_deriv(handle, get_param_index("Hmolar"), get_param_index("P")) ≈ 0.0025636362140578207

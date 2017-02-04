@@ -52,7 +52,7 @@ if (branchname == "nightly")
   @test_throws ErrorException AbstractState_set_cubic_alpha_C(inhandle, 0, "TWU", 0.0, 0.0, 0.0)
   @test_throws ErrorException AbstractState_set_cubic_alpha_C(handle, 0, instr, 0.0, 0.0, 0.0)
 end
-if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
+if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
   @test_throws ErrorException saturation_ancillary(instr, "I", 1, "T", 300.0)
   @test_throws ErrorException saturation_ancillary("R410A", instr, 1, "T", 300.0)
   AbstractState_free(handle)

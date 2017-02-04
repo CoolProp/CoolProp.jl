@@ -65,14 +65,14 @@ M = PropsSI("molemass", "Water");
 set_reference_stateS("Water", "DEF");
 @test PropsSI("H", "T", T0, "P", 101325, "Water") ≈ 104920.1198093371
 
-if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
+if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
   #saturation_ancillary
   @test saturation_ancillary("R410A","I",1,"T", 300) ≈ 0.004877519938463293
   #cair_sat
   @test cair_sat(400) ≈ 202.53656679999574
 end
 #config
-if (haskey(ENV, "testCoolProp") && ENV["testCoolProp"]=="on")
+if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
   set_config_string("ALTERNATIVE_TABLES_DIRECTORY", "")
 end
 try

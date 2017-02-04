@@ -28,7 +28,7 @@ The installer downloads related libraries respect to machine OS & wordsize. Plea
 ## Development
 For development, it is possible to include a custom wrapper from `ENV["TestingPath"]`, then:  
 ```julia
-ENV["testCoolProp"]="on";
+ENV["includelocalwrapper"]="on";
 using CoolProp;
 ```
 if `!haskey(ENV, "TestingPath")` the default `\test\CoolProp.jl` will be used.

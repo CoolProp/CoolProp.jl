@@ -1,7 +1,7 @@
 # Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
 env:
-  - includelocalwrapper="off"
+  - includelocalwrapper="on"
 os:
   - linux
   - osx

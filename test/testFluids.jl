@@ -1,11 +1,11 @@
-id = 0;
+global id = 0;
 counter = 0;
-maxdiffreduvscriti = 0.0;
+global maxdiffreduvscriti = 0.0;
 maxfluid = "";
 uneq = Set();
 critphasefail = Set();
 for fluid in coolpropfluids
-  id+=1;
+  global id+=1;
   pure = get_fluid_param_string(fluid, "pure");
   tcrit = PropsSI("TCRIT", fluid);
   pcrit = PropsSI("PCRIT", fluid);
@@ -23,10 +23,10 @@ for fluid in coolpropfluids
   @test PhaseSI("P", p3, "T", (t3+tcrit)/2, fluid)=="gas";
   @test PhaseSI("P", (pcrit+p3)/2, "T", (t3+tcrit)/2, fluid)=="liquid";
   (pure == "true") && (tcrit != PropsSI("T_REDUCING", fluid)) && push!(uneq, fluid);
-  diffreduvscriti = abs(PropsSI("TCRIT", fluid) - PropsSI("T_REDUCING", fluid));
+  global diffreduvscriti = abs(PropsSI("TCRIT", fluid) - PropsSI("T_REDUCING", fluid));
   if (diffreduvscriti > maxdiffreduvscriti)
     maxfluid = fluid;
-    maxdiffreduvscriti = diffreduvscriti;
+    global maxdiffreduvscriti = diffreduvscriti;
   end
 end
 println("max diff between reducing vs critical point T: $maxdiffreduvscriti for $maxfluid");

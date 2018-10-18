@@ -1,5 +1,5 @@
 #low
-info("********* Low Level Api *********")
+@info "********* Low Level Api *********"
 const HEOS_BACKEND_FAMILY = "HEOS"
 const REFPROP_BACKEND_FAMILY = "REFPROP";#Need Install
 const INCOMP_BACKEND_FAMILY = "INCOMP"
@@ -56,7 +56,7 @@ try
     println("IF97 $p = ", AbstractState_keyed_output(IF97, pi))
   end
 catch
-  warn("QT_INPUTS not ready")
+  @warn "QT_INPUTS not ready"
 end
 AbstractState_free(IF97)
 #AbstractState_output AbstractState_set_fractions AbstractState_specify_phase
@@ -80,9 +80,9 @@ else
   AbstractState_update_and_1_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, "T", out_)
   out1=[0.0]; out2=[0.0]; out3=[0.0]; out4=[0.0]; out5=[0.0]; out1_=[0.0]
   AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t], out1, out2, out3, out4, out5)
-  AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"], out1_, out2, out3, out4, out5)
+  # AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"], out1_, out2, out3, out4, out5)
 end 
-if is_apple()
+if Sys.isapple()
   @test AbstractState_keyed_output(handle,t) ≈ 352.3522212978604
   @test AbstractState_output(handle,"T") ≈ 352.3522212978604
   @test T[1] ≈ 352.3522212978604
@@ -99,7 +99,7 @@ else
   @test out[1] ≈ 352.3522212991724
   @test out_[1] ≈ 352.3522212991724
   @test out1[1] ≈ 352.3522212991724
-  @test out1_[1] ≈ 352.3522212991724
+  # @test out1_[1] ≈ 352.3522212991724
 end
 for phase in ["phase_liquid", "phase_gas", "phase_twophase", "phase_supercritical", "phase_supercritical_gas", "phase_supercritical_liquid", "phase_critical_point", "phase_unknown", "phase_not_imposed"]
   AbstractState_specify_phase(handle, phase)
@@ -121,7 +121,7 @@ try
   #do not export on all machines
   AbstractState_set_cubic_alpha_C(handle, 0, "TWU", 1.0, 1.0, 1.0)
 catch err
-  warn("AbstractState_set_cubic_alpha_C fails with: $err")
+  @warn "AbstractState_set_cubic_alpha_C fails with: $err"
 end
 AbstractState_set_fluid_parameter_double(handle, 0, "c", 1.0)
 AbstractState_free(handle)

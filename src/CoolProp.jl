@@ -1,15 +1,13 @@
 module CoolProp
 import Libdl
 
-push!(Libdl.DL_LOAD_PATH, abspath(@__FILE__, "..", "..", "deps", "lib"));
+# push!(Libdl.DL_LOAD_PATH, abspath(@__FILE__, "..", "..", "deps", "lib"));
 const libcoolprop = joinpath(splitdir(@__DIR__)[1],"deps","lib","CoolProp.dll")
-println(libcoolprop)
+# println(libcoolprop)
 
 #Check if the libray open
 if Libdl.dlopen_e(libcoolprop) in (C_NULL, nothing)
-    error("$(libcoolprop) cannot be opened, Please re-run Pkg.build(\"not really\"), and restart Julia.")
-else
-    println("I can open the library")
+    error("$(libcoolprop) cannot be opened, Please re-run Pkg.build(\"CoolProp\"), and restart Julia.")
 end
 
 export PropsSI, PhaseSI, get_global_param_string, get_parameter_information_string,get_fluid_param_string,set_reference_stateS, get_param_index, get_input_pair_index, set_config_string,F2K, K2F, HAPropsSI, AbstractState_factory, AbstractState_free, AbstractState_set_fractions, AbstractState_update, AbstractState_specify_phase, AbstractState_unspecify_phase, AbstractState_keyed_output, AbstractState_output, AbstractState_update_and_common_out, AbstractState_update_and_1_out, AbstractState_update_and_5_out, AbstractState_set_binary_interaction_double, AbstractState_set_fluid_parameter_double

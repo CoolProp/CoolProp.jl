@@ -1,7 +1,0 @@
-[ Info: On update-to-julia-v1.0
-┌ Warning: C:\Users\alaz\.julia\dev\CoolProp\deps\lib exists make sure to remove old library files.
-└ @ Main C:\Users\alaz\.julia\dev\CoolProp\deps\build.jl:23
-┌ Warning: unable to download may be a windows machine firewall.. , set latestVersion_CoolProp = 6.1.0
-└ @ Main C:\Users\alaz\.julia\dev\CoolProp\deps\build.jl:31
-CoolProp latestVersion =  ...
-Build error: UndefVarError(:coolpropurlbase)

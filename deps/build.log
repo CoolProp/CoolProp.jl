@@ -1,35 +1,7 @@
-WARNING: Base.LibGit2 is deprecated, run `import LibGit2` instead
-  likely near C:\Users\alaz\.julia\dev\CoolProp\deps\build.jl:5
-WARNING: Base.LibGit2 is deprecated, run `import LibGit2` instead
-  likely near C:\Users\alaz\.julia\dev\CoolProp\deps\build.jl:5
-┌ Warning: `isdefined(:symbol)` is deprecated, use `@isdefined symbol` instead
-│   caller = ip:0x0
-└ @ Core :-1
-┌ Warning: `info()` is deprecated, use `@info` instead.
-│   caller = top-level scope at none:0
-└ @ Core none:0
-INFO: On master
-┌ Warning: `warn()` is deprecated, use `@warn` instead.
-│   caller = #warn#781(::Base.Iterators.Pairs{Union{},Union{},Tuple{},NamedTuple{(),Tuple{}}}, ::Function, ::String) at deprecated.jl:1032
-└ @ Base .\deprecated.jl:1032
-WARNING: C:\Users\alaz\.julia\dev\CoolProp\deps\lib exists make sure to remove old library files.
-┌ Warning: Deprecated syntax `implicit assignment to global variable `latestVersion_CoolProp``.
-│ Use `global latestVersion_CoolProp` instead.
-└ @ none:0
-┌ Warning: Deprecated syntax `implicit assignment to global variable `latestVersion_CoolProp``.
-│ Use `global latestVersion_CoolProp` instead.
-└ @ none:0
-┌ Warning: `readstring(filename::AbstractString)` is deprecated, use `read(filename, String)` instead.
-│   caller = top-level scope at build.jl:25
-└ @ Core C:\Users\alaz\.julia\dev\CoolProp\deps\build.jl:25
-┌ Warning: `is_windows` is deprecated, use `Sys.iswindows` instead.
-│   caller = top-level scope at none:0
-└ @ Core none:0
-┌ Warning: `is_linux` is deprecated, use `Sys.islinux` instead.
-│   caller = top-level scope at none:0
-└ @ Core none:0
-┌ Warning: `is_apple` is deprecated, use `Sys.isapple` instead.
-│   caller = top-level scope at none:0
-└ @ Core none:0
-CoolProp latestVersion = 6.1.0 ...
-Build error: file exists ...
+[ Info: On update-to-julia-v1.0
+┌ Warning: C:\Users\alaz\.julia\dev\CoolProp\deps\lib exists make sure to remove old library files.
+└ @ Main C:\Users\alaz\.julia\dev\CoolProp\deps\build.jl:23
+┌ Warning: unable to download may be a windows machine firewall.. , set latestVersion_CoolProp = 6.1.0
+└ @ Main C:\Users\alaz\.julia\dev\CoolProp\deps\build.jl:31
+CoolProp latestVersion =  ...
+Build error: UndefVarError(:coolpropurlbase)

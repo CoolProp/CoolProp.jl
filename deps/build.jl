@@ -1,7 +1,7 @@
 using Compat
 import LibGit2
 import JSON
-const OS_ARCH_CoolProp = (Sys.WORD_SIZE == 64) ? "64bit" : (is_windows() ? "32bit__cdecl" : "32bit");
+const OS_ARCH_CoolProp = (Sys.WORD_SIZE == 64) ? "64bit" : (Sys.iswindows() ? "32bit__cdecl" : "32bit");
 const destpathbase = abspath(@__FILE__, "..", "lib");
 # const branchname = begin
 #   if (isdefined(:LibGit2))
@@ -25,16 +25,19 @@ else
   mkdir(destpathbase);
 end
 try
-  latestVersion_CoolProp = JSON.parse(readstring(download("https://sourceforge.net/projects/coolprop/best_release.json")))["release"]["filename"][11:15];
+  latestVersion_CoolProp = JSON.parse(read(download("https://sourceforge.net/projects/coolprop/best_release.json"), String))["release"]["filename"][11:15];  
 catch err
   latestVersion_CoolProp = "6.1.0";
   @warn "unable to download may be a windows machine firewall.. , set latestVersion_CoolProp = $latestVersion_CoolProp";
 end
+latestVersion_CoolProp = JSON.parse(read(download("https://sourceforge.net/projects/coolprop/best_release.json"), String))["release"]["filename"][11:15]; 
+coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/$latestVersion_CoolProp/";
+
 (branchname == "nightly") && (coolpropurlbase = "http://www.coolprop.dreamhosters.com/binaries/");
 (branchname == "master") && (coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/$latestVersion_CoolProp/");
 try
   println("CoolProp latestVersion = $latestVersion_CoolProp ...")
-  _download(coolpropurlbase * "Julia/CoolProp.jl", joinpath(destpathbase,"CoolProp.jl"));
+  # _download(coolpropurlbase * "Julia/CoolProp.jl", joinpath(destpathbase,"CoolProp.jl")); 
   @info "I'm Getting CoolProp Binaries...";
   @static if  Sys.iswindows()
     urlbase = coolpropurlbase * "shared_library/Windows/$OS_ARCH_CoolProp/";

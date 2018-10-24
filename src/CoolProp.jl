@@ -14,7 +14,7 @@ export PropsSI, PhaseSI, get_global_param_string, get_parameter_information_stri
 
 errcode = Ref{Clong}(0)
 
-const buffer_length = 10000
+const buffer_length = 20000
 # message_buffer = Array(UInt8, buffer_length)
 message_buffer = Array{UInt8}(undef, buffer_length)
 

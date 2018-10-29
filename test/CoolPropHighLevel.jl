@@ -21,11 +21,11 @@ julia> PropsSI("n-Butane", "rhomolar_critical")
 CoolProp::Props1SI(std::string, std::string)
 """
 function PropsSI(fluid::AbstractString, output::AbstractString)
-  val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Cstring, Cstring), fluid, output)
-  if val == Inf
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
+    val = ccall( (:Props1SI, "CoolProp"), Cdouble, (Cstring, Cstring), fluid, output)
+    if val == Inf
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return val
 end
 
 """
@@ -64,11 +64,11 @@ julia> PropsSI("Dmass", "T", 300, "P", 101325, "100-41-4[0.5]&106-42-3[0.5]") # 
 CoolProp::PropsSI(const std::string &, const std::string &, double, const std::string &, double, const std::string&)
 """
 function PropsSI(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
-  val = ccall( (:PropsSI, "CoolProp"), Cdouble, (Cstring, Cstring, Cdouble, Cstring, Cdouble, Cstring), output, name1, value1, name2, value2, fluid)
-  if val == Inf
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
+    val = ccall( (:PropsSI, "CoolProp"), Cdouble, (Cstring, Cstring, Cdouble, Cstring, Cdouble, Cstring), output, name1, value1, name2, value2, fluid)
+    if val == Inf
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return val
 end
 
 """
@@ -101,12 +101,12 @@ julia> PhaseSI("T", 300, "P", 3541, "Water")
 CoolProp::PhaseSI(const std::string &, double, const std::string &, double, const std::string&)
 """
 function PhaseSI(name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, fluid::AbstractString)
-  val = ccall( (:PhaseSI, "CoolProp"), Int32, (Cstring, Cdouble, Cstring, Cdouble, Cstring, Ptr{UInt8}, Int), name1, value1, name2, value2, fluid, message_buffer::Array{UInt8, 1}, buffer_length)
-  val = unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
-  if val == ""
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
+    val = ccall( (:PhaseSI, "CoolProp"), Int32, (Cstring, Cdouble, Cstring, Cdouble, Cstring, Ptr{UInt8}, Int), name1, value1, name2, value2, fluid, message_buffer::Array{UInt8, 1}, buffer_length)
+    val = unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
+    if val == ""
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return val
 end
 
 #=No sample no test
@@ -172,11 +172,11 @@ set_reference_stateS(const std::string& FluidName, const std::string& reference_
 The changing of the reference state should be part of the initialization of your program, and it is not recommended to change the reference state during the course of making calculations
 """
 function set_reference_state(fluid::AbstractString, reference_state::AbstractString)
-  val = ccall( (:set_reference_stateS, "CoolProp"), Cint, (Cstring, Cstring), fluid, reference_state)
-  if val == 0
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
+    val = ccall( (:set_reference_stateS, "CoolProp"), Cint, (Cstring, Cstring), fluid, reference_state)
+    if val == 0
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return val
 end
 
 """
@@ -195,11 +195,11 @@ Set the reference state based on a thermodynamic state point specified by temper
 set_reference_stateD(const char* Ref, double T, double rhomolar, double hmolar0, double smolar0)
 """
 function set_reference_state(fluid::AbstractString, T::Real, rhomolar::Real, hmolar0::Real, smolar0::Real)
-  val = ccall( (:set_reference_stateD, "CoolProp"), Cint, (Cstring, Cdouble, Cdouble, Cdouble, Cdouble), fluid, T, rhomolar, hmolar0, smolar0)
-  if val == 0
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
+    val = ccall( (:set_reference_stateD, "CoolProp"), Cint, (Cstring, Cdouble, Cdouble, Cdouble, Cdouble), fluid, T, rhomolar, hmolar0, smolar0)
+    if val == 0
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return val
 end
 
 """
@@ -222,9 +222,9 @@ julia> saturation_ancillary("R410A","I",1,"T", 300)
 double saturation_ancillary(const char* fluid_name, const char* output, int Q, const char* input, double value);
 """
 function saturation_ancillary(fluid_name::AbstractString, output::AbstractString, quality::Integer, input::AbstractString, value::Real)
-  val = ccall( (:saturation_ancillary, "CoolProp"), Cdouble, (Cstring, Cstring, Cint, Cstring, Cdouble), fluid_name, output, quality, input, value)
-  if val == Inf
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
+    val = ccall( (:saturation_ancillary, "CoolProp"), Cdouble, (Cstring, Cstring, Cint, Cstring, Cdouble), fluid_name, output, quality, input, value)
+    if val == Inf
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return val
 end

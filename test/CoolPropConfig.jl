@@ -19,8 +19,8 @@ ALTERNATIVE_REFPROP_HMX_BNC_PATH | "" | An alternative path to the HMX.BNC file.
 VTPR_UNIFAQ_PATH | "" | The path to the directory containing the UNIFAQ JSON files.  Should be slash terminated
 """
 function set_config(key::AbstractString, val::AbstractString)
-  ccall( (:set_config_string, "CoolProp"), Void, (Cstring, Cstring), key, val)
-  return get_global_param_string("errstring")
+    ccall( (:set_config_string, "CoolProp"), Void, (Cstring, Cstring), key, val)
+    return get_global_param_string("errstring")
 end
 
 """
@@ -40,8 +40,8 @@ R_U_CODATA |  8.3144598 | The value for the ideal gas constant in J/mol/K accord
 SPINODAL_MINIMUM_DELTA |  0.5 | The minimal delta to be used in tracing out the spinodal; make sure that the EOS has a spinodal at this value of delta=rho/rho_r
 """
 function set_config(key::AbstractString, val::Real)
-  ccall( (:set_config_double, "CoolProp"), Void, (Cstring, Cdouble), key, val)
-  return get_global_param_string("errstring")
+    ccall( (:set_config_double, "CoolProp"), Void, (Cstring, Cdouble), key, val)
+    return get_global_param_string("errstring")
 end
 
 """
@@ -70,6 +70,6 @@ OVERWRITE_DEPARTURE_FUNCTION |  false | If true, and a departure function to be 
 OVERWRITE_BINARY_INTERACTION |  false | If true, and a pair of binary interaction pairs to be added is already there, rather than not adding the binary interaction pair (and probably throwing an exception), overwrite it
 """
 function set_config(key::AbstractString, val::Bool)
-  ccall( (:set_config_bool, "CoolProp"), Void, (Cstring, UInt8), key, val)
-  return get_global_param_string("errstring")
+    ccall( (:set_config_bool, "CoolProp"), Void, (Cstring, UInt8), key, val)
+    return get_global_param_string("errstring")
 end

@@ -25,7 +25,7 @@ Get the debug level.
 Level The level of the verbosity for the debugging output (0-10) 0: no debgging output
 """
 function get_debug_level()
-  ccall( (:get_debug_level, "CoolProp"), Cint, () )
+    ccall( (:get_debug_level, "CoolProp"), Cint, () )
 end
 
 """
@@ -37,16 +37,16 @@ Set the debug level.
 * `level::Integer`: The level of the verbosity for the debugging output (0-10) 0: no debgging output
 """
 function set_debug_level(level::Integer) # change ::Int to ::Integer to make set_debug_level(get_debug_level()) works on different machine
-  ccall( (:set_debug_level, "CoolProp"), Void, (Cint,), level)
+    ccall( (:set_debug_level, "CoolProp"), Void, (Cint,), level)
 end
 
 include("CoolPropHA.jl")
 include("CoolPropLowLevel.jl")
 
 for symorigin = [:PropsSI, :PhaseSI, :K2F, :F2K, :HAPropsSI, :AbstractState_factory, :AbstractState_free, :AbstractState_set_fractions, :AbstractState_update, :AbstractState_keyed_output, :AbstractState_output, :AbstractState_specify_phase, :AbstractState_unspecify_phase, :AbstractState_update_and_common_out, :AbstractState_update_and_1_out, :AbstractState_update_and_5_out, :AbstractState_set_binary_interaction_double, :AbstractState_set_cubic_alpha_C, :AbstractState_set_fluid_parameter_double, :AbstractState_first_saturation_deriv, :AbstractState_first_partial_deriv, :AbstractState_build_phase_envelope, :AbstractState_build_spinodal, :AbstractState_all_critical_points, :AbstractState_get_phase_envelope_data, :AbstractState_get_spinodal_data]
-  sym = Symbol(lowercase(string(symorigin)))
-  @eval const $sym = $symorigin
-  @eval export $sym, $symorigin
+    sym = Symbol(lowercase(string(symorigin)))
+    @eval const $sym = $symorigin
+    @eval export $sym, $symorigin
 end
 const set_reference_stateS = set_reference_state
 const set_reference_stateD = set_reference_state

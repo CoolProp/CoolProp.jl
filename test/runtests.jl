@@ -21,9 +21,9 @@ const coolpropparameters = map(Compat.String, split(get_global_param_string("par
 const coolpropmix = map(Compat.String, split(get_global_param_string("predefined_mixtures"), ','));
 #all trivials taken from http://www.coolprop.org/coolprop/HighLevelAPI.html#table-of-string-inputs-to-propssi-function
 const coolproptrivialparameters = ["ACENTRIC", "DIPOLE_MOMENT", "FH", "FRACTION_MAX", "FRACTION_MIN",
-  "GAS_CONSTANT", "GWP100", "GWP20", "GWP500", "HH", "M", "ODP", "PCRIT", "PH", "PMAX", "PMIN", "PTRIPLE",
-  "P_REDUCING", "RHOCRIT", "RHOMASS_REDUCING", "RHOMOLAR_CRITICAL", "RHOMOLAR_REDUCING", "TCRIT", "TMAX",
-  "TMIN", "TTRIPLE", "T_FREEZE", "T_REDUCING"];
+"GAS_CONSTANT", "GWP100", "GWP20", "GWP500", "HH", "M", "ODP", "PCRIT", "PH", "PMAX", "PMIN", "PTRIPLE",
+"P_REDUCING", "RHOCRIT", "RHOMASS_REDUCING", "RHOMOLAR_CRITICAL", "RHOMOLAR_REDUCING", "TCRIT", "TMAX",
+"TMIN", "TTRIPLE", "T_FREEZE", "T_REDUCING"];
 const trivalwithnumval = ["FH","GWP100","PMIN","TMIN","P_REDUCING","PCRIT","GWP20","GAS_CONSTANT","PMAX","RHOCRIT","TCRIT","T_REDUCING","ACENTRIC","GWP500","RHOMOLAR_REDUCING","TMAX","TTRIPLE","PH","M","PTRIPLE","RHOMOLAR_CRITICAL","ODP","HH"];
 const fails_any_props_trivals = ["DIPOLE_MOMENT","FRACTION_MAX","FRACTION_MIN","RHOMASS_REDUCING","T_FREEZE"];
 const fails_critical_point = ["DiethylEther","R134a","R116","SulfurDioxide","n-Pentane","R11","CycloPropane","MDM","n-Nonane","Oxygen","DimethylCarbonate","R41","R227EA","R245fa","trans-2-Butene","n-Propane","MM","Air","R236FA","Neon","SES36","Fluorine","n-Undecane","Isohexane","MD4M","IsoButane","D5"];
@@ -32,11 +32,11 @@ const fails_tcrit_eq_treducing = ["R134a","R116","n-Pentane","R11","n-Nonane","M
 @info "********* High Level Api *********"
 #get_global_param_string
 for param in ["version", "gitrevision", "errstring", "warnstring", "FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "parameter_list", "predefined_mixtures", "HOME", "cubic_fluids_schema"]
-  try
-    get_global_param_string(param);
-  catch err
-    @warn "get_global_param_string($param) fails with $err" 
-  end
+    try
+        get_global_param_string(param);
+    catch err
+        @warn "get_global_param_string($param) fails with $err" 
+    end
 end
 #PropsSI
 @test (PropsSI("T","P",101325.0,"Q",0.0,"Water")-373.1242958476879)<1e-5
@@ -66,22 +66,22 @@ set_reference_stateS("Water", "DEF");
 @test PropsSI("H", "T", T0, "P", 101325, "Water") ≈ 104920.1198093371
 
 if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
-  #saturation_ancillary
-  @test saturation_ancillary("R410A","I",1,"T", 300) ≈ 0.004877519938463293
-  #cair_sat
-  @test cair_sat(400) ≈ 202.53656679999574
+    #saturation_ancillary
+    @test saturation_ancillary("R410A","I",1,"T", 300) ≈ 0.004877519938463293
+    #cair_sat
+    @test cair_sat(400) ≈ 202.53656679999574
 end
 #config
 if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
-  set_config_string("ALTERNATIVE_TABLES_DIRECTORY", "")
+    set_config_string("ALTERNATIVE_TABLES_DIRECTORY", "")
 end
 try
-  set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0)
+    set_config("MAXIMUM_TABLE_DIRECTORY_SIZE_IN_GB", 1.0)
 catch err
-  @warn "set_config for double fails with: $err"
+    @warn "set_config for double fails with: $err"
 end
 try
-  set_config("NORMALIZE_GAS_CONSTANTS", true)
+    set_config("NORMALIZE_GAS_CONSTANTS", true)
 catch err
-  @warn "set_config for bool fails with: $err"
+    @warn "set_config for bool fails with: $err"
 end

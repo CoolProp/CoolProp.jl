@@ -8,23 +8,23 @@ const parameterswithnumval = union(trivalwithnumval, Set(["P_TRIPLE","pcrit","p_
 global counter = 0;
 global longunits = Set();
 for p in coolpropparameters
-  global longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");
-  note = "";
-  if (!in(longunit, longunits))
-    push!(longunits, longunit);
-  else
-    note = " *Duplicated* "
-  end
-  for fluid in coolpropfluids
-    try
-      res = ("$(PropsSI(p, fluid))");
-      (!in(p, parameterswithnumval)) && push!(missed, p);
-      note *= " **Constant Property** "
-      global counter+=1;
-      break;
-    catch err
+    global longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");
+    note = "";
+    if (!in(longunit, longunits))
+        push!(longunits, longunit);
+    else
+        note = " *Duplicated* "
     end
-  end
+    for fluid in coolpropfluids
+        try
+            res = ("$(PropsSI(p, fluid))");
+            (!in(p, parameterswithnumval)) && push!(missed, p);
+            note *= " **Constant Property** "
+            global counter+=1;
+        break;
+        catch err
+        end
+    end
 end
 length(missed) > 0 && @warn "missed parameters with numerical value:\n $missed)";
 @test length(parameterswithnumval) == counter

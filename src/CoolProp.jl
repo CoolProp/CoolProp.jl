@@ -4,9 +4,7 @@ module CoolProp
 using Compat
 import Libdl
 
-# push!(Libdl.DL_LOAD_PATH, abspath(@__FILE__, "..", "..", "deps", "lib"));
-const libcoolprop = joinpath(splitdir(@__DIR__)[1],"deps","lib","CoolProp.dll")
-# println(libcoolprop)
+const libcoolprop = joinpath(splitdir(@__DIR__)[1],"deps","lib","CoolProp")
 
 #Check if the libray open
 if Libdl.dlopen_e(libcoolprop) in (C_NULL, nothing)
@@ -14,7 +12,6 @@ if Libdl.dlopen_e(libcoolprop) in (C_NULL, nothing)
 end
 ####################################################################################################################
 ####################################################################################################################
-
 
 errcode = Ref{Clong}(0)
 const buffer_length = 20000

@@ -60,11 +60,11 @@ julia> T = HAPropsSI("T", "H", h, "R", 1.0, "P", 101325)
 HumidAir::HAPropsSI(const char* OutputName, const char* Input1Name, double Input1, const char* Input2Name, double Input2, const char* Input3Name, double Input3);
 """
 function HAPropsSI(output::AbstractString, name1::AbstractString, value1::Real, name2::AbstractString, value2::Real, name3::AbstractString, value3::Real)
-  val = ccall( (:HAPropsSI, "CoolProp"), Cdouble, (Cstring, Cstring, Cdouble, Cstring, Cdouble, Cstring, Cdouble), output, name1, value1, name2, value2, name3, value3)
-  if val == Inf
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return val
+    val = ccall( (:HAPropsSI, "CoolProp"), Cdouble, (Cstring, Cstring, Cdouble, Cstring, Cdouble, Cstring, Cdouble), output, name1, value1, name2, value2, name3, value3)
+    if val == Inf
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return val
 end
 
 """
@@ -82,6 +82,6 @@ HumidAir::cair_sat(double);
 Equals partial derivative of enthalpy with respect to temperature at constant relative humidity of 100 percent and pressure of 1 atmosphere.
 """
 function cair_sat(t::Real)
-  val = ccall( (:cair_sat, "CoolProp"), Cdouble, (Cdouble, ), t)
-  return val;
+    val = ccall( (:cair_sat, "CoolProp"), Cdouble, (Cdouble, ), t)
+    return val;
 end

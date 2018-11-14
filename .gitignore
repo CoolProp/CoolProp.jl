@@ -5,3 +5,5 @@ deps/lib/*
 test/*.log
 test/*.table
 .tags*
+deps/*.log
+deps/*.table

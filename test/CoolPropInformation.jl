@@ -6,30 +6,30 @@ $(isfile(abspath(@__FILE__, "..", "parameters.table")) ? readstring(abspath(@__F
 """
 const CoolProp_parameters = "Type `?CoolProp_arameters` to get a list of all CoolProp parameters."
 buildparameters() = begin
-  logf = open("parameters.table", "w");
-  println(logf, "Paramerer |Description |Unit |Comment ");
-  println(logf, ":---------|:-----------|:----|:-------" );
-  counter = 0;
-  longunits = Set();
-  for p in coolpropparameters
-    longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");
-    note = "";
-    if (!in(longunit, longunits))
-      push!(longunits, longunit);
-    else
-      note = " *Duplicated* "
+    logf = open("parameters.table", "w");
+    println(logf, "Paramerer |Description |Unit |Comment ");
+    println(logf, ":---------|:-----------|:----|:-------" );
+    counter = 0;
+    longunits = Set();
+    for p in coolpropparameters
+        longunit = get_parameter_information_string(p, "long") * " | " * get_parameter_information_string(p, "units");
+        note = "";
+        if (!in(longunit, longunits))
+            push!(longunits, longunit);
+        else
+            note = " *Duplicated* "
+        end
+        for fluid in coolpropfluids
+            try
+                res = ("$(PropsSI(p, fluid))");
+                note *= " **Constant Property** "
+            break;
+            catch err
+            end
+        end
+        println(logf, "$p" * " | " * longunit * " | " * note);
     end
-    for fluid in coolpropfluids
-      try
-        res = ("$(PropsSI(p, fluid))");
-        note *= " **Constant Property** "
-        break;
-      catch err
-      end
-    end
-    println(logf, "$p" * " | " * longunit * " | " * note);
-  end
-  close(logf);
+    close(logf);
 end
 """
 # CoolProp fluids table, to build run `CoolProp.buildfluids()`
@@ -38,23 +38,23 @@ $(isfile(abspath(@__FILE__, "..", "fluids.table")) ? readstring(abspath(@__FILE_
 """
 const CoolProp_fluids = "Type `?CoolProp_fluids` to get a list of all CoolProp fluids."
 buildfluids() = begin
-  logf = open("fluids.table", "w");
-  println(logf, "ID |Name |Alias |CAS |Pure |Formula |BibTeX ");
-  println(logf, ":--|:----|:-----|:---|:----|:-------|:------");
-  id = 0;
-  for fluid in coolpropfluids
-    id+=1;
-    print(logf, "$id | $fluid | $(get_fluid_param_string(fluid, "aliases"))");
-    print(logf, " | $(get_fluid_param_string(fluid, "CAS"))");
-    pure = get_fluid_param_string(fluid, "pure");
-    print(logf, " | $pure");
-    print(logf, " | $(get_fluid_param_string(fluid, "formula")) | ");
-    for bi in ["BibTeX-CONDUCTIVITY", "BibTeX-EOS", "BibTeX-CP0", "BibTeX-SURFACE_TENSION","BibTeX-MELTING_LINE","BibTeX-VISCOSITY"]
-      print(logf, " $bi:$(get_fluid_param_string(fluid, bi))");
-    end
-    print(logf, "\n");
-  end
-  close(logf);
+    logf = open("fluids.table", "w");
+    println(logf, "ID |Name |Alias |CAS |Pure |Formula |BibTeX ");
+    println(logf, ":--|:----|:-----|:---|:----|:-------|:------");
+    id = 0;
+    for fluid in coolpropfluids
+        id+=1;
+        print(logf, "$id | $fluid | $(get_fluid_param_string(fluid, "aliases"))");
+        print(logf, " | $(get_fluid_param_string(fluid, "CAS"))");
+        pure = get_fluid_param_string(fluid, "pure");
+        print(logf, " | $pure");
+        print(logf, " | $(get_fluid_param_string(fluid, "formula")) | ");
+        for bi in ["BibTeX-CONDUCTIVITY", "BibTeX-EOS", "BibTeX-CP0", "BibTeX-SURFACE_TENSION","BibTeX-MELTING_LINE","BibTeX-VISCOSITY"]
+            print(logf, " $bi:$(get_fluid_param_string(fluid, bi))");
+        end
+        print(logf, "\n");
+     end
+     close(logf);
 end
 # ---------------------------------
 #       Information functions
@@ -72,11 +72,11 @@ ref CoolProp::get_global_param_string
 * `key`: A string represents parameter name, could be one of $inputs_to_get_global_param_string
 """
 function get_global_param_string(key::AbstractString)
-  val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8}, Int), key, message_buffer::Array{UInt8, 1}, buffer_length)
-  if val == 0
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
+    val = ccall( (:get_global_param_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8}, Int), key, message_buffer::Array{UInt8, 1}, buffer_length)
+    if val == 0
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
 end
 
 """
@@ -101,16 +101,16 @@ julia> get_parameter_information_string("HMOLAR", "units")
 A tabular output for this function is available with `?CoolProp_parameters`
 """
 function get_parameter_information_string(key::AbstractString, outtype::AbstractString)
-  message_buffer[1:length(outtype)+1] = [Vector{UInt8}(outtype); 0x00]
-  val = ccall( (:get_parameter_information_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8}, Int), key, message_buffer::Array{UInt8, 1}, buffer_length)
-  if val == 0
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
+    message_buffer[1:length(outtype)+1] = [Vector{UInt8}(outtype); 0x00]
+    val = ccall( (:get_parameter_information_string, "CoolProp"), Clong, (Cstring, Ptr{UInt8}, Int), key, message_buffer::Array{UInt8, 1}, buffer_length)
+    if val == 0
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
 end
 
 function get_parameter_information_string(key::AbstractString)
-  return get_parameter_information_string(key, "long")
+    return get_parameter_information_string(key, "long")
 end
 
 """
@@ -136,11 +136,11 @@ ParamName                    | Description
 A tabular output for this function is available with `?CoolProp_fluids`
 """
 function get_fluid_param_string(fluid::AbstractString, param::AbstractString)
-  val = ccall( (:get_fluid_param_string, "CoolProp"), Clong, (Cstring, Cstring, Ptr{UInt8}, Int), fluid, param, message_buffer::Array{UInt8, 1}, buffer_length)
-  if val == 0
-    error("CoolProp: ", get_global_param_string("errstring"))
-  end
-  return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
+    val = ccall( (:get_fluid_param_string, "CoolProp"), Clong, (Cstring, Cstring, Ptr{UInt8}, Int), fluid, param, message_buffer::Array{UInt8, 1}, buffer_length)
+    if val == 0
+        error("CoolProp: ", get_global_param_string("errstring"))
+    end
+    return unsafe_string(convert(Ptr{UInt8}, pointer(message_buffer::Array{UInt8, 1})))
 end
 
 """
@@ -149,7 +149,7 @@ end
 Convert from degrees Fahrenheit to Kelvin (useful primarily for testing).
 """
 function F2K(tf::Real)
-  return ccall( (:F2K, "CoolProp"), Cdouble, (Cdouble,), tf)
+    return ccall( (:F2K, "CoolProp"), Cdouble, (Cdouble,), tf)
 end
 
 """
@@ -158,7 +158,7 @@ end
 Convert from Kelvin to degrees Fahrenheit (useful primarily for testing).
 """
 function K2F(tk::Real)
-  return ccall( (:K2F, "CoolProp"), Cdouble, (Cdouble,), tk)
+    return ccall( (:K2F, "CoolProp"), Cdouble, (Cdouble,), tk)
 end
 
 """
@@ -170,11 +170,11 @@ Get the index as a long for a parameter "T", "P", etc, for `abstractstate_keyed_
 * `param`: A string represents parameter name, to see full list check "Table of string inputs to PropsSI function": http://www.coolprop.org/coolprop/HighLevelAPI.html#parameter-table, or simply type `get_global_param_string("parameter_list")`
 """
 function get_param_index(param::AbstractString)
-  val = ccall( (:get_param_index, "CoolProp"), Clong, (Cstring,), param)
-  if val == -1
-    error("CoolProp: Unknown parameter: ", param)
-  end
-  return val
+    val = ccall( (:get_param_index, "CoolProp"), Clong, (Cstring,), param)
+    if val == -1
+        error("CoolProp: Unknown parameter: ", param)
+    end
+    return val
 end
 
 """
@@ -230,11 +230,11 @@ julia> get_input_pair_index("PT_INPUTS")
 ```
 """
 function get_input_pair_index(pair::AbstractString)
-  val = ccall( (:get_input_pair_index, "CoolProp"), Clong, (Cstring,), pair)
-  if val == -1
-    error("CoolProp: Unknown input pair: ", pair)
-  end
-  return val
+    val = ccall( (:get_input_pair_index, "CoolProp"), Clong, (Cstring,), pair)
+    if val == -1
+        error("CoolProp: Unknown input pair: ", pair)
+    end
+    return val
 end
 const coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
 const coolpropfluids = map(Compat.String, split(get_global_param_string("FluidsList"),','));

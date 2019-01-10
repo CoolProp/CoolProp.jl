@@ -1,0 +1,7 @@
+name = "CoolProp"
+uuid = "e084ae63-2819-5025-826e-f8e611a84251"
+version = "0.0.0"
+
+[deps]
+Compat = "34da2185-b29b-5c13-b0c7-acf172513d20"
+Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"

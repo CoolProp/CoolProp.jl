@@ -3,15 +3,9 @@ import LibGit2
 import JSON
 const OS_ARCH_CoolProp = (Sys.WORD_SIZE == 64) ? "64bit" : (Sys.iswindows() ? "32bit__cdecl" : "32bit");
 const destpathbase = abspath(@__FILE__, "..", "lib");
-# const branchname = begin
-#   if (isdefined(:LibGit2))
-#     LibGit2.branch(LibGit2.GitRepo(abspath(@__FILE__, "..", "..")));
-#   else
-#     Base.Git.branch(dir = abspath(@__FILE__, "..", ".."));
-#   end
-# end
+
 # const branchname = LibGit2.branch(LibGit2.GitRepo(abspath(@__FILE__, "..", "..")));
-const branchname = LibGit2.branch(LibGit2.GitRepo(abspath(@__FILE__, "..", "..")));
+const branchname = "master"
 @info "On $branchname";
 latestVersion_CoolProp = "";
 _download(s, d) = isfile(d) ? throw("file exists ...") : begin

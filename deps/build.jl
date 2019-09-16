@@ -27,8 +27,8 @@ end
 latestVersion_CoolProp = JSON.parse(read(download("https://sourceforge.net/projects/coolprop/best_release.json"), String))["release"]["filename"][11:15]; 
 coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/$latestVersion_CoolProp/";
 
-(branchname == "nightly") && (coolpropurlbase = "http://www.coolprop.dreamhosters.com/binaries/");
-(branchname == "master") && (coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/$latestVersion_CoolProp/");
+(branchname == "nightly") && (global coolpropurlbase = "http://www.coolprop.dreamhosters.com/binaries/");
+(branchname == "master") && (global coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/$latestVersion_CoolProp/");
 try
     println("CoolProp latestVersion = $latestVersion_CoolProp ...")
     # _download(coolpropurlbase * "Julia/CoolProp.jl", joinpath(destpathbase,"CoolProp.jl")); 
@@ -40,7 +40,7 @@ try
         _download(joinpath(urlbase,"exports.txt"), joinpath(destpathbase,"exports.txt"));
     end
     @static if  Sys.islinux()
-        (branchname == "nightly") && (coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/nightly/");
+        (branchname == "nightly") && (global coolpropurlbase = "http://netix.dl.sourceforge.net/project/coolprop/CoolProp/nightly/");
         urlbase = coolpropurlbase * "shared_library/Linux/$OS_ARCH_CoolProp/libCoolProp.so.$latestVersion_CoolProp";
         _download(urlbase, joinpath(destpathbase,"CoolProp.so"));
     end

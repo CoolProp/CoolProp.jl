@@ -3,6 +3,7 @@ module CoolProp
 
 using Compat
 import Libdl
+import Unitful
 
 const libcoolprop = joinpath(splitdir(@__DIR__)[1],"deps","lib","CoolProp")
 
@@ -90,6 +91,46 @@ function PropsSI(output::AbstractString, name1::AbstractString, value1::Real, na
         error("CoolProp: ", get_global_param_string("errstring"))
     end
     return val
+end
+
+# units for humid air
+const _ha_units = Dict(
+    "Tdb" => Unitful.u"K",
+    "Twb" => Unitful.u"K",
+    "Tdp" => Unitful.u"K",
+    "H" => Unitful.u"J/kg",
+    "Hha" => Unitful.u"J/kg",
+    "U" => Unitful.u"J/kg",
+    "S" => Unitful.u"J/kg/K",
+    "V" => Unitful.u"m^3/kg",
+    "Vda" => Unitful.u"m^3/kg",
+    "Vha" => Unitful.u"m^3/kg",
+    "cp" => Unitful.u"J/kg/K",
+    "CV" => Unitful.u"J/kg/K",
+    "Cha" => Unitful.u"J/kg/K",
+    "CVha" => Unitful.u"J/kg/K",
+    "P_w" => Unitful.u"Pa",
+    )
+
+function _get_unit(param::AbstractString)
+    try
+        unit_str = get_parameter_information_string(param, "units")
+        return @eval Unitful.@u_str $unit_str
+    catch err
+    end
+    if haskey(_ha_units, param)
+        return _ha_units[param]
+    end
+    return Unitful.NoUnits
+end
+
+_si_value(unit, value) = Unitful.ustrip(Unitful.uconvert(unit, value))
+
+function PropsSI(output::AbstractString, name1::AbstractString, value1::Union{Unitful.Quantity,Real}, name2::AbstractString, value2::Union{Unitful.Quantity,Real}, fluid::AbstractString)
+    unit1 = _get_unit(name1)
+    unit2 = _get_unit(name2)
+    outunit = _get_unit(output)
+    return PropsSI(output, name1, _si_value(unit1,value1), name2, _si_value(unit2,value2), fluid)*outunit
 end
 
 """
@@ -657,6 +698,14 @@ function HAPropsSI(output::AbstractString, name1::AbstractString, value1::Real, 
         error("CoolProp: ", get_global_param_string("errstring"))
     end
     return val
+end
+
+function HAPropsSI(output::AbstractString, name1::AbstractString, value1::Union{Unitful.Quantity,Real}, name2::AbstractString, value2::Union{Unitful.Quantity,Real}, name3::AbstractString, value3::Union{Unitful.Quantity,Real})
+    unit1 = _get_unit(name1)
+    unit2 = _get_unit(name2)
+    unit3 = _get_unit(name3)
+    outunit = _get_unit(output)
+    return HAPropsSI(output, name1, _si_value(unit1,value1), name2, _si_value(unit2,value2), name3, _si_value(unit3,value3))*outunit
 end
 
 """

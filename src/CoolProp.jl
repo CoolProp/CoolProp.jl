@@ -327,14 +327,12 @@ function set_config(key::AbstractString, val::Bool)
 end
 
 export CoolProp_parameters, CoolProp_fluids;
+import Markdown
 """
-# CoolProp parameters table, to build run `CoolProp.buildparameters()`
-
-$(isfile(abspath(@__FILE__, "..", "parameters.table")) ? readstring(abspath(@__FILE__, "..", "parameters.table")) : "")
+Show the CoolProp parameters table
 """
-const CoolProp_parameters = "Type `?CoolProp_arameters` to get a list of all CoolProp parameters."
-buildparameters() = begin
-    logf = open("parameters.table", "w");
+function CoolProp_parameters()
+    logf = IOBuffer()
     println(logf, "Paramerer |Description |Unit |Comment ");
     println(logf, ":---------|:-----------|:----|:-------" );
     counter = 0;
@@ -357,16 +355,13 @@ buildparameters() = begin
         end
         println(logf, "$p" * " | " * longunit * " | " * note);
     end
-    close(logf);
+    return Markdown.parse(String(take!(logf)))
 end
 """
-# CoolProp fluids table, to build run `CoolProp.buildfluids()`
-
-$(isfile(abspath(@__FILE__, "..", "fluids.table")) ? readstring(abspath(@__FILE__, "..", "fluids.table")) : "")
+Show the CoolProp fluids table
 """
-const CoolProp_fluids = "Type `?CoolProp_fluids` to get a list of all CoolProp fluids."
-buildfluids() = begin
-    logf = open("fluids.table", "w");
+function CoolProp_fluids()
+    logf = IOBuffer()
     println(logf, "ID |Name |Alias |CAS |Pure |Formula |BibTeX ");
     println(logf, ":--|:----|:-----|:---|:----|:-------|:------");
     id = 0;
@@ -382,7 +377,7 @@ buildfluids() = begin
         end
         print(logf, "\n");
     end
-    close(logf);
+    return Markdown.parse(String(take!(logf)))
 end
 # ---------------------------------
 #       Information functions

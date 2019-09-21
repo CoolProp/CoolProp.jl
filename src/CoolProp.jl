@@ -3,6 +3,7 @@ module CoolProp
 
 using Compat
 import Libdl
+import Unitful
 
 const libcoolprop = joinpath(splitdir(@__DIR__)[1],"deps","lib","CoolProp")
 
@@ -90,6 +91,46 @@ function PropsSI(output::AbstractString, name1::AbstractString, value1::Real, na
         error("CoolProp: ", get_global_param_string("errstring"))
     end
     return val
+end
+
+# units for humid air
+const _ha_units = Dict(
+    "Tdb" => Unitful.u"K",
+    "Twb" => Unitful.u"K",
+    "Tdp" => Unitful.u"K",
+    "H" => Unitful.u"J/kg",
+    "Hha" => Unitful.u"J/kg",
+    "U" => Unitful.u"J/kg",
+    "S" => Unitful.u"J/kg/K",
+    "V" => Unitful.u"m^3/kg",
+    "Vda" => Unitful.u"m^3/kg",
+    "Vha" => Unitful.u"m^3/kg",
+    "cp" => Unitful.u"J/kg/K",
+    "CV" => Unitful.u"J/kg/K",
+    "Cha" => Unitful.u"J/kg/K",
+    "CVha" => Unitful.u"J/kg/K",
+    "P_w" => Unitful.u"Pa",
+    )
+
+function _get_unit(param::AbstractString)
+    try
+        unit_str = get_parameter_information_string(param, "units")
+        return @eval Unitful.@u_str $unit_str
+    catch err
+    end
+    if haskey(_ha_units, param)
+        return _ha_units[param]
+    end
+    return Unitful.NoUnits
+end
+
+_si_value(unit, value) = Unitful.ustrip(Unitful.uconvert(unit, value))
+
+function PropsSI(output::AbstractString, name1::AbstractString, value1::Union{Unitful.Quantity,Real}, name2::AbstractString, value2::Union{Unitful.Quantity,Real}, fluid::AbstractString)
+    unit1 = _get_unit(name1)
+    unit2 = _get_unit(name2)
+    outunit = _get_unit(output)
+    return PropsSI(output, name1, _si_value(unit1,value1), name2, _si_value(unit2,value2), fluid)*outunit
 end
 
 """
@@ -327,14 +368,12 @@ function set_config(key::AbstractString, val::Bool)
 end
 
 export CoolProp_parameters, CoolProp_fluids;
+import Markdown
 """
-# CoolProp parameters table, to build run `CoolProp.buildparameters()`
-
-$(isfile(abspath(@__FILE__, "..", "parameters.table")) ? readstring(abspath(@__FILE__, "..", "parameters.table")) : "")
+Show the CoolProp parameters table
 """
-const CoolProp_parameters = "Type `?CoolProp_arameters` to get a list of all CoolProp parameters."
-buildparameters() = begin
-    logf = open("parameters.table", "w");
+function CoolProp_parameters()
+    logf = IOBuffer()
     println(logf, "Paramerer |Description |Unit |Comment ");
     println(logf, ":---------|:-----------|:----|:-------" );
     counter = 0;
@@ -357,16 +396,13 @@ buildparameters() = begin
         end
         println(logf, "$p" * " | " * longunit * " | " * note);
     end
-    close(logf);
+    return Markdown.parse(String(take!(logf)))
 end
 """
-# CoolProp fluids table, to build run `CoolProp.buildfluids()`
-
-$(isfile(abspath(@__FILE__, "..", "fluids.table")) ? readstring(abspath(@__FILE__, "..", "fluids.table")) : "")
+Show the CoolProp fluids table
 """
-const CoolProp_fluids = "Type `?CoolProp_fluids` to get a list of all CoolProp fluids."
-buildfluids() = begin
-    logf = open("fluids.table", "w");
+function CoolProp_fluids()
+    logf = IOBuffer()
     println(logf, "ID |Name |Alias |CAS |Pure |Formula |BibTeX ");
     println(logf, ":--|:----|:-----|:---|:----|:-------|:------");
     id = 0;
@@ -382,7 +418,7 @@ buildfluids() = begin
         end
         print(logf, "\n");
     end
-    close(logf);
+    return Markdown.parse(String(take!(logf)))
 end
 # ---------------------------------
 #       Information functions
@@ -662,6 +698,14 @@ function HAPropsSI(output::AbstractString, name1::AbstractString, value1::Real, 
         error("CoolProp: ", get_global_param_string("errstring"))
     end
     return val
+end
+
+function HAPropsSI(output::AbstractString, name1::AbstractString, value1::Union{Unitful.Quantity,Real}, name2::AbstractString, value2::Union{Unitful.Quantity,Real}, name3::AbstractString, value3::Union{Unitful.Quantity,Real})
+    unit1 = _get_unit(name1)
+    unit2 = _get_unit(name2)
+    unit3 = _get_unit(name3)
+    outunit = _get_unit(output)
+    return HAPropsSI(output, name1, _si_value(unit1,value1), name2, _si_value(unit2,value2), name3, _si_value(unit3,value3))*outunit
 end
 
 """

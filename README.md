@@ -14,14 +14,11 @@ This is not my work, and all the credit goes to the cool [CoolProp contributors]
 
 ## Installation
 ```julia
-Pkg.clone("https://github.com/vimalaad/CoolProp.jl.git")
-Pkg.build("CoolProp") # to download the latest binaries
+Pkg.clone("https://github.com/CoolProp/CoolProp.jl.git")
 ```
-or
+or for nightly (Julia <0.7)
 ```julia
-Pkg.clone("https://github.com/vimalaad/CoolProp.jl.git")
-Pkg.checkout("CoolProp", "nightly")
-Pkg.build("CoolProp") # to download the nightly binaries
+Pkg.add(PackageSpec(url="https://github.com/CoolProp/CoolProp.jl.git", rev="nightly"))
 ```
 ## Note
 The installer downloads related libraries respect to machine OS & wordsize. Please let me know if it does not work for you. As an alternative, you can download the binaries for your OS from [here](https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/)

@@ -25,12 +25,12 @@ for fluid in coolpropfluids
     (pure == "true") && (tcrit != PropsSI("T_REDUCING", fluid)) && push!(uneq, fluid);
     global diffreduvscriti = abs(PropsSI("TCRIT", fluid) - PropsSI("T_REDUCING", fluid));
     if (diffreduvscriti > maxdiffreduvscriti)
-        maxfluid = fluid;
+        global maxfluid = fluid;
         global maxdiffreduvscriti = diffreduvscriti;
     end
 end
-println("max diff between reducing vs critical point T: $maxdiffreduvscriti for $maxfluid");
-@test uneq == Set(fails_tcrit_eq_treducing);
-println("different reducing vs critical point: $uneq");
-@test issubset(critphasefail, Set(fails_critical_point));
-println("fails to get phase for critical point: $critphasefail");
+println("max diff between reducing vs critical point T: $maxdiffreduvscriti for $maxfluid")
+@test uneq == Set(fails_tcrit_eq_treducing)
+println("different reducing vs critical point: $uneq")
+@test issubset(critphasefail, Set(fails_critical_point))
+println("fails to get phase for critical point: $critphasefail")

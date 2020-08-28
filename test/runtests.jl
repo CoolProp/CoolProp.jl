@@ -26,8 +26,8 @@ const coolproptrivialparameters = ["ACENTRIC", "DIPOLE_MOMENT", "FH", "FRACTION_
 "TMIN", "TTRIPLE", "T_FREEZE", "T_REDUCING"];
 const trivalwithnumval = ["FH","GWP100","PMIN","TMIN","P_REDUCING","PCRIT","GWP20","GAS_CONSTANT","PMAX","RHOCRIT","TCRIT","T_REDUCING","ACENTRIC","GWP500","RHOMOLAR_REDUCING","TMAX","TTRIPLE","PH","M","PTRIPLE","RHOMOLAR_CRITICAL","ODP","HH"];
 const fails_any_props_trivals = ["DIPOLE_MOMENT","FRACTION_MAX","FRACTION_MIN","RHOMASS_REDUCING","T_FREEZE"];
-const fails_critical_point = ["DiethylEther","R134a","R116","SulfurDioxide","n-Pentane","R11","CycloPropane","MDM","n-Nonane","Oxygen","DimethylCarbonate","R41","R227EA","R245fa","trans-2-Butene","n-Propane","MM","Air","R236FA","Neon","SES36","Fluorine","n-Undecane","Isohexane","MD4M","IsoButane","D5"];
-const fails_tcrit_eq_treducing = ["R134a","R116","n-Pentane","R11","n-Nonane","MDM","Oxygen","R41","MM","Neon","Fluorine","n-Undecane","Isohexane","Helium","IsoButane","D5"];
+const fails_critical_point = ["DiethylEther","R134a","R116","SulfurDioxide","n-Pentane","R11","CycloPropane","MDM","n-Nonane","Oxygen","DimethylCarbonate","R41","R227EA","R245fa","trans-2-Butene","n-Propane","MM","Air","R236FA","Neon","SES36","Fluorine","n-Undecane","Isohexane","MD4M","IsoButane","D5","Ammonia","R1234ze(Z)","HydrogenChloride"];
+const fails_tcrit_eq_treducing = ["R134a","R116","n-Pentane","R11","n-Nonane","MDM","Oxygen","R41","MM","Fluorine","n-Undecane","Isohexane","Helium","IsoButane","Ammonia","HydrogenChloride"];
 #high
 @info "********* High Level Api *********"
 #get_global_param_string

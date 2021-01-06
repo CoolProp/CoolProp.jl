@@ -37,7 +37,7 @@ AbstractState_free(TTSE)
 AbstractState_free(BICU)
 AbstractState_free(SRK)
 AbstractState_free(PR)
-IF97 = AbstractState_factory(IF97_BACKEND_FAMILY, "")
+IF97 = AbstractState_factory(IF97_BACKEND_FAMILY, "Water")
 pin = 101325
 tin = 308.15
 println("IF97::Water property for PT_INPUTS $pin $tin")

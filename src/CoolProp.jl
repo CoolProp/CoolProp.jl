@@ -4,13 +4,8 @@ module CoolProp
 using Compat
 import Libdl
 import Unitful
+using CoolProp_jll
 
-const libcoolprop = joinpath(splitdir(@__DIR__)[1],"deps","lib","CoolProp")
-
-#Check if the libray open
-if Libdl.dlopen_e(libcoolprop) in (C_NULL, nothing)
-  error("$(libcoolprop) cannot be opened, Please re-run Pkg.build(\"CoolProp\"), and restart Julia.")
-end
 ####################################################################################################################
 ####################################################################################################################
 

@@ -4,11 +4,16 @@ version = "0.0.0"
 
 [deps]
 Compat = "34da2185-b29b-5c13-b0c7-acf172513d20"
+CoolProp_jll = "3351c21f-4feb-5f29-afb9-f4fcb0e27549"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 LibGit2 = "76f85450-5226-5b5a-8eaa-529ad045b433"
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 Markdown = "d6f4376e-aef5-505a-96c1-9c027394607a"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
+
+[compat]
+CoolProp_jll = "6.4"
+julia = "1.3"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

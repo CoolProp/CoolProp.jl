@@ -9,17 +9,20 @@ This is not my work, and all the credit goes to the cool [CoolProp contributors]
 
 ## Installation
 ```julia
-Pkg.clone("https://github.com/vimalaad/CoolProp.jl.git")
-Pkg.build("CoolProp") # to download the latest binaries
+using Pkg
+Pkg.add(url="https://github.com/CoolProp/CoolProp.jl.git")
 ```
-or
-```julia
-Pkg.clone("https://github.com/vimalaad/CoolProp.jl.git")
-Pkg.checkout("CoolProp", "nightly")
-Pkg.build("CoolProp") # to download the nightly binaries
-```
-## Note
+### Note
 The installer downloads related libraries respect to machine OS & wordsize. Please let me know if it does not work for you. As an alternative, you can download the binaries for your OS from [here](https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/)
+
+## Usage
+The API is described in http://www.coolprop.org/coolprop/HighLevelAPI.html.
+```julia
+using CoolProp
+PropsSI("T", "P", 101325.0, "Q", 0.0, "Water")
+373.1242958476844
+```
+
 ## Development
 For development, it is possible to include a custom wrapper from `ENV["TestingPath"]`, then:  
 ```julia

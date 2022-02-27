@@ -7,3 +7,4 @@ test/*.table
 .tags*
 deps/*.log
 deps/*.table
+Manifest.toml

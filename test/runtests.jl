@@ -85,3 +85,5 @@ try
 catch err
     @warn "set_config for bool fails with: $err"
 end
+
+include("testunits.jl")

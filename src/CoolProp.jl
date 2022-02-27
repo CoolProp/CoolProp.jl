@@ -108,13 +108,29 @@ const _ha_units = Dict(
     )
 
 function _get_unit(param::AbstractString)
-    try
-        unit_str = get_parameter_information_string(param, "units")
-        return @eval Unitful.@u_str $unit_str
-    catch err
-    end
+    # First check if it's a humid air parameter
     if haskey(_ha_units, param)
         return _ha_units[param]
+    end
+    # Otherwise use the normal parameter info
+    unit_str = "-"
+    try 
+        unit_str = get_parameter_information_string(param, "units")
+    catch
+    end
+    if unit_str == "-"
+        return Unitful.NoUnits
+    end
+    try
+        # The unit uses e.g. Pa-s to mean Pa*s
+        unit_str = replace(unit_str, "-" => "*")
+        parsed_unit =  Unitful.uparse(unit_str)
+        if parsed_unit isa Unitful.Quantity
+            return Unitful.unit(parsed_unit)
+        end
+        return parsed_unit
+    catch err
+        @warn "Failed to parse unit $(unit_str): " err
     end
     return Unitful.NoUnits
 end

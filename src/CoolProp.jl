@@ -1,8 +1,6 @@
 #__precompile__()
 module CoolProp
 
-using Compat
-import Libdl
 import Unitful
 using CoolProp_jll
 
@@ -611,8 +609,8 @@ function get_input_pair_index(pair::AbstractString)
     end
     return val
 end
-const coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
-const coolpropfluids = map(Compat.String, split(get_global_param_string("FluidsList"),','));
+const coolpropparameters = map(String, split(get_global_param_string("parameter_list"),','));
+const coolpropfluids = map(String, split(get_global_param_string("FluidsList"),','));
 
 # ---------------------------------
 # Getter and setter for debug level

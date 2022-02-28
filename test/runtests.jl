@@ -1,14 +1,5 @@
 using CoolProp
-using Compat
 using Test
-# const branchname = begin
-#   if (isdefined(:LibGit2))
-#     LibGit2.branch(LibGit2.GitRepo(abspath(@__FILE__, "..", "..")));
-#   else
-#     Base.Git.branch(dir = abspath(@__FILE__, "..", ".."));
-#   end
-# end
-# info("On $branchname");
 
 include("testThrows.jl"); 
 
@@ -16,9 +7,9 @@ dl = CoolProp.get_debug_level();
 CoolProp.set_debug_level(10);
 @test CoolProp.get_debug_level()==10;
 CoolProp.set_debug_level(Int(dl));
-const coolpropfluids = map(Compat.String, split(get_global_param_string("fluids_list"),','));
-const coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
-const coolpropmix = map(Compat.String, split(get_global_param_string("predefined_mixtures"), ','));
+const coolpropfluids = map(String, split(get_global_param_string("fluids_list"),','));
+const coolpropparameters = map(String, split(get_global_param_string("parameter_list"),','));
+const coolpropmix = map(String, split(get_global_param_string("predefined_mixtures"), ','));
 #all trivials taken from http://www.coolprop.org/coolprop/HighLevelAPI.html#table-of-string-inputs-to-propssi-function
 const coolproptrivialparameters = ["ACENTRIC", "DIPOLE_MOMENT", "FH", "FRACTION_MAX", "FRACTION_MIN",
 "GAS_CONSTANT", "GWP100", "GWP20", "GWP500", "HH", "M", "ODP", "PCRIT", "PH", "PMAX", "PMIN", "PTRIPLE",

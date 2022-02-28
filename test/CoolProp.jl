@@ -1,6 +1,5 @@
 #__precompile__()
 module CoolProp
-using Compat
 
 errcode = Ref{Clong}(0)
 const buffer_length = 20000

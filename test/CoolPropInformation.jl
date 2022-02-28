@@ -236,5 +236,5 @@ function get_input_pair_index(pair::AbstractString)
     end
     return val
 end
-const coolpropparameters = map(Compat.String, split(get_global_param_string("parameter_list"),','));
-const coolpropfluids = map(Compat.String, split(get_global_param_string("FluidsList"),','));
+const coolpropparameters = map(String, split(get_global_param_string("parameter_list"),','));
+const coolpropfluids = map(String, split(get_global_param_string("FluidsList"),','));

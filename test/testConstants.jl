@@ -5,7 +5,7 @@ for p in coolproptrivialparameters
     missed = Set();
     for fluid in coolpropfluids
         try
-            res = ("$(PropsSI(p, Compat.String(fluid)))");
+            res = ("$(PropsSI(p, String(fluid)))");
             push!(tpropwithnumval, p);
         catch err
             push!(missed, fluid);

@@ -1,6 +1,5 @@
 
-[![Coverage Status](https://img.shields.io/coveralls/vimalaad/CoolProp.jl/master.svg?label=master%20coverage)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=master)
-[![Coverage Status](https://img.shields.io/coveralls/vimalaad/CoolProp.jl/nightly.svg?label=nightly%20coverage)](https://coveralls.io/github/vimalaad/CoolProp.jl?branch=nightly)
+[![test](https://github.com/CoolProp/CoolProp.jl/actions/workflows/test.yml/badge.svg)](https://github.com/CoolProp/CoolProp.jl/actions/workflows/test.yml)
 
 # CoolProp.jl
 A Julia wrapper for CoolProp (http://www.coolprop.org)
@@ -10,23 +9,35 @@ This is not my work, and all the credit goes to the cool [CoolProp contributors]
 ## Installation
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/CoolProp/CoolProp.jl.git")
+Pkg.add("CoolProp")
 ```
-### Note
-The installer downloads related libraries respect to machine OS & wordsize. Please let me know if it does not work for you. As an alternative, you can download the binaries for your OS from [here](https://sourceforge.net/projects/coolprop/files/CoolProp/6.1.0/shared_library/)
 
 ## Usage
 The API is described in http://www.coolprop.org/coolprop/HighLevelAPI.html.
+
+You can obtain e.g. the boiling point of water like this:
 ```julia
 using CoolProp
 PropsSI("T", "P", 101325.0, "Q", 0.0, "Water")
 373.1242958476844
 ```
 
-## Development
-For development, it is possible to include a custom wrapper from `ENV["TestingPath"]`, then:  
+The [Unitful](https://github.com/PainterQubits/Unitful.jl) package is also supported. When you make a call to `PropsSI` using units, the result will also have the relevant units:
+
 ```julia
-ENV["includelocalwrapper"]="on";
-using CoolProp;
+using CoolProp
+using Unitful: °C, Pa
+
+PropsSI("P", "T", 100°C, "Q", 0.0, "Water")
+101417.99665788244 Pa
 ```
-if `!haskey(ENV, "TestingPath")` the default `\test\CoolProp.jl` will be used.
+
+Humid air properties are available using the `HAPropsSI` function, e.g. getting the enthalpy at 20°c and 50 % relative humidity:
+
+```julia
+using CoolProp
+using Unitful: °C, Pa
+
+HAPropsSI("H", "Tdb", 20°C, "RH", 0.5, "P", 101325Pa)
+38622.83892391293 J kg⁻¹
+```

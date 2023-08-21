@@ -9,7 +9,7 @@ using CoolProp_jll
 
 errcode = Ref{Clong}(0)
 const message_buffer = Array{UInt8}(undef, 32768) #2^15
-
+const maxN = 100 #max number of species per model
 const inputs_to_get_global_param_string = ["version", "gitrevision", "errstring", "warnstring", "FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "parameter_list", "predefined_mixtures", "HOME", "cubic_fluids_schema"]
 
 # ---------------------------------
@@ -111,7 +111,7 @@ function _get_unit(param::AbstractString)
     end
     # Otherwise use the normal parameter info
     unit_str = "-"
-    try 
+    try
         unit_str = get_parameter_information_string(param, "units")
     catch
     end
@@ -823,6 +823,71 @@ function AbstractState_set_fractions(handle::Clong, fractions::Array{Float64})
 end
 
 """
+    AbstractState_get_mole_fractions(handle::Clong, fractions::Array{Float64})
+
+Get the molar fractions for the AbstractState.
+
+# Arguments
+* `handle`: The integer handle for the state class stored in memory
+* `fractions`: The array of fractions
+
+# Example
+```julia
+julia> handle = AbstractState_factory("HEOS", "Water&Ethanol");
+julia> pq_inputs = get_input_pair_index("PQ_INPUTS");
+julia> t = get_param_index("T");
+julia> AbstractState_set_fractions(handle, [0.4, 0.6]);
+julia> AbstractState_update(handle, pq_inputs, 101325, 0);
+julia> mole_frac = [0.0, 0.0]
+julia> AbstractState_get_mole_fractions(handle, mole_frac)
+julia> @show mole_frac
+mole_frac = [0.4, 0.6]
+julia> AbstractState_free(handle);
+```
+"""
+function AbstractState_get_mole_fractions(handle::Clong, fractions::Array{Float64})
+    ccall( (:AbstractState_get_mole_fractions, libcoolprop), Nothing, (Clong, Ptr{Cdouble}, Clong, Ref{Clong}, Ref{Clong}, Ptr{UInt8}, Clong), handle, fractions, maxN, length(fractions), errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+    raise(errcode, message_buffer)
+    return nothing
+end
+
+"""
+    AbstractState_get_mole_fractions_satState(handle::Clong, saturated_state::AbstractString,
+                                              fractions::Array{Float64})
+
+Get the molar fractions for the AbstractState and the desired saturated State.
+
+# Arguments
+* `handle`: The integer handle for the state class stored in memory
+* `saturated_state`: The string specifying the state (liquid or gas)
+* `fractions`: The array of fractions
+
+# Example
+```julia
+julia> handle = AbstractState_factory("HEOS", "Water&Ethanol");
+julia> pq_inputs = get_input_pair_index("PQ_INPUTS");
+julia> t = get_param_index("T");
+julia> AbstractState_set_fractions(handle, [0.4, 0.6]);
+julia> AbstractState_update(handle, pq_inputs, 101325, 0);
+julia> gas_frac = [0.0, 0.0]
+julia> AbstractState_get_mole_fractions_satState(handle, "gas", gas_frac)
+julia> @show gas_frac
+gas_frac = [0.30304421184833846, 0.6969557881516616]
+julia> liq_frac = [0.0, 0.0]
+julia> AbstractState_get_mole_fractions_satState(handle, "liquid", liq_frac)
+julia> @show liq_frac
+liq_frac = [0.4, 0.6]
+julia> AbstractState_free(handle);
+```
+"""
+function AbstractState_get_mole_fractions_satState(handle::Clong, saturated_state::AbstractString,
+                                                   fractions::Array{Float64})
+    ccall( (:AbstractState_get_mole_fractions_satState, libcoolprop), Nothing, (Clong, Cstring, Ptr{Cdouble}, Clong, Ref{Clong}, Ref{Clong}, Ptr{UInt8}, Clong), handle, saturated_state, fractions, maxN, length(fractions), errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+    raise(errcode, message_buffer)
+    return nothing
+end
+
+"""
     AbstractState_update(handle::Clong, input_pair::Clong, value1::Real, value2::Real)
     AbstractState_update(handle::Clong, input_pair::AbstractString, value1::Real, value2::Real)
 
@@ -1368,7 +1433,7 @@ function AbstractState_all_critical_points(handle::Clong, length::Integer)
     return  AbstractState_all_critical_points(handle, length, T, p, rhomolar, stable)
 end
 
-for symorigin = [:PropsSI, :PhaseSI, :K2F, :F2K, :HAPropsSI, :AbstractState_factory, :AbstractState_free, :AbstractState_set_fractions, :AbstractState_update, :AbstractState_keyed_output, :AbstractState_output, :AbstractState_specify_phase, :AbstractState_unspecify_phase, :AbstractState_update_and_common_out, :AbstractState_update_and_1_out, :AbstractState_update_and_5_out, :AbstractState_set_binary_interaction_double, :AbstractState_set_cubic_alpha_C, :AbstractState_set_fluid_parameter_double, :AbstractState_first_saturation_deriv, :AbstractState_first_partial_deriv, :AbstractState_build_phase_envelope, :AbstractState_build_spinodal, :AbstractState_all_critical_points, :AbstractState_get_phase_envelope_data, :AbstractState_get_spinodal_data]
+for symorigin = [:PropsSI, :PhaseSI, :K2F, :F2K, :HAPropsSI, :AbstractState_factory, :AbstractState_free, :AbstractState_set_fractions, :AbstractState_get_mole_fractions, :AbstractState_get_mole_fractions_satState, :AbstractState_update, :AbstractState_keyed_output, :AbstractState_output, :AbstractState_specify_phase, :AbstractState_unspecify_phase, :AbstractState_update_and_common_out, :AbstractState_update_and_1_out, :AbstractState_update_and_5_out, :AbstractState_set_binary_interaction_double, :AbstractState_set_cubic_alpha_C, :AbstractState_set_fluid_parameter_double, :AbstractState_first_saturation_deriv, :AbstractState_first_partial_deriv, :AbstractState_build_phase_envelope, :AbstractState_build_spinodal, :AbstractState_all_critical_points, :AbstractState_get_phase_envelope_data, :AbstractState_get_spinodal_data]
     sym = Symbol(lowercase(string(symorigin)))
     @eval const $sym = $symorigin
     @eval export $sym, $symorigin

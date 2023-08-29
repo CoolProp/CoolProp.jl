@@ -4,8 +4,6 @@
 # CoolProp.jl
 A Julia wrapper for CoolProp (http://www.coolprop.org)
 
-This is not my work, and all the credit goes to the cool [CoolProp contributors](https://github.com/CoolProp/CoolProp/graphs/contributors). I only put this together to make things easier for a friend of mine.  
-
 ## Installation
 ```julia
 using Pkg

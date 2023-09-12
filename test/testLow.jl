@@ -1,3 +1,6 @@
+using CoolProp
+using Test
+
 #low
 @info "********* Low Level Api *********"
 const HEOS_BACKEND_FAMILY = "HEOS"
@@ -65,6 +68,9 @@ pq_inputs = get_input_pair_index("PQ_INPUTS")
 t = get_param_index("T")
 AbstractState_set_fractions(handle, [0.4, 0.6])
 AbstractState_update(handle,pq_inputs,101325, 0)
+i = 1 #index of water in mixture
+AbstractState_get_fugacity(handle, i)
+AbstractState_get_fugacity_coefficient(handle, i)
 if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
     T, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1)
     temp_, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1)
@@ -81,7 +87,7 @@ else
     out1=[0.0]; out2=[0.0]; out3=[0.0]; out4=[0.0]; out5=[0.0]; out1_=[0.0]
     AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t], out1, out2, out3, out4, out5)
     AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"], out1_, out2, out3, out4, out5)
-end 
+end
 if Sys.isapple()
     @test AbstractState_keyed_output(handle,t) ≈ 352.3522212978604
     @test AbstractState_output(handle,"T") ≈ 352.3522212978604

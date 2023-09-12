@@ -112,7 +112,7 @@ function _get_unit(param::AbstractString)
     end
     # Otherwise use the normal parameter info
     unit_str = "-"
-    try 
+    try
         unit_str = get_parameter_information_string(param, "units")
     catch
     end
@@ -852,6 +852,63 @@ function AbstractState_update(handle::Clong, input_pair::AbstractString, value1:
     return nothing
 end
 
+#TODO: these functions will not work with CoolProp_jll 6.5. Needs new version released of current master from Sept 2023
+#TODO: update output of example func call
+"""
+    AbstractState_get_fugacity(handle::Clong, i::Integer)
+
+Return the fugacity of species `i`
+
+# Arguments
+* `handle`: The integer handle for the state class stored in memory
+* `i`: The index of the species
+
+# Example
+```julia
+julia> handle = AbstractState_factory("HEOS", "Water&Ethanol");
+julia> pq_inputs = get_input_pair_index("PQ_INPUTS");
+julia> t = get_param_index("T");
+julia> AbstractState_set_fractions(handle, [0.4, 0.6]);
+julia> AbstractState_update(handle, pq_inputs, 101325, 0);
+julia> AbstractState_get_fugacity(handle, 1)
+TODO: update output
+julia> AbstractState_free(handle);
+```
+"""
+function AbstractState_get_fugacity(handle::Clong, i::Integer) #TODO: maybe type this as an integer?
+    ccall( (:AbstractState_get_fugacity, libcoolprop), Nothing, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+    raise(errcode, message_buffer)
+    return nothing
+end
+
+#TODO: update output of example func call
+"""
+    AbstractState_get_fugacity_coefficient(handle::Clong, i::Real)
+
+Return the fugacity coefficient of species `i`
+
+# Arguments
+* `handle`: The integer handle for the state class stored in memory
+* `i`: The index of the species
+
+# Example
+```julia
+julia> handle = AbstractState_factory("HEOS", "Water&Ethanol");
+julia> pq_inputs = get_input_pair_index("PQ_INPUTS");
+julia> t = get_param_index("T");
+julia> AbstractState_set_fractions(handle, [0.4, 0.6]);
+julia> AbstractState_update(handle, pq_inputs, 101325, 0);
+julia> AbstractState_get_fugacity_coefficient(handle, 1)
+TODO: update output
+julia> AbstractState_free(handle);
+```
+"""
+function AbstractState_get_fugacity_coefficient(handle::Clong, i::Integer) #TODO: maybe type this as an integer?
+    ccall( (:AbstractState_get_fugacity_coefficient, libcoolprop), Nothing, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+    raise(errcode, message_buffer)
+    return nothing
+end
+
 """
     AbstractState_keyed_output(handle::Clong, param::Clong)
 
@@ -1345,7 +1402,7 @@ function AbstractState_all_critical_points(handle::Clong, length::Integer)
     return  AbstractState_all_critical_points(handle, length, T, p, rhomolar, stable)
 end
 
-for symorigin = [:PropsSI, :PhaseSI, :K2F, :F2K, :HAPropsSI, :AbstractState_factory, :AbstractState_free, :AbstractState_set_fractions, :AbstractState_update, :AbstractState_keyed_output, :AbstractState_output, :AbstractState_specify_phase, :AbstractState_unspecify_phase, :AbstractState_update_and_common_out, :AbstractState_update_and_1_out, :AbstractState_update_and_5_out, :AbstractState_set_binary_interaction_double, :AbstractState_set_cubic_alpha_C, :AbstractState_set_fluid_parameter_double, :AbstractState_first_saturation_deriv, :AbstractState_first_partial_deriv, :AbstractState_build_phase_envelope, :AbstractState_build_spinodal, :AbstractState_all_critical_points, :AbstractState_get_phase_envelope_data, :AbstractState_get_spinodal_data]
+for symorigin = [:PropsSI, :PhaseSI, :K2F, :F2K, :HAPropsSI, :AbstractState_factory, :AbstractState_free, :AbstractState_set_fractions, :AbstractState_update, :AbstractState_get_fugacity, :AbstractState_get_fugacity_coefficient, :AbstractState_keyed_output, :AbstractState_output, :AbstractState_specify_phase, :AbstractState_unspecify_phase, :AbstractState_update_and_common_out, :AbstractState_update_and_1_out, :AbstractState_update_and_5_out, :AbstractState_set_binary_interaction_double, :AbstractState_set_cubic_alpha_C, :AbstractState_set_fluid_parameter_double, :AbstractState_first_saturation_deriv, :AbstractState_first_partial_deriv, :AbstractState_build_phase_envelope, :AbstractState_build_spinodal, :AbstractState_all_critical_points, :AbstractState_get_phase_envelope_data, :AbstractState_get_spinodal_data]
     sym = Symbol(lowercase(string(symorigin)))
     @eval const $sym = $symorigin
     @eval export $sym, $symorigin

@@ -74,6 +74,9 @@ gas_frac = [0.0, 0.0]
 AbstractState_get_mole_fractions_satState(handle, "gas", gas_frac)
 liq_frac = [0.0, 0.0]
 AbstractState_get_mole_fractions_satState(handle, "liquid", liq_frac)
+i = 1 #index of water in mixture
+AbstractState_get_fugacity(handle, i)
+AbstractState_get_fugacity_coefficient(handle, i)
 if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
     T, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1)
     temp_, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1)

@@ -19,6 +19,20 @@ const trivalwithnumval = ["FH","GWP100","PMIN","TMIN","P_REDUCING","PCRIT","GWP2
 const fails_any_props_trivals = ["DIPOLE_MOMENT","FRACTION_MAX","FRACTION_MIN","RHOMASS_REDUCING","T_FREEZE"];
 const fails_critical_point = ["R134a","R116","R236EA","R1234ze(E)","SulfurDioxide","n-Pentane","R11","CycloPropane","Cyclopentane","MDM","n-Nonane","Oxygen","DimethylCarbonate","R41","R227EA","R245fa","trans-2-Butene","MM","Air","R236FA","SES36","Fluorine","n-Undecane","Isohexane","IsoButane","R1234ze(Z)","HydrogenChloride"];
 const fails_tcrit_eq_treducing = ["R134a","R116","R1234ze(E)","n-Pentane","R11","n-Nonane","MDM","Oxygen","R41","MM","Fluorine","n-Undecane","Isohexane","Helium","IsoButane","HydrogenChloride"];
+
+function compare_sets(fails,reference)
+    failsset = Set(fails)
+    refset = Set(fails)
+    if issubset(failsset, refset)
+        return true
+    end
+
+    diff = setdiff(failsset, refset)
+    println("The set of failures is not a subset of the reference set. Extra failures are: $diff")
+
+    return false
+end
+
 #high
 @info "********* High Level Api *********"
 #get_global_param_string

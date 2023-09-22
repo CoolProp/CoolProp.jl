@@ -927,7 +927,6 @@ function AbstractState_update(handle::Clong, input_pair::AbstractString, value1:
 end
 
 #TODO: these functions will not work with CoolProp_jll 6.5. Needs new version released of current master from Sept 2023
-#TODO: update output of example func call
 """
     AbstractState_get_fugacity(handle::Clong, i::Integer)
 
@@ -944,18 +943,17 @@ julia> pq_inputs = get_input_pair_index("PQ_INPUTS");
 julia> t = get_param_index("T");
 julia> AbstractState_set_fractions(handle, [0.4, 0.6]);
 julia> AbstractState_update(handle, pq_inputs, 101325, 0);
-julia> AbstractState_get_fugacity(handle, 1)
-TODO: update output
+julia> AbstractState_get_fugacity(handle, 0)
+30227.119385400914
 julia> AbstractState_free(handle);
 ```
 """
-function AbstractState_get_fugacity(handle::Clong, i::Integer) #TODO: maybe type this as an integer?
-    ccall( (:AbstractState_get_fugacity, libcoolprop), Nothing, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+function AbstractState_get_fugacity(handle::Clong, i::Integer)
+    output = ccall( (:AbstractState_get_fugacity, libcoolprop), Cdouble, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
-    return nothing
+    return output
 end
 
-#TODO: update output of example func call
 """
     AbstractState_get_fugacity_coefficient(handle::Clong, i::Real)
 
@@ -972,15 +970,15 @@ julia> pq_inputs = get_input_pair_index("PQ_INPUTS");
 julia> t = get_param_index("T");
 julia> AbstractState_set_fractions(handle, [0.4, 0.6]);
 julia> AbstractState_update(handle, pq_inputs, 101325, 0);
-julia> AbstractState_get_fugacity_coefficient(handle, 1)
-TODO: update output
+julia> AbstractState_get_fugacity_coefficient(handle, 0)
+0.7457961851803392
 julia> AbstractState_free(handle);
 ```
 """
 function AbstractState_get_fugacity_coefficient(handle::Clong, i::Integer) #TODO: maybe type this as an integer?
-    ccall( (:AbstractState_get_fugacity_coefficient, libcoolprop), Nothing, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
+    output = ccall( (:AbstractState_get_fugacity_coefficient, libcoolprop), Cdouble, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
-    return nothing
+    return output
 end
 
 """

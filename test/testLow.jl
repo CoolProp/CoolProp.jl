@@ -74,7 +74,7 @@ gas_frac = [0.0, 0.0]
 AbstractState_get_mole_fractions_satState(handle, "gas", gas_frac)
 liq_frac = [0.0, 0.0]
 AbstractState_get_mole_fractions_satState(handle, "liquid", liq_frac)
-i = 1 #index of water in mixture
+i = 0 #index of water in mixture
 AbstractState_get_fugacity(handle, i)
 AbstractState_get_fugacity_coefficient(handle, i)
 if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")

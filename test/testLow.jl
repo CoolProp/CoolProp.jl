@@ -68,9 +68,9 @@ pq_inputs = get_input_pair_index("PQ_INPUTS")
 t = get_param_index("T")
 AbstractState_set_fractions(handle, [0.4, 0.6])
 AbstractState_update(handle,pq_inputs,101325, 0)
-i = 1 #index of water in mixture
-AbstractState_get_fugacity(handle, i)
-AbstractState_get_fugacity_coefficient(handle, i)
+i = 0 #index of water in mixture
+f_0 = AbstractState_get_fugacity(handle, i)
+fc_0 = AbstractState_get_fugacity_coefficient(handle, i)
 if (haskey(ENV, "includelocalwrapper") && ENV["includelocalwrapper"]=="on")
     T, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, pq_inputs, [101325.0], [0.0], 1)
     temp_, p, rhomolar, hmolar, smolar = AbstractState_update_and_common_out(handle, "PQ_INPUTS", [101325.0], [0.0], 1)

@@ -983,7 +983,7 @@ julia> AbstractState_free(handle);
 ```
 """
 function AbstractState_update_and_common_out(handle::Clong, input_pair::Clong, value1::Array{Float64}, value2::Array{Float64}, length::Integer, T::Array{Float64}, p::Array{Float64}, rhomolar::Array{Float64}, hmolar::Array{Float64}, smolar::Array{Float64})
-    buffer_length = length(message_buffer)
+    buffer_length = Base.length(message_buffer)
     ccall( (:AbstractState_update_and_common_out, libcoolprop), Nothing, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, input_pair, value1, value2, length, T, p, rhomolar, hmolar, smolar, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return T, p, rhomolar, hmolar, smolar
@@ -1019,7 +1019,7 @@ Update the state of the AbstractState and get one output value (temperature, pre
 * `out`: The array for output
 """
 function AbstractState_update_and_1_out(handle::Clong, input_pair::Clong, value1::Array{Float64}, value2::Array{Float64}, length::Integer, output::Clong, out::Array{Float64})
-    buffer_length = length(message_buffer)
+    buffer_length = Base.length(message_buffer)
     ccall( (:AbstractState_update_and_1_out, libcoolprop), Nothing, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Clong, Clong, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, input_pair, value1, value2, length, output, out, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return out
@@ -1059,7 +1059,7 @@ Update the state of the AbstractState and get an output value five common output
 * `out5`: The array for the fifth output
 """
 function AbstractState_update_and_5_out(handle::Clong, input_pair::Clong, value1::Array{Float64}, value2::Array{Float64}, length::Integer, outputs::Array{Clong}, out1::Array{Float64}, out2::Array{Float64}, out3::Array{Float64}, out4::Array{Float64}, out5::Array{Float64})
-    buffer_length = length(message_buffer)
+    buffer_length = Base.length(message_buffer)
     ccall( (:AbstractState_update_and_5_out, libcoolprop), Nothing, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Clong, Ref{Clong}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, input_pair, value1, value2, length, outputs, out1, out2, out3, out4, out5, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return out1, out2, out3, out4, out5
@@ -1270,7 +1270,7 @@ If there is an error in an update call for one of the inputs, no change in the o
 CoolProp::AbstractState_get_phase_envelope_data(const long handle, const long length, double* T, double* p, double* rhomolar_vap, double* rhomolar_liq, double* x, double* y, long* errcode, char* message_buffer, const long buffer_length);
 """
 function AbstractState_get_phase_envelope_data(handle::Clong, length::Integer, T::Array{Float64}, p::Array{Float64}, rhomolar_vap::Array{Float64}, rhomolar_liq::Array{Float64}, x::Array{Float64}, y::Array{Float64})
-    buffer_length = length(message_buffer)
+    buffer_length = Base.length(message_buffer)
     ccall( (:AbstractState_get_phase_envelope_data, libcoolprop), Nothing, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, T, p, rhomolar_vap, rhomolar_liq, x, y, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return T, p, rhomolar_vap, rhomolar_liq, x, y
@@ -1325,7 +1325,7 @@ julia> tau, delta, m1 = AbstractState_get_spinodal_data(HEOS, 127);
 CoolProp::AbstractState_get_spinodal_data(const long handle, const long length, double* tau, double* delta, double* M1, long* errcode, char* message_buffer, const long buffer_length);
 """
 function AbstractState_get_spinodal_data(handle::Clong, length::Integer, tau::Array{Float64}, delta::Array{Float64}, m1::Array{Float64})
-    buffer_length = length(message_buffer)
+    buffer_length = Base.length(message_buffer)
     ccall( (:AbstractState_get_spinodal_data, libcoolprop), Nothing, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, tau, delta, m1, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return tau, delta, m1;
@@ -1356,7 +1356,7 @@ If there is an error in an update call for one of the inputs, no change in the o
 CoolProp::AbstractState_all_critical_points(const long handle, const long length, double* T, double* p, double* rhomolar, long* stable, long* errcode, char* message_buffer, const long buffer_length);
 """
 function AbstractState_all_critical_points(handle::Clong, length::Integer, T::Array{Float64}, p::Array{Float64}, rhomolar::Array{Float64}, stable::Array{Clong})
-    buffer_length = length(message_buffer)
+    buffer_length = Base.length(message_buffer)
     ccall( (:AbstractState_all_critical_points, libcoolprop), Nothing, (Clong, Clong, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Clong}, Ref{Clong}, Ptr{UInt8}, Clong), handle, length, T, p, rhomolar, stable, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return T, p, rhomolar, stable

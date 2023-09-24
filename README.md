@@ -2,7 +2,7 @@
 [![test](https://github.com/CoolProp/CoolProp.jl/actions/workflows/test.yml/badge.svg)](https://github.com/CoolProp/CoolProp.jl/actions/workflows/test.yml)
 
 # CoolProp.jl
-A Julia wrapper for CoolProp (http://www.coolprop.org)
+A Julia wrapper for CoolProp (http://www.coolprop.org), offering access to thermodynamic properties for fluids and mixtures.
 
 ## Installation
 ```julia

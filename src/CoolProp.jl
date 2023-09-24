@@ -8,8 +8,7 @@ using CoolProp_jll
 ####################################################################################################################
 
 errcode = Ref{Clong}(0)
-buffer_length = 20000
-message_buffer = Array{UInt8}(undef, buffer_length)
+const message_buffer = Array{UInt8}(undef, 32768) #2^15
 
 const inputs_to_get_global_param_string = ["version", "gitrevision", "errstring", "warnstring", "FluidsList", "incompressible_list_pure", "incompressible_list_solution", "mixture_binary_pairs_list", "parameter_list", "predefined_mixtures", "HOME", "cubic_fluids_schema"]
 

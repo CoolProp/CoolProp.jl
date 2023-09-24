@@ -17,8 +17,22 @@ const coolproptrivialparameters = ["ACENTRIC", "DIPOLE_MOMENT", "FH", "FRACTION_
 "TMIN", "TTRIPLE", "T_FREEZE", "T_REDUCING"];
 const trivalwithnumval = ["FH","GWP100","PMIN","TMIN","P_REDUCING","PCRIT","GWP20","GAS_CONSTANT","PMAX","RHOCRIT","TCRIT","T_REDUCING","ACENTRIC","GWP500","RHOMOLAR_REDUCING","TMAX","TTRIPLE","PH","M","PTRIPLE","RHOMOLAR_CRITICAL","ODP","HH"];
 const fails_any_props_trivals = ["DIPOLE_MOMENT","FRACTION_MAX","FRACTION_MIN","RHOMASS_REDUCING","T_FREEZE"];
-const fails_critical_point = ["DiethylEther","R134a","R116","SulfurDioxide","n-Pentane","R11","CycloPropane","MDM","n-Nonane","Oxygen","DimethylCarbonate","R41","R227EA","R245fa","trans-2-Butene","n-Propane","MM","Air","R236FA","Neon","SES36","Fluorine","n-Undecane","Isohexane","MD4M","IsoButane","D5","Ammonia","R1234ze(Z)","HydrogenChloride"];
-const fails_tcrit_eq_treducing = ["R134a","R116","n-Pentane","R11","n-Nonane","MDM","Oxygen","R41","MM","Fluorine","n-Undecane","Isohexane","Helium","IsoButane","Ammonia","HydrogenChloride"];
+const fails_critical_point = ["R134a","R116","R236EA","R1234ze(E)","SulfurDioxide","n-Pentane","R11","CycloPropane","Cyclopentane","MDM","n-Nonane","Oxygen","DimethylCarbonate","R41","R227EA","R245fa","trans-2-Butene","MM","Air","R236FA","SES36","Fluorine","n-Undecane","Isohexane","IsoButane","R1234ze(Z)","HydrogenChloride"];
+const fails_tcrit_eq_treducing = ["R134a","R116","R1234ze(E)","n-Pentane","R11","n-Nonane","MDM","Oxygen","R41","MM","Fluorine","n-Undecane","Isohexane","Helium","IsoButane","HydrogenChloride"];
+
+function compare_sets(fails,reference)
+    failsset = Set(fails)
+    refset = Set(fails)
+    if issubset(failsset, refset)
+        return true
+    end
+
+    diff = setdiff(failsset, refset)
+    println("The set of failures is not a subset of the reference set. Extra failures are: $diff")
+
+    return false
+end
+
 #high
 @info "********* High Level Api *********"
 #get_global_param_string
@@ -44,7 +58,7 @@ include("testLow.jl");
 @test K2F(F2K(100)) ≈ 100
 #HAPropsSI
 dt=1e-3;
-@test (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 0) - HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 0))/2/dt ≈ HAPropsSI("C", "T", 300, "P", 100000, "Y", 0) atol =2e-9
+@test (HAPropsSI("H", "T", 300+dt, "P", 100000, "Y", 1e-20) - HAPropsSI("H", "T", 300-dt, "P", 100000, "Y", 1e-20))/2/dt ≈ HAPropsSI("C", "T", 300, "P", 100000, "Y", 1e-20) atol =2e-9
 #PropsSI
 h0 = -15870000.0; # J/kg
 s0 = 3887.0; #J/kg

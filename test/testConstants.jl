@@ -2,7 +2,7 @@
 tpropwithnumval = Set();
 @info "Finding trivials with numerical value"
 for p in coolproptrivialparameters
-    missed = Set();
+    local missed = Set();
     for fluid in coolpropfluids
         try
             res = ("$(PropsSI(p, String(fluid)))");

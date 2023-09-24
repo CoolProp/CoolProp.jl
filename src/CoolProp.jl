@@ -846,6 +846,7 @@ julia> AbstractState_free(handle);
 ```
 """
 function AbstractState_get_mole_fractions(handle::Clong, fractions::Array{Float64})
+    buffer_length = length(message_buffer)
     ccall( (:AbstractState_get_mole_fractions, libcoolprop), Nothing, (Clong, Ptr{Cdouble}, Clong, Ref{Clong}, Ref{Clong}, Ptr{UInt8}, Clong), handle, fractions, maxN, length(fractions), errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return nothing
@@ -882,6 +883,7 @@ julia> AbstractState_free(handle);
 """
 function AbstractState_get_mole_fractions_satState(handle::Clong, saturated_state::AbstractString,
                                                    fractions::Array{Float64})
+    buffer_length = length(message_buffer)
     ccall( (:AbstractState_get_mole_fractions_satState, libcoolprop), Nothing, (Clong, Cstring, Ptr{Cdouble}, Clong, Ref{Clong}, Ref{Clong}, Ptr{UInt8}, Clong), handle, saturated_state, fractions, maxN, length(fractions), errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return nothing

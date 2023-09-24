@@ -947,6 +947,7 @@ Unspecify the phase to be used for all further calculations.
 * `handle`: The integer handle for the state class stored in memory
 """
 function AbstractState_unspecify_phase(handle::Clong)
+    buffer_length = length(message_buffer)
     ccall( (:AbstractState_unspecify_phase, libcoolprop), Nothing, (Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return nothing
@@ -1125,6 +1126,7 @@ Set cubic's alpha function parameters.
 * `c3`: the third parameter for the alpha function
 """
 function AbstractState_set_cubic_alpha_C(handle::Clong, i::Integer, parameter::AbstractString, c1::Real, c2::Real, c3::Real)
+    buffer_length = length(message_buffer)
     ccall( (:AbstractState_set_cubic_alpha_C, libcoolprop), Nothing, (Clong, Clong, Cstring, Cdouble, Cdouble, Cdouble, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, parameter, c1, c2, c3, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return nothing

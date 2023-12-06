@@ -949,6 +949,7 @@ julia> AbstractState_free(handle);
 ```
 """
 function AbstractState_get_fugacity(handle::Clong, i::Integer)
+    buffer_length = length(message_buffer)
     output = ccall( (:AbstractState_get_fugacity, libcoolprop), Cdouble, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return output
@@ -976,6 +977,7 @@ julia> AbstractState_free(handle);
 ```
 """
 function AbstractState_get_fugacity_coefficient(handle::Clong, i::Integer) #TODO: maybe type this as an integer?
+    buffer_length = length(message_buffer)
     output = ccall( (:AbstractState_get_fugacity_coefficient, libcoolprop), Cdouble, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)
     return output

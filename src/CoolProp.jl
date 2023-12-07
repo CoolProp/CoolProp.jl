@@ -926,7 +926,6 @@ function AbstractState_update(handle::Clong, input_pair::AbstractString, value1:
     return nothing
 end
 
-#TODO: these functions will not work with CoolProp_jll 6.5. Needs new version released of current master from Sept 2023
 """
     AbstractState_get_fugacity(handle::Clong, i::Integer)
 
@@ -976,7 +975,7 @@ julia> AbstractState_get_fugacity_coefficient(handle, 0)
 julia> AbstractState_free(handle);
 ```
 """
-function AbstractState_get_fugacity_coefficient(handle::Clong, i::Integer) #TODO: maybe type this as an integer?
+function AbstractState_get_fugacity_coefficient(handle::Clong, i::Integer)
     buffer_length = length(message_buffer)
     output = ccall( (:AbstractState_get_fugacity_coefficient, libcoolprop), Cdouble, (Clong, Clong, Ref{Clong}, Ptr{UInt8}, Clong), handle, i, errcode, message_buffer::Array{UInt8, 1}, buffer_length)
     raise(errcode, message_buffer)

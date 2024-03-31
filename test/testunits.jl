@@ -9,11 +9,13 @@ let fluid="air"
 
   # Test that all parameters return a unit
   for param in split(get_global_param_string("parameter_list"),',')
-    @test CoolProp._get_unit(param) isa FreeUnits
+    @test CoolProp._get_unit(param,false) isa FreeUnits
   end
 end
 
 let p=1atm, Tdb = 20°C, φ = 0.6
   x = HAPropsSI("HumRat", "Tdb", Tdb, "RH", φ, "P", p) |> g/kg
   @test round(g/kg, x; digits=2) == 8.77g/kg
+  Tdp = HAPropsSI("D", "T", 300K, "P", 101325Pa, "W", 0.01)
+  @test round(K,Tdp) == 287K
 end

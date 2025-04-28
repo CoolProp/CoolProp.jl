@@ -19,3 +19,5 @@ let p=1atm, Tdb = 20°C, φ = 0.6
   Tdp = HAPropsSI("D", "T", 300K, "P", 101325Pa, "W", 0.01)
   @test round(K,Tdp) == 287K
 end
+
+@test length(CoolProp.get_fluid_param_string("Methane","JSON")) > 188000

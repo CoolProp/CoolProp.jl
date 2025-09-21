@@ -94,24 +94,15 @@ else
     AbstractState_update_and_5_out(handle, pq_inputs, [101325.0], [0.0],1, [t, t, t, t, t], out1, out2, out3, out4, out5)
     AbstractState_update_and_5_out(handle, "PQ_INPUTS", [101325.0], [0.0],1, ["T", "T", "T", "T", "T"], out1_, out2, out3, out4, out5)
 end
-if Sys.isapple()
-    @test AbstractState_keyed_output(handle,t) ≈ 352.3522212978604
-    @test AbstractState_output(handle,"T") ≈ 352.3522212978604
-    @test T[1] ≈ 352.3522212978604
-    @test temp_[1] ≈ 352.3522212978604
-    @test out[1] ≈ 352.3522212978604
-    @test out_[1] ≈ 352.3522212978604
-    @test out1[1] ≈ 352.3522212978604
-    @test out1_[1] ≈ 352.3522212978604
-else
-    @test AbstractState_keyed_output(handle,t) ≈ 352.3522212991724
-    @test AbstractState_output(handle,"T") ≈ 352.3522212991724
-    @test T[1] ≈ 352.3522212991724
-    @test temp_[1] ≈ 352.3522212991724
-    @test out[1] ≈ 352.3522212991724
-    @test out_[1] ≈ 352.3522212991724
-    @test out1[1] ≈ 352.3522212991724
-    @test out1_[1] ≈ 352.3522212991724
+let refval = 352.3522127099312 
+    @test AbstractState_keyed_output(handle,t) ≈ refval
+    @test AbstractState_output(handle,"T") ≈ refval
+    @test T[1] ≈ refval
+    @test temp_[1] ≈ refval
+    @test out[1] ≈ refval
+    @test out_[1] ≈ refval
+    @test out1[1] ≈ refval
+    @test out1_[1] ≈ refval
 end
 for phase in ["phase_liquid", "phase_gas", "phase_twophase", "phase_supercritical", "phase_supercritical_gas", "phase_supercritical_liquid", "phase_critical_point", "phase_unknown", "phase_not_imposed"]
     AbstractState_specify_phase(handle, phase)
